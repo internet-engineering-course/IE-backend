@@ -20,6 +20,12 @@ public class Main {
                 case "addProject":
                     Commands.addProject(json);
                     break;
+                case "bid":
+                    if(Commands.addBid(json))
+                        System.out.println("Bid is successfully added");
+                    else
+                        System.out.println("The doesn't meet the requirements");
+                    break;
                 default:
                     System.err.println("Command not supported!");
                     break;

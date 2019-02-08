@@ -2,6 +2,7 @@ package entities;
 
 import models.BidInfo;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Auction {
@@ -11,6 +12,11 @@ public class Auction {
     public Auction(String projectTitle, List<BidInfo> offers) {
         this.projectTitle = projectTitle;
         this.offers = offers;
+    }
+
+    public Auction(String projectTitle) {
+        this.projectTitle = projectTitle;
+        this.offers = new LinkedList<>();
     }
 
     public String getProjectTitle() {
@@ -38,5 +44,9 @@ public class Auction {
         else {
             return false;
         }
+    }
+
+    public void addOffer(BidInfo bidInfo) {
+        offers.add(bidInfo);
     }
 }

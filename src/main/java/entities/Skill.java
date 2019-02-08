@@ -26,4 +26,15 @@ public class Skill {
     public void setPoints(Integer points) {
         this.points = points;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Skill) {
+            Skill skill = (Skill)obj;
+            return name.equals(skill.name);
+        }
+        else {
+            return false;
+        }
+    }
 }

@@ -53,7 +53,7 @@ public class MemoryDataBase {
 
     public void insertProject(Project project) {
         if (projectExists(project)) {
-            System.err.println("user already exists.");
+            System.err.println("Project already exists.");
             return;
         }
         projects.add(project);

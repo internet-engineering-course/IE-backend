@@ -7,7 +7,6 @@ import java.io.IOException;
 public class Deserializer {
     private static ObjectMapper mapper = new ObjectMapper();
     public static <T> T deserialize(String json , Class<T> type){
-
         T t = null;
         try {
             t = mapper.readValue(json, type);
