@@ -2,11 +2,13 @@ package entities;
 
 public class Skill {
     private String name;
-    private Integer point;
+    private Integer points;
 
-    public Skill(String name, Integer point) {
+    public Skill() {}
+
+    public Skill(String name, Integer points) {
         this.name = name;
-        this.point = point;
+        this.points = points;
     }
 
     public String getName() {
@@ -17,11 +19,11 @@ public class Skill {
         this.name = name;
     }
 
-    public Integer getPoint() {
-        return point;
+    public Integer getPoints() {
+        return points;
     }
 
-    public void setPoint(Integer point) {
-        this.point = point;
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 }
