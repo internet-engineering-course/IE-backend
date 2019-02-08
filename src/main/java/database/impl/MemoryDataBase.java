@@ -13,9 +13,9 @@ public class MemoryDataBase {
     private List <Auction> auctions;
 
     public MemoryDataBase() {
-        this.users = new LinkedList<>();
-        this.projects = new LinkedList<>();
-        this.auctions = new LinkedList<>();
+        this.users = new LinkedList<User>();
+        this.projects = new LinkedList<Project>();
+        this.auctions = new LinkedList<Auction>();
     }
 
     private static MemoryDataBase dataBase;

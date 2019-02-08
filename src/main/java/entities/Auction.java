@@ -16,7 +16,7 @@ public class Auction {
 
     public Auction(String projectTitle) {
         this.projectTitle = projectTitle;
-        this.offers = new LinkedList<>();
+        this.offers = new LinkedList<BidInfo>();
     }
 
     public String getProjectTitle() {
