@@ -1,4 +1,9 @@
-import database.MemoryDataBase;
+import database.AuctionRepository;
+import database.ProjectRepository;
+import database.UserRepository;
+import database.impl.AuctionRepositoryInMemoryImpl;
+import database.impl.ProjectRepositoryInMemoryImpl;
+import database.impl.UserRepositoryInMemoryImpl;
 import entities.Auction;
 import entities.Project;
 import entities.Skill;
@@ -7,19 +12,22 @@ import models.BidInfo;
 import models.ProjectTitle;
 import utilities.Deserializer;
 
-import java.io.IOException;
-
 public class Commands {
+
+    private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
+    private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
+    private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
+
 
     public static void register(String json){
         User user = Deserializer.deserialize(json , User.class);
-        MemoryDataBase.getInstance().insertUser(user);
+        userRepository.insertUser(user);
 
     }
 
     public static void addProject(String json){
         Project project = Deserializer.deserialize(json , Project.class);
-        MemoryDataBase.getInstance().insertProject(project);
+        projectRepository.insertProject(project);
     }
 
     public static boolean addBid(String json){
@@ -27,18 +35,18 @@ public class Commands {
         if (!meetsRequirements(bidInfo))
             return false;
 
-        Auction auction = MemoryDataBase.getInstance().getAuction(bidInfo.getProjectTitle());
+        Auction auction = auctionRepository.getAuction(bidInfo.getProjectTitle());
         if (auction == null) {
             auction = new Auction(bidInfo.getProjectTitle());
-            MemoryDataBase.getInstance().insertAuction(auction);
+            auctionRepository.insertAuction(auction);
         }
         auction.addOffer(bidInfo);
         return true;
     }
 
     private static boolean meetsRequirements(BidInfo bidInfo) {
-        User user = MemoryDataBase.getInstance().getUser(bidInfo.getBiddingUser());
-        Project project = MemoryDataBase.getInstance().getProject(bidInfo.getProjectTitle());
+        User user = userRepository.getUser(bidInfo.getBiddingUser());
+        Project project = projectRepository.getProject(bidInfo.getProjectTitle());
         if (user == null || project == null)
             return false;
 
@@ -57,7 +65,34 @@ public class Commands {
         return meets;
     }
 
-    public static User auction(ProjectTitle projectTitle) {
-        return null;
+
+    public static User auction(String json) {
+        ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
+        Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
+        Project project = projectRepository.getProject(auction.getProjectTitle());
+        User winnerUser = null;
+        int maxPoint = 0;
+        for(BidInfo bidInfo: auction.getOffers()){
+            User user = userRepository.getUser(bidInfo.getBiddingUser());
+            int point =  calAuctionPoint(project , user);
+            point += project.getBudget() - bidInfo.getBidAmount();
+            if(maxPoint < point) {
+                maxPoint = point;
+                winnerUser = user;
+            }
+        }
+        return winnerUser;
+    }
+
+    private static int calAuctionPoint(Project project , User user){
+        int sum = 0;
+
+        for (Skill skill: project.getSkills()) {
+            int skillIndex = user.getSkills().indexOf(skill);
+            int userPoint = user.getSkills().get(skillIndex).getPoints();
+            sum = 10000*(userPoint - skill.getPoints())^2;
+        }
+
+        return sum;
     }
 }

@@ -1,9 +1,8 @@
-package database;
+package database.impl;
 
 import entities.Auction;
 import entities.Project;
 import entities.User;
-import models.BidInfo;
 
 import java.util.LinkedList;
 import java.util.List;
