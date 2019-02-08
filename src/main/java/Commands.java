@@ -71,10 +71,10 @@ public class Commands {
         Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
         Project project = projectRepository.getProject(auction.getProjectTitle());
         User winnerUser = null;
-        int maxPoint = 0;
+        double maxPoint = 0;
         for(BidInfo bidInfo: auction.getOffers()){
             User user = userRepository.getUser(bidInfo.getBiddingUser());
-            int point =  calAuctionPoint(project , user);
+            double point =  calAuctionPoint(project , user);
             point += project.getBudget() - bidInfo.getBidAmount();
             if(maxPoint < point) {
                 maxPoint = point;
@@ -84,13 +84,13 @@ public class Commands {
         return winnerUser;
     }
 
-    private static int calAuctionPoint(Project project , User user){
-        int sum = 0;
+    private static double calAuctionPoint(Project project , User user){
+        double sum = 0;
 
         for (Skill skill: project.getSkills()) {
             int skillIndex = user.getSkills().indexOf(skill);
             int userPoint = user.getSkills().get(skillIndex).getPoints();
-            sum = 10000*(userPoint - skill.getPoints())^2;
+            sum = 10000 * Math.pow((double) (userPoint - skill.getPoints()) , 2);
         }
 
         return sum;
