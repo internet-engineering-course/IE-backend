@@ -45,11 +45,11 @@ public class Main {
                     User user = null;
                     try {
                         user = Commands.auction(json);
+                        System.out.print("winner: ");
+                        System.out.println(user.getUsername());
                     } catch (DeserializeException e) {
                         e.printStackTrace();
                     }
-                    System.out.print("winner: ");
-                    System.out.println(user.getUsername());
                     return;
                 default:
                     System.err.println("Command not supported!");
