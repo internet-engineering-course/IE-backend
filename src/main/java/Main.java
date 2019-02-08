@@ -1,4 +1,5 @@
 import entities.User;
+import exceptions.DeserializeException;
 
 import java.util.Scanner;
 
@@ -17,19 +18,36 @@ public class Main {
 
             switch (command){
                 case "register":
-                    Commands.register(json);
+                    try {
+                        Commands.register(json);
+                    } catch (DeserializeException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "addProject":
-                    Commands.addProject(json);
+                    try {
+                        Commands.addProject(json);
+                    } catch (DeserializeException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "bid":
-                    if(Commands.addBid(json))
-                        System.err.println("Bid is successfully added");
-                    else
-                        System.err.println("The user doesn't meet the requirements");
+                    try {
+                        if(Commands.addBid(json))
+                            System.err.println("Bid is successfully added");
+                        else
+                            System.err.println("The user doesn't meet the requirements");
+                    } catch (DeserializeException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "auction":
-                    User user = Commands.auction(json);
+                    User user = null;
+                    try {
+                        user = Commands.auction(json);
+                    } catch (DeserializeException e) {
+                        e.printStackTrace();
+                    }
                     System.out.print("winner: ");
                     System.out.println(user.getUsername());
                     return;

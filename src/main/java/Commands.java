@@ -8,6 +8,7 @@ import entities.Auction;
 import entities.Project;
 import entities.Skill;
 import entities.User;
+import exceptions.DeserializeException;
 import models.BidInfo;
 import models.ProjectTitle;
 import utilities.Deserializer;
@@ -19,18 +20,17 @@ public class Commands {
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
 
 
-    public static void register(String json){
+    public static void register(String json) throws DeserializeException {
         User user = Deserializer.deserialize(json , User.class);
         userRepository.insertUser(user);
-
     }
 
-    public static void addProject(String json){
+    public static void addProject(String json) throws DeserializeException {
         Project project = Deserializer.deserialize(json , Project.class);
         projectRepository.insertProject(project);
     }
 
-    public static boolean addBid(String json){
+    public static boolean addBid(String json) throws DeserializeException {
         BidInfo bidInfo = Deserializer.deserialize(json , BidInfo.class);
         if (!meetsRequirements(bidInfo))
             return false;
@@ -66,7 +66,7 @@ public class Commands {
     }
 
 
-    public static User auction(String json) {
+    public static User auction(String json) throws DeserializeException {
         ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
         Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
         Project project = projectRepository.getProject(auction.getProjectTitle());
