@@ -6,6 +6,7 @@ import entities.Project;
 import entities.Skill;
 import entities.User;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -118,6 +119,18 @@ class MemoryDataBase {
 
     public void initialize() {
         System.out.println("initializing memory database ...");
+
+        User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
+                "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
+                Arrays.asList(
+                        new Skill("HTMl" , 5) ,
+                        new Skill("Javascript" , 4) ,
+                        new Skill("C++" , 2) ,
+                        new Skill("Java" , 3)
+                )
+        );
+        insertUser(user);
+        System.out.println("fetched default user ...");
         List<Project> projects = HttpClient.fetchAllProjects();
         for (Project project: projects) {
             insertProject(project);
