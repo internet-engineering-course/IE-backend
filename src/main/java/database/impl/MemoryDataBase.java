@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-class MemoryDataBase {
+public class MemoryDataBase {
     private List <User> users;
     private List <Project> projects;
     private List <Auction> auctions;
@@ -24,7 +24,7 @@ class MemoryDataBase {
     }
 
     private static MemoryDataBase dataBase;
-    static MemoryDataBase getInstance() {
+    public static MemoryDataBase getInstance() {
         if (dataBase == null)
             dataBase = new MemoryDataBase();
         return dataBase;
@@ -123,7 +123,7 @@ class MemoryDataBase {
         User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
                 Arrays.asList(
-                        new Skill("HTMl" , 5) ,
+                        new Skill("HTML" , 5) ,
                         new Skill("Javascript" , 4) ,
                         new Skill("C++" , 2) ,
                         new Skill("Java" , 3)
@@ -142,5 +142,9 @@ class MemoryDataBase {
             insertSkill(skill);
         }
         System.out.println("fetched all skills ...");
+    }
+
+    public List<Project> getAllProjects() {
+        return projects;
     }
 }

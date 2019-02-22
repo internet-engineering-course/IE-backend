@@ -3,8 +3,15 @@ package database.impl;
 import database.ProjectRepository;
 import entities.Project;
 
+import java.util.List;
+
 
 public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
+    @Override
+    public List<Project> getAllProjects() {
+        return MemoryDataBase.getInstance().getAllProjects();
+    }
+
     @Override
     public boolean projectExists(Project project) {
         return MemoryDataBase.getInstance().projectExists(project);

@@ -15,12 +15,47 @@ import models.BidInfo;
 import models.ProjectTitle;
 import utilities.Deserializer;
 
-class Commands {
+import java.util.LinkedList;
+import java.util.List;
+
+public class Commands {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
 
+
+    public static List<Project> getValidProjects(User user){
+        List<Project>  projects= projectRepository.getAllProjects();
+        LinkedList<Project> result = new LinkedList<>();
+        for(Project project:projects){
+            if(hasEnoughSkills(user , project)) {
+                result.add(project);
+            }
+        }
+        return result;
+    }
+
+    public static User getDefaultUser(){
+        return userRepository.getUser("test");
+    }
+
+    private static boolean hasEnoughSkills(User user , Project project) {
+
+        if (user == null || project == null)
+            return false;
+
+        boolean meets = true;
+        for (Skill skill: project.getSkills()) {
+            int skillIndex = user.getSkills().indexOf(skill);
+            if (skillIndex == -1)
+                meets = false;
+            else if (user.getSkills().get(skillIndex).getPoint() < skill.getPoint())
+                meets = false;
+        }
+
+        return meets;
+    }
 
     static void register(String json) throws DeserializeException {
         User user = Deserializer.deserialize(json , User.class);
@@ -55,16 +90,7 @@ class Commands {
         if(bidInfo.getBidAmount() > project.getBudget())
             return false;
 
-        boolean meets = true;
-        for (Skill skill: project.getSkills()) {
-            int skillIndex = user.getSkills().indexOf(skill);
-            if (skillIndex == -1)
-                meets = false;
-            else if (user.getSkills().get(skillIndex).getPoint() < skill.getPoint())
-                meets = false;
-        }
-
-        return meets;
+        return hasEnoughSkills(user , project);
     }
 
 

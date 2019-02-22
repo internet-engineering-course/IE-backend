@@ -1,14 +1,10 @@
-import command.Commands;
-import entities.User;
-import exceptions.DeserializeException;
+import database.impl.MemoryDataBase;
 import httpServer.Server;
-
-import java.util.Scanner;
 
 public class Main {
 
     public static void main(String [] args){
-
+        MemoryDataBase.getInstance().initialize();
         Server server = new Server();
         try {
 

@@ -10,7 +10,6 @@ public class Server {
         server.createContext("/project", new ProjectHandler());
         server.createContext("/user/", new UserHandler());
         server.createContext("/project/", new ProjectDetailHandler());
-
         server.setExecutor(null);
         server.start();
     }
