@@ -43,7 +43,7 @@ public class ProjectHandler implements HttpHandler {
                 "        </tr>\n";
         for(int i= 0 ; i < valideProjects.size() ; i++) {
             response +="        <tr>\n" +
-                    "            <td>"+i+"</td>\n" +
+                    "            <td>"+valideProjects.get(i).getId()+"</td>\n" +
                     "            <td>"+valideProjects.get(i).getTitle()+"</td>\n" +
                     "            <td>"+valideProjects.get(i).getBudget()+"</td>\n" +
                     "        </tr>\n";

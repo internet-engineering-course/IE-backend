@@ -156,4 +156,13 @@ public class MemoryDataBase {
     public List<Project> getAllProjects() {
         return projects;
     }
+
+    public Project getProjectById(String id) {
+        for (Project project : projects) {
+            if (project.getId().equals(id)) {
+                return project;
+            }
+        }
+        return null;
+    }
 }

@@ -44,7 +44,11 @@ public class Commands {
         return userRepository.getUserById(id);
     }
 
-    private static boolean hasEnoughSkills(User user , Project project) {
+    public static Project getProjectById(String id){
+        return projectRepository.getProjectById(id);
+    }
+
+    public static boolean hasEnoughSkills(User user , Project project) {
 
         if (user == null || project == null)
             return false;

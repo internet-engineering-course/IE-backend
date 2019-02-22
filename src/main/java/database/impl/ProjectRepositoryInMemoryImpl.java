@@ -27,4 +27,9 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
         return MemoryDataBase.getInstance().getProject(projectTitle);
     }
 
+    @Override
+    public Project getProjectById(String id) {
+        return MemoryDataBase.getInstance().getProjectById(id);
+    }
+
 }
