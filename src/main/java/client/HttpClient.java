@@ -2,6 +2,7 @@ package client;
 
 import client.models.HttpResponse;
 import entities.Project;
+import entities.Skill;
 import exceptions.DeserializeException;
 import utilities.Deserializer;
 
@@ -38,6 +39,17 @@ public class HttpClient {
         HttpResponse response = get(url);
         try {
             return Deserializer.deserializeList(response.getResponse(), Project.class);
+        } catch (DeserializeException e) {
+            e.printStackTrace();
+        }
+        return new LinkedList<>();
+    }
+
+    public static List<Skill> fetchAllSkills() {
+        String url = "http://142.93.134.194:8000/joboonja/skill";
+        HttpResponse response = get(url);
+        try {
+            return Deserializer.deserializeList(response.getResponse(), Skill.class);
         } catch (DeserializeException e) {
             e.printStackTrace();
         }

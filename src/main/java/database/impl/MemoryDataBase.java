@@ -3,6 +3,7 @@ package database.impl;
 import client.HttpClient;
 import entities.Auction;
 import entities.Project;
+import entities.Skill;
 import entities.User;
 
 import java.util.LinkedList;
@@ -12,11 +13,13 @@ class MemoryDataBase {
     private List <User> users;
     private List <Project> projects;
     private List <Auction> auctions;
+    private List<Skill> skills;
 
     private MemoryDataBase() {
         this.users = new LinkedList<User>();
         this.projects = new LinkedList<Project>();
         this.auctions = new LinkedList<Auction>();
+        this.skills = new LinkedList<Skill>();
     }
 
     private static MemoryDataBase dataBase;
@@ -88,6 +91,31 @@ class MemoryDataBase {
         return null;
     }
 
+    boolean skillExists(Skill skill) {
+        return skills.indexOf(skill) != -1;
+    }
+
+    void insertSkill(Skill skill) {
+        if (skillExists(skill)){
+            System.err.println("skill already exists.");
+            return;
+        }
+        skills.add(skill);
+    }
+
+    Skill getSkill(String skillName) {
+        for (Skill skill : skills) {
+            if (skill.getName().equals(skillName)) {
+                return skill;
+            }
+        }
+        return null;
+    }
+
+    List<Skill> getAllSkills() {
+        return skills;
+    }
+
     public void initialize() {
         System.out.println("initializing memory database ...");
         List<Project> projects = HttpClient.fetchAllProjects();
@@ -95,5 +123,11 @@ class MemoryDataBase {
             insertProject(project);
         }
         System.out.println("fetched all projects ...");
+
+        List<Skill> skills = HttpClient.fetchAllSkills();
+        for (Skill skill: skills) {
+            insertSkill(skill);
+        }
+        System.out.println("fetched all skills ...");
     }
 }
