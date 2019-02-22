@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.StringTokenizer;
 
-public class UserHandler implements HttpHandler {
+public class ProjectDetailHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         StringTokenizer tokenizer = new StringTokenizer(exchange.getRequestURI().getPath(), "/");
