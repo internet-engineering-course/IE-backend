@@ -2,13 +2,13 @@ package entities;
 
 public class Skill {
     private String name;
-    private Integer points;
+    private Integer point;
 
     public Skill() {}
 
-    public Skill(String name, Integer points) {
+    public Skill(String name, Integer point) {
         this.name = name;
-        this.points = points;
+        this.point = point;
     }
 
     public String getName() {
@@ -19,12 +19,12 @@ public class Skill {
         this.name = name;
     }
 
-    public Integer getPoints() {
-        return points;
+    public Integer getPoint() {
+        return point;
     }
 
-    public void setPoints(Integer points) {
-        this.points = points;
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 
     @Override
