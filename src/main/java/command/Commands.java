@@ -1,3 +1,5 @@
+package command;
+
 import database.AuctionRepository;
 import database.ProjectRepository;
 import database.UserRepository;

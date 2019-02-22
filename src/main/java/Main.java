@@ -1,60 +1,23 @@
+import command.Commands;
 import entities.User;
 import exceptions.DeserializeException;
+import httpServer.Server;
 
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String [] args){
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String[] input = sc.nextLine().split(" ");
-            if (input.length != 2) {
-                System.err.println("Command not supported!");
-                continue;
-            }
-            String command = input[0];
-            String json = input[1];
 
-            switch (command){
-                case "register":
-                    try {
-                        Commands.register(json);
-                    } catch (DeserializeException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case "addProject":
-                    try {
-                        Commands.addProject(json);
-                    } catch (DeserializeException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case "bid":
-                    try {
-                        if(Commands.addBid(json))
-                            System.err.println("Bid is successfully added");
-                        else
-                            System.err.println("The user doesn't meet the requirements");
-                    } catch (DeserializeException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case "auction":
-                    User user = null;
-                    try {
-                        user = Commands.auction(json);
-                        System.out.print("winner: ");
-                        System.out.println(user.getUsername());
-                    } catch (DeserializeException e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                default:
-                    System.err.println("Command not supported!");
-                    break;
-            }
+        Server server = new Server();
+        try {
+
+            server.startServer();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
     }
 }
