@@ -40,6 +40,10 @@ public class Commands {
         return userRepository.getUser("test");
     }
 
+    public static User getUserById(Integer id){
+        return userRepository.getUserById(id);
+    }
+
     private static boolean hasEnoughSkills(User user , Project project) {
 
         if (user == null || project == null)

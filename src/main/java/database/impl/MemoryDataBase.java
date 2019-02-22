@@ -51,6 +51,15 @@ public class MemoryDataBase {
         return null;
     }
 
+    User getUser(Integer id) {
+        for (User user : users) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     boolean projectExists(Project project) {
         return projects.indexOf(project) != -1;
     }

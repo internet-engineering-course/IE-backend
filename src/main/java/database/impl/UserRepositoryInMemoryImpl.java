@@ -20,4 +20,9 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     public User getUser(String username) {
         return MemoryDataBase.getInstance().getUser(username);
     }
+
+    @Override
+    public User getUserById(Integer id) {
+        return MemoryDataBase.getInstance().getUser(id);
+    }
 }

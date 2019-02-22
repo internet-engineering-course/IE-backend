@@ -9,4 +9,5 @@ public interface UserRepository {
     void insertUser(User user);
 
     User getUser(String username);
+    User getUserById(Integer id);
 }
