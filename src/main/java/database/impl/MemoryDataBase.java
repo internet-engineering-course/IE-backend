@@ -1,5 +1,6 @@
 package database.impl;
 
+import client.HttpClient;
 import entities.Auction;
 import entities.Project;
 import entities.User;
@@ -85,5 +86,14 @@ class MemoryDataBase {
             }
         }
         return null;
+    }
+
+    public void initialize() {
+        System.out.println("initializing memory database ...");
+        List<Project> projects = HttpClient.fetchAllProjects();
+        for (Project project: projects) {
+            insertProject(project);
+        }
+        System.out.println("fetched all projects ...");
     }
 }
