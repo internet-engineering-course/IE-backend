@@ -15,24 +15,24 @@ import models.BidInfo;
 import models.ProjectTitle;
 import utilities.Deserializer;
 
-public class Commands {
+class Commands {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
 
 
-    public static void register(String json) throws DeserializeException {
+    static void register(String json) throws DeserializeException {
         User user = Deserializer.deserialize(json , User.class);
         userRepository.insertUser(user);
     }
 
-    public static void addProject(String json) throws DeserializeException {
+    static void addProject(String json) throws DeserializeException {
         Project project = Deserializer.deserialize(json , Project.class);
         projectRepository.insertProject(project);
     }
 
-    public static boolean addBid(String json) throws DeserializeException {
+    static boolean addBid(String json) throws DeserializeException {
         BidInfo bidInfo = Deserializer.deserialize(json , BidInfo.class);
         if (!meetsRequirements(bidInfo))
             return false;
@@ -60,7 +60,7 @@ public class Commands {
             int skillIndex = user.getSkills().indexOf(skill);
             if (skillIndex == -1)
                 meets = false;
-            else if (user.getSkills().get(skillIndex).getPoints() < skill.getPoints())
+            else if (user.getSkills().get(skillIndex).getPoint() < skill.getPoint())
                 meets = false;
         }
 
@@ -68,7 +68,7 @@ public class Commands {
     }
 
 
-    public static User auction(String json) throws DeserializeException {
+    static User auction(String json) throws DeserializeException {
         ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
         Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
         Project project = projectRepository.getProject(auction.getProjectTitle());
@@ -91,8 +91,8 @@ public class Commands {
 
         for (Skill skill: project.getSkills()) {
             int skillIndex = user.getSkills().indexOf(skill);
-            int userPoint = user.getSkills().get(skillIndex).getPoints();
-            sum = 10000 * Math.pow((double) (userPoint - skill.getPoints()) , 2);
+            int userPoint = user.getSkills().get(skillIndex).getPoint();
+            sum = 10000 * Math.pow((double) (userPoint - skill.getPoint()) , 2);
         }
 
         return sum;
