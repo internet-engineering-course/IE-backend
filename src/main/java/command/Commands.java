@@ -40,7 +40,7 @@ public class Commands {
     }
 
     public static User getDefaultUser(){
-        return userRepository.getUser("test");
+        return userRepository.getUser("ali");
     }
 
     public static User getUserById(Integer id){

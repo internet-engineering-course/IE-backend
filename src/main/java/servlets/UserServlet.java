@@ -22,12 +22,18 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StringTokenizer tokenizer = new StringTokenizer(request.getPathInfo(), "/");
-        String userId = tokenizer.nextToken();
-        User user = Commands.getUserById(Integer.valueOf(userId));
-        request.setAttribute("user", user);
-        request.setAttribute("skills", Commands.getAllSkills());
-        response.setContentType("text/html; charset=UTF-8");
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/user-single-logged-in.jsp");
-        requestDispatcher.forward(request, response);
+        Integer userId = Integer.valueOf(tokenizer.nextToken());
+        User user = Commands.getUserById(userId);
+        User defaultUser = Commands.getDefaultUser();
+        if (user.equals(defaultUser)) {
+            request.setAttribute("user", user);
+            request.setAttribute("skills", Commands.getAllSkills());
+            response.setContentType("text/html; charset=UTF-8");
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/user-single-logged-in.jsp");
+            requestDispatcher.forward(request, response);
+        } else {
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/user-single-guest.jsp");
+            requestDispatcher.forward(request, response);
+        }
     }
 }
