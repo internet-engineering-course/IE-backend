@@ -1,6 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Projects</title>
@@ -22,15 +23,15 @@
 <table>
     <tbody>
     <tr>
-        <th>id</th>
-        <th>title</th>
-        <th>budget</th>
+        <th>ID</th>
+        <th>TITLE</th>
+        <th>BUDGET</th>
     </tr>
-    <c:forEach var="project" items="${requestScope.project}">
+    <c:forEach var="project" items="${requestScope.projects}">
         <tr>
             <td><c:out value="${project.id}"/></td>
             <td><c:out value="${project.title}"/></td>
-            <td>${project.budget}</td>
+            <td><c:out value="${project.budget}"/></td>
         </tr>
     </c:forEach>
     </tbody>
