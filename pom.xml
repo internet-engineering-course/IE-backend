@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ir.ut.ie</groupId>
-    <artifactId>ca2</artifactId>
+    <artifactId>ca3</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <build>
@@ -26,9 +26,16 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
