@@ -34,6 +34,7 @@ public class ProjectDetail extends HttpServlet {
             response.setContentType("text/html; charset=UTF-8");
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/projectDetail.jsp");
             requestDispatcher.forward(request, response);
+
         }else{
             //request.setAttribute("project", project);
             //            response.setContentType("text/html; charset=UTF-8");
