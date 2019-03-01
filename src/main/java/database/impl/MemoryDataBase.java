@@ -15,6 +15,7 @@ public class MemoryDataBase {
     private List <Project> projects;
     private List <Auction> auctions;
     private List<Skill> skills;
+    private Boolean initialized = false;
 
     private MemoryDataBase() {
         this.users = new LinkedList<User>();
@@ -127,6 +128,9 @@ public class MemoryDataBase {
     }
 
     public void initialize() {
+        if(initialized)
+            return;
+
         System.out.println("initializing memory database ...");
 
         User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
@@ -151,6 +155,7 @@ public class MemoryDataBase {
             insertSkill(skill);
         }
         System.out.println("fetched all skills ...");
+        initialized = true;
     }
 
     public List<Project> getAllProjects() {

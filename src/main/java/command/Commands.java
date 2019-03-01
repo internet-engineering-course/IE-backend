@@ -2,9 +2,11 @@ package command;
 
 import database.AuctionRepository;
 import database.ProjectRepository;
+import database.SkillRepository;
 import database.UserRepository;
 import database.impl.AuctionRepositoryInMemoryImpl;
 import database.impl.ProjectRepositoryInMemoryImpl;
+import database.impl.SkillRepositoryInMemoryImpl;
 import database.impl.UserRepositoryInMemoryImpl;
 import entities.Auction;
 import entities.Project;
@@ -23,6 +25,7 @@ public class Commands {
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
+    private static SkillRepository skillRepository = new SkillRepositoryInMemoryImpl();
 
 
     public static List<Project> getValidProjects(User user){
@@ -46,6 +49,10 @@ public class Commands {
 
     public static Project getProjectById(String id){
         return projectRepository.getProjectById(id);
+    }
+
+    public static List<Skill> getAllSkills() {
+        return skillRepository.getAllSkills();
     }
 
     public static boolean hasEnoughSkills(User user , Project project) {
@@ -130,5 +137,13 @@ public class Commands {
         }
 
         return sum;
+    }
+
+    public static void updateUserSkill(User user, Skill skill) {
+        if (user.getSkills().indexOf(skill) == -1) {
+            System.err.println("User " + user.getUsername() + " already has skill " + skill.getName());
+            return;
+        }
+        user.getSkills().add(skill);
     }
 }
