@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public class User {
     private Integer id;
@@ -9,11 +9,11 @@ public class User {
     private String lastname;
     private String jobTitle;
     private String bio;
-    private List <Skill> skills;
+    private LinkedList<Skill> skills;
 
     public User() {}
 
-    public User(Integer id, String username, String firstname, String lastname, String jobTitle, String bio, List<Skill> skills) {
+    public User(Integer id, String username, String firstname, String lastname, String jobTitle, String bio, LinkedList<Skill> skills) {
         this.id = id;
         this.username = username;
         this.firstname = firstname;
@@ -31,11 +31,11 @@ public class User {
         this.username = username;
     }
 
-    public List<Skill> getSkills() {
+    public LinkedList<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(LinkedList<Skill> skills) {
         this.skills = skills;
     }
 

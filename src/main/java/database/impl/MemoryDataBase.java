@@ -135,12 +135,12 @@ public class MemoryDataBase {
 
         User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
-                Arrays.asList(
-                        new Skill("HTML" , 5) ,
-                        new Skill("Javascript" , 4) ,
-                        new Skill("C++" , 2) ,
-                        new Skill("Java" , 3)
-                )
+            new LinkedList<Skill>(Arrays.asList(
+                new Skill("HTML", 5),
+                new Skill("Javascript", 4),
+                new Skill("C++", 2),
+                new Skill("Java", 3)
+            ))
         );
         insertUser(user);
         System.out.println("fetched default user ...");
