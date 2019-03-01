@@ -133,7 +133,7 @@ public class MemoryDataBase {
 
         System.out.println("initializing memory database ...");
 
-        User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
+        User user = new User(1 , "ali" , "علی" , "شریف زاده" , "برنامه نویس وب",
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
             new LinkedList<Skill>(Arrays.asList(
                 new Skill("HTML", 5),
@@ -143,7 +143,18 @@ public class MemoryDataBase {
             ))
         );
         insertUser(user);
-        System.out.println("fetched default user ...");
+        user = new User(2 , "ahmadreza" , "احمدرضا" , "صبور" , "برنامه نویس وب",
+            "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
+            new LinkedList<Skill>(Arrays.asList(
+                new Skill("SQL", 5),
+                new Skill("Django", 4),
+                new Skill("Linux", 3),
+                new Skill("Java", 3)
+            ))
+        );
+        insertUser(user);
+
+        System.out.println("initialized users ...");
         List<Project> projects = HttpClient.fetchAllProjects();
         for (Project project: projects) {
             insertProject(project);
