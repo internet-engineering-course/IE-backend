@@ -27,7 +27,7 @@
         <th>TITLE</th>
         <th>BUDGET</th>
     </tr>
-    <c:forEach var="project" items="${requestScope.projects}">
+    <c:forEach var="project" items="${projects}">
         <tr>
             <td><c:out value="${project.id}"/></td>
             <td><c:out value="${project.title}"/></td>

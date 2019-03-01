@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/project")
+@WebServlet(value = "/project" , name = "project")
 public class Project extends HttpServlet {
     @Override
     public void init() throws ServletException {

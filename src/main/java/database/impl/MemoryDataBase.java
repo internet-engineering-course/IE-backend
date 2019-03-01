@@ -125,8 +125,12 @@ public class MemoryDataBase {
     List<Skill> getAllSkills() {
         return skills;
     }
-
+    private boolean isIntialize = false;
     public void initialize() {
+        if(isIntialize){
+            return;
+        }
+        isIntialize = true;
         System.out.println("initializing memory database ...");
 
         User user = new User(1 , "test" , "علی" , "شریف زاده" , "برنامه نویس وب",
