@@ -25,4 +25,14 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     public User getUserById(Integer id) {
         return MemoryDataBase.getInstance().getUser(id);
     }
+
+    @Override
+    public void updateUserSkill(Integer userId, String skillName) {
+        MemoryDataBase.getInstance().updateUserSkill(userId, skillName);
+    }
+
+    @Override
+    public void deleteUserSkill(Integer userId, String skillName) {
+        MemoryDataBase.getInstance().deleteUserSkill(userId, skillName);
+    }
 }

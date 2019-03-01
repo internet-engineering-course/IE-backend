@@ -139,11 +139,11 @@ public class Commands {
         return sum;
     }
 
-    public static void updateUserSkill(User user, Skill skill) {
-        if (user.getSkills().indexOf(skill) == -1) {
-            System.err.println("User " + user.getUsername() + " already has skill " + skill.getName());
-            return;
-        }
-        user.getSkills().add(skill);
+    public static void updateUserSkill(Integer userId, String skillName) {
+        userRepository.updateUserSkill(userId, skillName);
+    }
+
+    public static void deleteUserSkill(Integer userId, String skillName) {
+        userRepository.deleteUserSkill(userId, skillName);
     }
 }

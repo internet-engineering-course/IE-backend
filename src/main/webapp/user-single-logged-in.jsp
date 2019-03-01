@@ -7,19 +7,20 @@
 </head>
 <body>
 <ul>
-    <li>id: <c:out value="${requestScope.user.id}"/></li>
-    <li>first name: <c:out value="${requestScope.user.firstname}"/></li>
-    <li>last name: <c:out value="${requestScope.user.lastname}"/></li>
-    <li>jobTitle: <c:out value="${requestScope.user.jobTitle}"/></li>
-    <li>bio: <c:out value="${requestScope.user.bio}"/></li>
+    <li>Id: <c:out value="${requestScope.user.id}"/></li>
+    <li>First Name: <c:out value="${requestScope.user.firstname}"/></li>
+    <li>Last Name: <c:out value="${requestScope.user.lastname}"/></li>
+    <li>Job Title: <c:out value="${requestScope.user.jobTitle}"/></li>
+    <li>Bio: <c:out value="${requestScope.user.bio}"/></li>
     <li>
-        skills:
+        Skills:
         <ul>
             <c:forEach var="skill" items="${requestScope.user.skills}">
                 <li>
                     <c:out value="${skill.name}"/>
-                    <form action="" method="">
-                        <button>Delete</button>
+                    <form action="/skill/delete" method="post">
+                        <input type="hidden" name="skillName" value=<c:out value="${skill.name}"/>>
+                        <input type="submit" value="Delete">
                     </form>
                 </li>
             </c:forEach>
@@ -27,13 +28,13 @@
     </li>
 </ul>
 Add Skill:
-<form action="" method="">
-    <select title="Skill">
+<form action="/skill/add" method="post">
+    <select title="skillName" name="skillName">
         <c:forEach var="skill" items="${requestScope.skills}">
             <option value=<c:out value="${skill.name}"/>><c:out value="${skill.name}"/></option>
         </c:forEach>
     </select>
-    <button>Add</button>
+    <input type="submit" value="Add">
 </form>
 </body>
 </html>

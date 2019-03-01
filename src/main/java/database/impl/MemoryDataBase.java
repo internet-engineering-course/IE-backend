@@ -170,4 +170,25 @@ public class MemoryDataBase {
         }
         return null;
     }
+
+    public void updateUserSkill(Integer userId, String skillName) {
+        User user = getUser(userId);
+        Skill skill = getSkill(skillName);
+        if (user.getSkills().indexOf(skill) != -1) {
+            System.err.println("User " + user.getUsername() + " already has skill " + skill.getName());
+            return;
+        }
+        user.getSkills().add(skill);
+    }
+
+    public void deleteUserSkill(Integer userId, String skillName) {
+        User user = getUser(userId);
+        Skill skill = getSkill(skillName);
+        int index = user.getSkills().indexOf(skill);
+        if (index == -1) {
+            System.err.println("User " + user.getUsername() + " doesn't have skill " + skill.getName());
+            return;
+        }
+        user.getSkills().remove(index);
+    }
 }

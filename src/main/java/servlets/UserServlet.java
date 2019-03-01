@@ -11,11 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.StringTokenizer;
 
-@WebServlet(name = "UserSingleLoggedIn", value = "/user/*")
-public class UserSingleLoggedIn extends HttpServlet {
+@WebServlet(name = "User", value = "/user/*")
+public class UserServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         MemoryDataBase.getInstance().initialize();
