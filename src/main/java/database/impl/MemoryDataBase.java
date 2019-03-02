@@ -1,10 +1,7 @@
 package database.impl;
 
 import client.HttpClient;
-import entities.Auction;
-import entities.Project;
-import entities.Skill;
-import entities.User;
+import entities.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,6 +12,7 @@ public class MemoryDataBase {
     private List <Project> projects;
     private List <Auction> auctions;
     private List<Skill> skills;
+    private List<Endorse> endorses;
     private Boolean initialized = false;
 
     private MemoryDataBase() {
@@ -22,6 +20,7 @@ public class MemoryDataBase {
         this.projects = new LinkedList<Project>();
         this.auctions = new LinkedList<Auction>();
         this.skills = new LinkedList<Skill>();
+        this.endorses = new LinkedList<Endorse>();
     }
 
     private static MemoryDataBase dataBase;
@@ -125,6 +124,18 @@ public class MemoryDataBase {
 
     List<Skill> getAllSkills() {
         return skills;
+    }
+
+    void insertEndorse(Endorse endorse) {
+        endorses.add(endorse);
+    }
+
+    public List<Endorse> getEndorses(Integer endorserId) {
+        List<Endorse> result = new LinkedList<Endorse>();
+        for(Endorse e: endorses)
+            if(e.getEndorserId().equals(endorserId))
+                result.add(e);
+        return result;
     }
 
     public void initialize() {

@@ -12,4 +12,6 @@ public interface UserRepository {
 
     User getUser(String username);
     User getUserById(Integer id);
+
+    void updateUserSkillPoint(Integer endorsedId, String skillName, Integer points);
 }

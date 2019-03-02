@@ -1,19 +1,12 @@
 package command;
 
-import database.AuctionRepository;
-import database.ProjectRepository;
-import database.SkillRepository;
-import database.UserRepository;
-import database.impl.AuctionRepositoryInMemoryImpl;
-import database.impl.ProjectRepositoryInMemoryImpl;
-import database.impl.SkillRepositoryInMemoryImpl;
-import database.impl.UserRepositoryInMemoryImpl;
-import entities.Auction;
-import entities.Project;
-import entities.Skill;
-import entities.User;
+import database.*;
+import database.impl.*;
+import entities.*;
 import exceptions.DeserializeException;
+import jdk.internal.util.xml.impl.Pair;
 import models.BidInfo;
+import models.EndorsableSkill;
 import models.ProjectTitle;
 import utilities.Deserializer;
 
@@ -26,6 +19,7 @@ public class Commands {
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
     private static SkillRepository skillRepository = new SkillRepositoryInMemoryImpl();
+    private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
 
     public static List<Project> getValidProjects(User user){
@@ -145,5 +139,31 @@ public class Commands {
 
     public static void deleteUserSkill(Integer userId, String skillName) {
         userRepository.deleteUserSkill(userId, skillName);
+    }
+
+    public static void endorseSkill(Integer endorserId, Integer endorsedId, String skillName) {
+        Endorse endorse = new Endorse(endorserId, endorsedId, skillName);
+        List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
+        for (Endorse e: endorses)
+            if (e.getEndorsedId().equals(endorsedId) && e.getSkillName().equals(skillName)) {
+                System.out.println("Already endorsed!");
+                return;
+            }
+        endorseRepository.insertEndorse(endorse);
+        userRepository.updateUserSkillPoint(endorsedId, skillName, 1);
+    }
+
+    public static List<EndorsableSkill> getUserEndorsableSkills(Integer endorserId, Integer endorsedId) {
+        User endorsed = userRepository.getUserById(endorsedId);
+        List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
+        List<EndorsableSkill> result = new LinkedList<EndorsableSkill>();
+        for (Skill skill: endorsed.getSkills()) {
+            boolean endorsable = true;
+            for (Endorse endorse : endorses)
+                if (endorse.getEndorsedId().equals(endorsedId) && skill.getName().equals(endorse.getSkillName()))
+                    endorsable = false;
+            result.add(new EndorsableSkill(skill, endorsable));
+        }
+        return result;
     }
 }

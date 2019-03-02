@@ -13,11 +13,11 @@
     <li>Job Title: <c:out value="${requestScope.user.jobTitle}"/></li>
     <li>Bio: <c:out value="${requestScope.user.bio}"/></li>
     <li>
-        Skills:
+        Your Skills:
         <ul>
             <c:forEach var="skill" items="${requestScope.user.skills}">
                 <li>
-                    <c:out value="${skill.name}"/>
+                    <c:out value="${skill.name}"/> : <c:out value="${skill.point}"/>
                     <form action="/skill/delete" method="post">
                         <input type="hidden" name="skillName" value=<c:out value="${skill.name}"/>>
                         <input type="submit" value="Delete">

@@ -1,6 +1,7 @@
 package database.impl;
 
 import database.UserRepository;
+import entities.Skill;
 import entities.User;
 
 public class UserRepositoryInMemoryImpl implements UserRepository {
@@ -24,6 +25,16 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     @Override
     public User getUserById(Integer id) {
         return MemoryDataBase.getInstance().getUser(id);
+    }
+
+    @Override
+    public void updateUserSkillPoint(Integer endorsedId, String skillName, Integer points) {
+        User user = MemoryDataBase.getInstance().getUser(endorsedId);
+        for (Skill skill: user.getSkills())
+            if (skill.getName().equals(skillName)) {
+                skill.setPoint(skill.getPoint() + points);
+                return;
+            }
     }
 
     @Override
