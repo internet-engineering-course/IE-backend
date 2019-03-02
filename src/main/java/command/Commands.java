@@ -14,8 +14,7 @@ import exceptions.DeserializeException;
 import models.BidInfo;
 import utilities.Deserializer;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Commands {
 
@@ -23,7 +22,16 @@ public class Commands {
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
 
-
+    public static List<User> getAllUsers(User user){
+        List<User> users = userRepository.getAllUser();
+        List<User> newList = new ArrayList<User>(users);
+        for(User u:newList){
+            if(u.getId().equals(user.getId())){
+                newList.remove(u);
+            }
+        }
+        return newList;
+    }
     public static List<Project> getValidProjects(User user){
         List<Project>  projects= projectRepository.getAllProjects();
         LinkedList<Project> result = new LinkedList<>();

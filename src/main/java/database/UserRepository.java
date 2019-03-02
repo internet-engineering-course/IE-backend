@@ -2,6 +2,8 @@ package database;
 
 import entities.User;
 
+import java.util.List;
+
 public interface UserRepository {
 
     boolean userExists(User user);
@@ -10,4 +12,5 @@ public interface UserRepository {
 
     User getUser(String username);
     User getUserById(Integer id);
+    List<User> getAllUser();
 }

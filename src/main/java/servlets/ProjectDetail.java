@@ -17,10 +17,6 @@ import java.util.StringTokenizer;
 
 @WebServlet(name = "ProjectDetail" , value = "/project/*")
 public class ProjectDetail extends HttpServlet {
-    @Override
-    public void init() throws ServletException {
-        MemoryDataBase.getInstance().initialize();
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

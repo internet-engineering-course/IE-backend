@@ -3,6 +3,8 @@ package database.impl;
 import database.UserRepository;
 import entities.User;
 
+import java.util.List;
+
 public class UserRepositoryInMemoryImpl implements UserRepository {
 
 
@@ -25,4 +27,11 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     public User getUserById(Integer id) {
         return MemoryDataBase.getInstance().getUser(id);
     }
+
+    @Override
+    public List<User> getAllUser() {
+        return MemoryDataBase.getInstance().getAllUser();
+    }
+
+
 }

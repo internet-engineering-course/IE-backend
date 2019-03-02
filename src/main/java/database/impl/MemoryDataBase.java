@@ -125,6 +125,7 @@ public class MemoryDataBase {
         return skills;
     }
     private boolean isIntialize = false;
+
     public void initialize() {
         if(isIntialize){
             return;
@@ -141,7 +142,16 @@ public class MemoryDataBase {
                         new Skill("Java" , 3)
                 )
         );
+        User user2 = new User(2 , "navid" , "نوید" , "اکبری" , "برنامه نویس",
+                "no bio",
+                Arrays.asList(
+                        new Skill("HTML" , 5) ,
+                        new Skill("Python" , 4) ,
+                        new Skill("C++" , 6)
+                )
+        );
         insertUser(user);
+        insertUser(user2);
         System.out.println("fetched default user ...");
         List<Project> projects = HttpClient.fetchAllProjects();
         for (Project project: projects) {
@@ -167,5 +177,8 @@ public class MemoryDataBase {
             }
         }
         return null;
+    }
+    public  List<User> getAllUser(){
+        return  users;
     }
 }
