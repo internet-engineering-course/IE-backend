@@ -2,6 +2,8 @@ package database;
 
 import entities.User;
 
+import java.util.List;
+
 public interface UserRepository {
 
     boolean userExists(User user);
@@ -14,4 +16,5 @@ public interface UserRepository {
     User getUserById(Integer id);
 
     void updateUserSkillPoint(Integer endorsedId, String skillName, Integer points);
+    List<User> getAllUser();
 }

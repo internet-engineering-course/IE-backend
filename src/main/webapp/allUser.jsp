@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Projects</title>
+    <title>Users</title>
     <style>
         table {
             text-align: center;
@@ -19,21 +19,22 @@
 </head>
 <body>
 
-
 <table>
     <tbody>
     <tr>
-        <th>ID</th>
-        <th>TITLE</th>
-        <th>BUDGET</th>
+        <th>id</th>
+        <th>name</th>
+        <th>jobTitle</th>
     </tr>
-    <c:forEach var="project" items="${projects}">
-        <tr>
-            <td><c:out value="${project.id}"/></td>
-            <td><c:out value="${project.title}"/></td>
-            <td><c:out value="${project.budget}"/></td>
-        </tr>
-    </c:forEach>
+    <c:if test="${size > 0}">
+        <c:forEach var="user" items="${users}">
+            <tr>
+                <td><c:out value="${user.id}"/></td>
+                <td><c:out value="${user.firstname} ${user.lastname}"/></td>
+                <td><c:out value="${user.jobTitle}"/></td>
+            </tr>
+        </c:forEach>
+    </c:if>
     </tbody>
 </table>
 </body>

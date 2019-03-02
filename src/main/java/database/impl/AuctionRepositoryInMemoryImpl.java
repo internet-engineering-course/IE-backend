@@ -15,7 +15,7 @@ public class AuctionRepositoryInMemoryImpl implements AuctionRepository {
     }
 
     @Override
-    public Auction getAuction(String auctionTitle) {
-        return MemoryDataBase.getInstance().getAuction(auctionTitle);
+    public Auction getAuction(String id) {
+        return MemoryDataBase.getInstance().getAuction(id);
     }
 }

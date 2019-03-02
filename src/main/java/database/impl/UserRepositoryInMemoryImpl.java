@@ -4,6 +4,8 @@ import database.UserRepository;
 import entities.Skill;
 import entities.User;
 
+import java.util.List;
+
 public class UserRepositoryInMemoryImpl implements UserRepository {
 
 
@@ -46,4 +48,11 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     public void deleteUserSkill(Integer userId, String skillName) {
         MemoryDataBase.getInstance().deleteUserSkill(userId, skillName);
     }
+
+    @Override
+    public List<User> getAllUser() {
+        return MemoryDataBase.getInstance().getAllUser();
+    }
+
+
 }
