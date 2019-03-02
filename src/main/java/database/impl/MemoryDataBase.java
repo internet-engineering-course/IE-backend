@@ -199,7 +199,7 @@ public class MemoryDataBase {
             System.err.println("User " + user.getUsername() + " already has skill " + skill.getName());
             return;
         }
-        user.getSkills().add(skill);
+        user.getSkills().add(new Skill(skillName, 0));
     }
 
     public void deleteUserSkill(Integer userId, String skillName) {
