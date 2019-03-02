@@ -1,32 +1,31 @@
 package models;
 
 public class BidInfo {
-    private String biddingUser;
-    private String projectTitle;
+    private Integer biddingUser;
+    private String id;
     private Integer bidAmount;
 
-    public BidInfo() {}
 
-    public BidInfo(String biddingUser, String projectTitle, Integer bidAmount) {
+    public BidInfo(Integer biddingUser, String id, Integer bidAmount) {
         this.biddingUser = biddingUser;
-        this.projectTitle = projectTitle;
+        this.id = id;
         this.bidAmount = bidAmount;
     }
 
-    public String getBiddingUser() {
+    public Integer getBiddingUser() {
         return biddingUser;
     }
 
-    public void setBiddingUser(String biddingUser) {
+    public void setBiddingUser(Integer biddingUser) {
         this.biddingUser = biddingUser;
     }
 
     public String getProjectTitle() {
-        return projectTitle;
+        return id;
     }
 
-    public void setProjectTitle(String projectTitle) {
-        this.projectTitle = projectTitle;
+    public void setProjectTitle(String id) {
+        this.id = id;
     }
 
     public Integer getBidAmount() {

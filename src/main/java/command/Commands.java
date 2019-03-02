@@ -12,7 +12,6 @@ import entities.Skill;
 import entities.User;
 import exceptions.DeserializeException;
 import models.BidInfo;
-import models.ProjectTitle;
 import utilities.Deserializer;
 
 import java.util.LinkedList;
@@ -75,50 +74,62 @@ public class Commands {
         projectRepository.insertProject(project);
     }
 
-    static boolean addBid(String json) throws DeserializeException {
-        BidInfo bidInfo = Deserializer.deserialize(json , BidInfo.class);
-        if (!meetsRequirements(bidInfo))
-            return false;
+    public static void addBid(Project project , User user , Integer bidAmount){
 
-        Auction auction = auctionRepository.getAuction(bidInfo.getProjectTitle());
-        if (auction == null) {
-            auction = new Auction(bidInfo.getProjectTitle());
+        Auction auction = auctionRepository.getAuction(project.getId());
+        if(auction == null){
+            auction = new Auction(project.getId());
             auctionRepository.insertAuction(auction);
         }
+        BidInfo bidInfo = new BidInfo(user.getId(), project.getId(),  bidAmount);
         auction.addOffer(bidInfo);
-        return true;
     }
 
-    private static boolean meetsRequirements(BidInfo bidInfo) {
-        User user = userRepository.getUser(bidInfo.getBiddingUser());
-        Project project = projectRepository.getProject(bidInfo.getProjectTitle());
-        if (user == null || project == null)
+    public static boolean userIsBidBefore(Project project, User user){
+        Auction auction = auctionRepository.getAuction(project.getId());
+        if(auction == null) {
             return false;
-
-        if(bidInfo.getBidAmount() > project.getBudget())
-            return false;
-
-        return hasEnoughSkills(user , project);
-    }
-
-
-    static User auction(String json) throws DeserializeException {
-        ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
-        Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
-        Project project = projectRepository.getProject(auction.getProjectTitle());
-        User winnerUser = null;
-        double maxPoint = 0;
-        for(BidInfo bidInfo: auction.getOffers()){
-            User user = userRepository.getUser(bidInfo.getBiddingUser());
-            double point =  calAuctionPoint(project , user);
-            point += project.getBudget() - bidInfo.getBidAmount();
-            if(maxPoint < point) {
-                maxPoint = point;
-                winnerUser = user;
+        }
+        else {
+            for(BidInfo bid:auction.getOffers()) {
+                if(bid.getBiddingUser().equals(user.getId())) {
+                    return true;
+                }
             }
         }
-        return winnerUser;
+        return false;
     }
+
+//    private static boolean meetsRequirements(BidInfo bidInfo) {
+//        User user = userRepository.getUser(bidInfo.getBiddingUser());
+//        Project project = projectRepository.getProject(bidInfo.getProjectTitle());
+//        if (user == null || project == null)
+//            return false;
+//
+//        if(bidInfo.getBidAmount() > project.getBudget())
+//            return false;
+//
+//        return hasEnoughSkills(user , project);
+//    }
+
+//
+//    static User auction(String json) throws DeserializeException {
+//        ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
+//        Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
+//        Project project = projectRepository.getProject(auction.getProjectTitle());
+//        User winnerUser = null;
+//        double maxPoint = 0;
+//        for(BidInfo bidInfo: auction.getOffers()){
+//            User user = userRepository.getUser(bidInfo.getBiddingUser());
+//            double point =  calAuctionPoint(project , user);
+//            point += project.getBudget() - bidInfo.getBidAmount();
+//            if(maxPoint < point) {
+//                maxPoint = point;
+//                winnerUser = user;
+//            }
+//        }
+//        return winnerUser;
+//    }
 
     private static double calAuctionPoint(Project project , User user){
         double sum = 0;
@@ -130,5 +141,15 @@ public class Commands {
         }
 
         return sum;
+    }
+
+    public static Integer getUserBidAmount(Project project, User user) {
+        Auction auction = auctionRepository.getAuction(project.getId());
+        for(BidInfo bid:auction.getOffers()) {
+            if(bid.getBiddingUser().equals(user.getId())) {
+                return bid.getBidAmount();
+            }
+        }
+        return 0;
     }
 }

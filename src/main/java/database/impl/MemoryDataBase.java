@@ -91,10 +91,9 @@ public class MemoryDataBase {
         auctions.add(auction);
     }
 
-
-    Auction getAuction(String auctionTitle) {
+    Auction getAuction(String id) {
         for (Auction auction : auctions) {
-            if (auction.getProjectTitle().equals(auctionTitle)) {
+            if (auction.getId().equals(id)) {
                 return auction;
             }
         }
