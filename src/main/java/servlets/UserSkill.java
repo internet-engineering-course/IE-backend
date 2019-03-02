@@ -1,7 +1,6 @@
 package servlets;
 
 import command.Commands;
-import database.impl.MemoryDataBase;
 import entities.User;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +12,6 @@ import java.util.StringTokenizer;
 
 @WebServlet(name = "UserSkill", value = "/skill/*")
 public class UserSkill extends HttpServlet {
-    @Override
-    public void init() throws ServletException {
-        MemoryDataBase.getInstance().initialize();
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

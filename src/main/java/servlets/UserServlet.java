@@ -1,7 +1,6 @@
 package servlets;
 
 import command.Commands;
-import database.impl.MemoryDataBase;
 import entities.User;
 
 import javax.servlet.RequestDispatcher;
@@ -15,10 +14,6 @@ import java.util.StringTokenizer;
 
 @WebServlet(name = "User", value = "/user/*")
 public class UserServlet extends HttpServlet {
-    @Override
-    public void init() throws ServletException {
-        MemoryDataBase.getInstance().initialize();
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StringTokenizer tokenizer = new StringTokenizer(request.getPathInfo(), "/");
