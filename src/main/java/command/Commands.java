@@ -26,6 +26,7 @@ public class Commands {
         for(User u:newList){
             if(u.getId().equals(user.getId())){
                 newList.remove(u);
+                break;
             }
         }
         return newList;

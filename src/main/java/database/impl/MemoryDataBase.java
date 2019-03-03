@@ -163,6 +163,16 @@ public class MemoryDataBase {
             ))
         );
         insertUser(user);
+        user = new User(3 , "navid" , "نوید" , "اکبری" , "دانشجو",
+                "no bio",
+                new LinkedList<Skill>(Arrays.asList(
+                        new Skill("SQL", 5),
+                        new Skill("Django", 4),
+                        new Skill("Linux", 3),
+                        new Skill("Python", 3)
+                ))
+        );
+        insertUser(user);
 
         System.out.println("initialized users ...");
         List<Project> projects = HttpClient.fetchAllProjects();
