@@ -3,7 +3,7 @@ package client;
 import client.models.HttpResponse;
 import entities.Project;
 import entities.Skill;
-import exceptions.DeserializeException;
+import exceptions.SerializeException;
 import utilities.Deserializer;
 
 import java.io.BufferedReader;
@@ -39,7 +39,7 @@ public class HttpClient {
         HttpResponse response = get(url);
         try {
             return Deserializer.deserializeList(response.getResponse(), Project.class);
-        } catch (DeserializeException e) {
+        } catch (SerializeException e) {
             e.printStackTrace();
         }
         return new LinkedList<>();
@@ -50,7 +50,7 @@ public class HttpClient {
         HttpResponse response = get(url);
         try {
             return Deserializer.deserializeList(response.getResponse(), Skill.class);
-        } catch (DeserializeException e) {
+        } catch (SerializeException e) {
             e.printStackTrace();
         }
         return new LinkedList<>();

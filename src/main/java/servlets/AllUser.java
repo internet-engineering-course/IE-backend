@@ -1,11 +1,9 @@
 package servlets;
 
 import command.Commands;
-import database.impl.MemoryDataBase;
-import entities.Project;
 import entities.User;
+import utilities.Serializer;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,10 +18,8 @@ public class AllUser extends HttpServlet {
         User user = Commands.getDefaultUser();
         List<User> users = Commands.getAllUsers(user);
 
-        response.setContentType("text/html; charset=UTF-8");
-        request.setAttribute("users" , users);
-        request.setAttribute("size" , users.size());
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/allUser.jsp");
-        requestDispatcher.forward(request, response);
+        response.setContentType("application/json; charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().append(Serializer.serialize(users));
     }
 }

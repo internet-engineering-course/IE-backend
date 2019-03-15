@@ -1,9 +1,8 @@
 package servlets;
 
 import command.Commands;
-import database.impl.MemoryDataBase;
+import utilities.Serializer;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,9 +17,8 @@ public class Project extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<entities.Project> validProjects = Commands.getValidProjects(Commands.getDefaultUser());
-        request.setAttribute("projects", validProjects);
-        response.setContentType("text/html; charset=UTF-8");
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/project.jsp");
-        requestDispatcher.forward(request, response);
+        response.setContentType("application/json; charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().append(Serializer.serialize(validProjects));
     }
 }

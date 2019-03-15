@@ -1,12 +1,10 @@
 package servlets;
 
-import client.models.HttpResponse;
 import command.Commands;
-import database.impl.MemoryDataBase;
 import entities.Project;
 import entities.User;
+import utilities.Serializer;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,27 +17,24 @@ import java.util.StringTokenizer;
 public class ProjectDetail extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         StringTokenizer tokenizer = new StringTokenizer(request.getPathInfo(), "/");
         String id = tokenizer.nextToken();
-        User  user = Commands.getDefaultUser();
+        User user = Commands.getDefaultUser();
         Project project = Commands.getProjectById(id);
-        boolean isBidBefore = false;
-        if(Commands.hasEnoughSkills(Commands.getDefaultUser() , project))
-        {
-            request.setAttribute("project", project);
-            if(Commands.userIsBidBefore(project , user)){
-                isBidBefore = true;
-                Integer amount = Commands.getUserBidAmount(project , user);
-                request.setAttribute("amount" , amount);
-            }
-            request.setAttribute("isBidBefore" , isBidBefore);
-            response.setContentType("text/html; charset=UTF-8");
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/projectDetail.jsp");
-            requestDispatcher.forward(request, response);
-
-        }else{
-            response.setStatus(403);
+        if (project == null) {
+            response.setContentType("text/plain; charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().append("Project not found!");
+        }
+        else if (Commands.hasEnoughSkills(user, project)) {
+            response.setContentType("application/json; charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().append(Serializer.serialize(project));
+        }
+        else {
+            response.setContentType("text/plain; charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().append("Access to project is forbidden!");
         }
     }
 

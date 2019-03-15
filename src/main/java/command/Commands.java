@@ -3,7 +3,7 @@ package command;
 import database.*;
 import database.impl.*;
 import entities.*;
-import exceptions.DeserializeException;
+import exceptions.SerializeException;
 import models.BidInfo;
 import models.EndorsableSkill;
 import utilities.Deserializer;
@@ -75,12 +75,12 @@ public class Commands {
         return meets;
     }
 
-    static void register(String json) throws DeserializeException {
+    static void register(String json) throws SerializeException {
         User user = Deserializer.deserialize(json , User.class);
         userRepository.insertUser(user);
     }
 
-    static void addProject(String json) throws DeserializeException {
+    static void addProject(String json) throws SerializeException {
         Project project = Deserializer.deserialize(json , Project.class);
         projectRepository.insertProject(project);
     }
