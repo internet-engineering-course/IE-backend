@@ -83,15 +83,15 @@ public class Commands {
 //        projectRepository.insertProject(project);
 //    }
 
-    public static void addBid(Project project , User user , Integer bidAmount){
-
+    public static BidInfo addBid(Project project , User user , Integer bidAmount){
         Auction auction = auctionRepository.getAuction(project.getId());
-        if(auction == null){
+        if(auction == null) {
             auction = new Auction(project.getId());
             auctionRepository.insertAuction(auction);
         }
-        BidInfo bidInfo = new BidInfo(user.getId(), project.getId(),  bidAmount);
+        BidInfo bidInfo = new BidInfo(user.getId(), project.getId(), bidAmount);
         auction.addOffer(bidInfo);
+        return bidInfo;
     }
 
     public static boolean userIsBidBefore(Project project, User user){
@@ -101,7 +101,7 @@ public class Commands {
         }
         else {
             for(BidInfo bid:auction.getOffers()) {
-                if(bid.getBiddingUser().equals(user.getId())) {
+                if(bid.getUserId().equals(user.getId())) {
                     return true;
                 }
             }
@@ -110,7 +110,7 @@ public class Commands {
     }
 
 //    private static boolean meetsRequirements(BidInfo bidInfo) {
-//        User user = userRepository.getUser(bidInfo.getBiddingUser());
+//        User user = userRepository.getUser(bidInfo.getUserId());
 //        Project project = projectRepository.getProject(bidInfo.getProjectTitle());
 //        if (user == null || project == null)
 //            return false;
@@ -129,7 +129,7 @@ public class Commands {
 //        User winnerUser = null;
 //        double maxPoint = 0;
 //        for(BidInfo bidInfo: auction.getOffers()){
-//            User user = userRepository.getUser(bidInfo.getBiddingUser());
+//            User user = userRepository.getUser(bidInfo.getUserId());
 //            double point =  calAuctionPoint(project , user);
 //            point += project.getBudget() - bidInfo.getBidAmount();
 //            if(maxPoint < point) {
@@ -160,16 +160,17 @@ public class Commands {
         userRepository.deleteUserSkill(userId, skillName);
     }
 
-    public static void endorseSkill(Integer endorserId, Integer endorsedId, String skillName) {
+    public static Endorse endorseSkill(Integer endorserId, Integer endorsedId, String skillName) {
         Endorse endorse = new Endorse(endorserId, endorsedId, skillName);
         List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
         for (Endorse e: endorses)
             if (e.getEndorsedId().equals(endorsedId) && e.getSkillName().equals(skillName)) {
                 System.out.println("Already endorsed!");
-                return;
+                return null;
             }
         endorseRepository.insertEndorse(endorse);
         userRepository.updateUserSkillPoint(endorsedId, skillName, 1);
+        return endorse;
     }
 
     public static List<EndorsableSkill> getUserEndorsableSkills(Integer endorserId, Integer endorsedId) {
@@ -189,7 +190,7 @@ public class Commands {
     public static Integer getUserBidAmount(Project project, User user) {
         Auction auction = auctionRepository.getAuction(project.getId());
         for(BidInfo bid:auction.getOffers()) {
-            if(bid.getBiddingUser().equals(user.getId())) {
+            if(bid.getUserId().equals(user.getId())) {
                 return bid.getBidAmount();
             }
         }

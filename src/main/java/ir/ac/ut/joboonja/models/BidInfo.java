@@ -1,31 +1,31 @@
 package ir.ac.ut.joboonja.models;
 
 public class BidInfo {
-    private Integer biddingUser;
-    private String id;
+    private Integer userId;
+    private String projectId;
     private Integer bidAmount;
 
 
-    public BidInfo(Integer biddingUser, String id, Integer bidAmount) {
-        this.biddingUser = biddingUser;
-        this.id = id;
+    public BidInfo(Integer userId, String projectId, Integer bidAmount) {
+        this.userId = userId;
+        this.projectId = projectId;
         this.bidAmount = bidAmount;
     }
 
-    public Integer getBiddingUser() {
-        return biddingUser;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setBiddingUser(Integer biddingUser) {
-        this.biddingUser = biddingUser;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getProjectTitle() {
-        return id;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setProjectTitle(String id) {
-        this.id = id;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public Integer getBidAmount() {
