@@ -96,6 +96,9 @@ public class Commands {
         User user = Commands.getDefaultUser();
         if (Commands.userIsBidBefore(project, user))
             throw new BadRequestException("User has already bidded!");
+        if (bidAmount > project.getBudget())
+            throw new BadRequestException("Bid amount is higher than project budget!");
+
         Auction auction = auctionRepository.getAuction(project.getId());
         if(auction == null) {
             auction = new Auction(project.getId());
