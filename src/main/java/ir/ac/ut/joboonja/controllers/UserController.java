@@ -44,6 +44,8 @@ public class UserController {
         return endorse;
     }
 
+
+    //todo: check that the skill is valid or not
     @PutMapping
     public User updateUser(@RequestBody User user) {
         User defaultUser = Commands.getDefaultUser();
