@@ -171,12 +171,24 @@ public class Commands {
         return sum;
     }
 
-    public static void updateUserSkill(Integer userId, String skillName) {
-        userRepository.updateUserSkill(userId, skillName);
+    public static void addUserSkill(String skillName) {
+        User user = Commands.getDefaultUser();
+        Skill skill = new Skill(skillName, 0);
+        if (!skillRepository.skillExists(skill))
+            throw new BadRequestException("Skill " + skillName + " doesn't exist!");
+        if (user.getSkills().indexOf(skill) != -1)
+            throw new BadRequestException("User already has " + skillName + " skill!");
+        userRepository.addUserSkill(user.getId(), skillName);
     }
 
-    public static void deleteUserSkill(Integer userId, String skillName) {
-        userRepository.deleteUserSkill(userId, skillName);
+    public static void deleteUserSkill(String skillName) {
+        User user = Commands.getDefaultUser();
+        Skill skill = new Skill(skillName, 0);
+        if (!skillRepository.skillExists(skill))
+            throw new BadRequestException("Skill " + skillName + " doesn't exist!");
+        if (user.getSkills().indexOf(skill) == -1)
+            throw new BadRequestException("User doesn't have " + skillName + " skill!");
+        userRepository.deleteUserSkill(user.getId(), skillName);
     }
 
     public static Endorse endorseSkill(Integer endorsedId, String skillName) {

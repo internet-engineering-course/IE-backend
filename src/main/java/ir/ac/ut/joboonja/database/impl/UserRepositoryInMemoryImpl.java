@@ -40,8 +40,8 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserSkill(Integer userId, String skillName) {
-        MemoryDataBase.getInstance().updateUserSkill(userId, skillName);
+    public void addUserSkill(Integer userId, String skillName) {
+        MemoryDataBase.getInstance().addUserSkill(userId, skillName);
     }
 
     @Override

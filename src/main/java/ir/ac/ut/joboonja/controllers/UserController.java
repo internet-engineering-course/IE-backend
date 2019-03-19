@@ -28,26 +28,23 @@ public class UserController {
         return Commands.endorseSkill(userId, endorseRequest.getSkillName());
     }
 
-    //todo: check that the skill is valid or not
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        User defaultUser = Commands.getDefaultUser();
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
-                Commands.updateUserSkill(defaultUser.getId(), skill.getName());
+                Commands.addUserSkill(skill.getName());
             }
         }
-        return defaultUser;
+        return Commands.getDefaultUser();
     }
 
     @DeleteMapping
     public User deleteUserSkill(@RequestBody User user) {
-        User defaultUser = Commands.getDefaultUser();
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
-                Commands.deleteUserSkill(defaultUser.getId(), skill.getName());
+                Commands.deleteUserSkill(skill.getName());
             }
         }
-        return defaultUser;
+        return Commands.getDefaultUser();
     }
 }

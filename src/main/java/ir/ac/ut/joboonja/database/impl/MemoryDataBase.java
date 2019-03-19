@@ -206,13 +206,8 @@ public class MemoryDataBase {
         return null;
     }
 
-    void updateUserSkill(Integer userId, String skillName) {
+    void addUserSkill(Integer userId, String skillName) {
         User user = getUser(userId);
-        Skill skill = getSkill(skillName);
-        if (user.getSkills().indexOf(skill) != -1) {
-            System.err.println("User " + user.getUsername() + " already has skill " + skill.getName());
-            return;
-        }
         user.getSkills().add(new Skill(skillName, 0));
     }
 
@@ -220,10 +215,6 @@ public class MemoryDataBase {
         User user = getUser(userId);
         Skill skill = getSkill(skillName);
         int index = user.getSkills().indexOf(skill);
-        if (index == -1) {
-            System.err.println("User " + user.getUsername() + " doesn't have skill " + skill.getName());
-            return;
-        }
         user.getSkills().remove(index);
     }
     List<User> getAllUser(){
