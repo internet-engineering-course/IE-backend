@@ -16,11 +16,11 @@ public class MemoryDataBase {
     private Boolean initialized = false;
 
     private MemoryDataBase() {
-        this.users = new LinkedList<User>();
-        this.projects = new LinkedList<Project>();
-        this.auctions = new LinkedList<Auction>();
-        this.skills = new LinkedList<Skill>();
-        this.endorses = new LinkedList<Endorse>();
+        this.users = new LinkedList<>();
+        this.projects = new LinkedList<>();
+        this.auctions = new LinkedList<>();
+        this.skills = new LinkedList<>();
+        this.endorses = new LinkedList<>();
     }
 
     private static MemoryDataBase dataBase;
@@ -129,12 +129,16 @@ public class MemoryDataBase {
         endorses.add(endorse);
     }
 
-    public List<Endorse> getEndorses(Integer endorserId) {
-        List<Endorse> result = new LinkedList<Endorse>();
+    List<Endorse> getEndorses(Integer endorserId) {
+        List<Endorse> result = new LinkedList<>();
         for(Endorse e: endorses)
             if(e.getEndorserId().equals(endorserId))
                 result.add(e);
         return result;
+    }
+
+    boolean endorseExists(Endorse endorse) {
+        return endorses.indexOf(endorse) != -1;
     }
 
     public void initialize() {
@@ -145,7 +149,7 @@ public class MemoryDataBase {
 
         User user = new User(1 , "ali" , "علی" , "شریف زاده" , "برنامه نویس وب",
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
-            new LinkedList<Skill>(Arrays.asList(
+            new LinkedList<>(Arrays.asList(
                 new Skill("HTML", 5),
                 new Skill("Javascript", 4),
                 new Skill("C++", 2),
@@ -155,7 +159,7 @@ public class MemoryDataBase {
         insertUser(user);
         user = new User(2 , "ahmadreza" , "احمدرضا" , "صبور" , "برنامه نویس وب",
             "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت",
-            new LinkedList<Skill>(Arrays.asList(
+            new LinkedList<>(Arrays.asList(
                 new Skill("SQL", 5),
                 new Skill("Django", 4),
                 new Skill("Linux", 3),
@@ -165,7 +169,7 @@ public class MemoryDataBase {
         insertUser(user);
         user = new User(3 , "navid" , "نوید" , "اکبری" , "دانشجو",
                 "no bio",
-                new LinkedList<Skill>(Arrays.asList(
+                new LinkedList<>(Arrays.asList(
                         new Skill("SQL", 5),
                         new Skill("Django", 4),
                         new Skill("Linux", 3),
@@ -189,11 +193,11 @@ public class MemoryDataBase {
         initialized = true;
     }
 
-    public List<Project> getAllProjects() {
+    List<Project> getAllProjects() {
         return projects;
     }
 
-    public Project getProjectById(String id) {
+    Project getProjectById(String id) {
         for (Project project : projects) {
             if (project.getId().equals(id)) {
                 return project;
@@ -202,7 +206,7 @@ public class MemoryDataBase {
         return null;
     }
 
-    public void updateUserSkill(Integer userId, String skillName) {
+    void updateUserSkill(Integer userId, String skillName) {
         User user = getUser(userId);
         Skill skill = getSkill(skillName);
         if (user.getSkills().indexOf(skill) != -1) {
@@ -212,7 +216,7 @@ public class MemoryDataBase {
         user.getSkills().add(new Skill(skillName, 0));
     }
 
-    public void deleteUserSkill(Integer userId, String skillName) {
+    void deleteUserSkill(Integer userId, String skillName) {
         User user = getUser(userId);
         Skill skill = getSkill(skillName);
         int index = user.getSkills().indexOf(skill);
@@ -222,7 +226,7 @@ public class MemoryDataBase {
         }
         user.getSkills().remove(index);
     }
-    public  List<User> getAllUser(){
+    List<User> getAllUser(){
         return  users;
     }
 }

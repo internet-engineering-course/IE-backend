@@ -179,12 +179,17 @@ public class Commands {
         userRepository.deleteUserSkill(userId, skillName);
     }
 
-    public static Endorse endorseSkill(Integer endorserId, Integer endorsedId, String skillName) {
+    public static Endorse endorseSkill(Integer endorsedId, String skillName) {
+        Integer endorserId = Commands.getDefaultUser().getId();
         Endorse endorse = new Endorse(endorserId, endorsedId, skillName);
-        List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
-        for (Endorse e: endorses)
-            if (e.getEndorsedId().equals(endorsedId) && e.getSkillName().equals(skillName))
-                throw new BadRequestException("Already Endorsed");
+        User user = getUserById(endorsedId);
+        if (endorserId.equals(endorsedId))
+            throw new ForbiddenException("You can't endorse yourself!");
+        if (endorseRepository.endorseExists(endorse))
+            throw new BadRequestException("Already Endorsed!");
+        if (user.getSkills().indexOf(new Skill(skillName, 0)) == -1)
+            throw new BadRequestException("User doesn't have endorsed skill!");
+
         endorseRepository.insertEndorse(endorse);
         userRepository.updateUserSkillPoint(endorsedId, skillName, 1);
         return endorse;

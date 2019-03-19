@@ -34,4 +34,17 @@ public class Endorse {
     public void setSkillName(String skillName) {
         this.skillName = skillName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Endorse) {
+            Endorse endorse = (Endorse)obj;
+            return endorsedId.equals(endorse.getEndorsedId()) &&
+                endorserId.equals(endorse.getEndorserId()) &&
+                skillName.equals(endorse.getSkillName());
+        }
+        else {
+            return false;
+        }
+    }
 }

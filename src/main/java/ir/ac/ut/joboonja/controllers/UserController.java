@@ -23,11 +23,9 @@ public class UserController {
         return Commands.getUserById(userId);
     }
 
-    // TODO user cannot endorse himself, skill should exist in user skills
     @PostMapping("/{userId}/endorse")
     public Endorse endorse(@PathVariable("userId") Integer userId, @RequestBody EndorseRequest endorseRequest) {
-        Integer endorserId = Commands.getDefaultUser().getId();
-        return Commands.endorseSkill(endorserId, userId, endorseRequest.getSkillName());
+        return Commands.endorseSkill(userId, endorseRequest.getSkillName());
     }
 
     //todo: check that the skill is valid or not

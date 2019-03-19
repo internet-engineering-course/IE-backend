@@ -30,8 +30,8 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserSkillPoint(Integer endorsedId, String skillName, Integer points) {
-        User user = MemoryDataBase.getInstance().getUser(endorsedId);
+    public void updateUserSkillPoint(Integer userId, String skillName, Integer points) {
+        User user = MemoryDataBase.getInstance().getUser(userId);
         for (Skill skill: user.getSkills())
             if (skill.getName().equals(skillName)) {
                 skill.setPoint(skill.getPoint() + points);

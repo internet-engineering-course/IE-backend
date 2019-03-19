@@ -12,6 +12,11 @@ public class EndorseRepositoryInMemoryImpl implements EndorseRepository {
     }
 
     @Override
+    public boolean endorseExists(Endorse endorse) {
+        return MemoryDataBase.getInstance().endorseExists(endorse);
+    }
+
+    @Override
     public List<Endorse> getEndorses(Integer endorserId) {
         return MemoryDataBase.getInstance().getEndorses(endorserId);
     }
