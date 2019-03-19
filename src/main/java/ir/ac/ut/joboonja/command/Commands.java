@@ -3,6 +3,9 @@ package ir.ac.ut.joboonja.command;
 import ir.ac.ut.joboonja.database.*;
 import ir.ac.ut.joboonja.database.impl.*;
 import ir.ac.ut.joboonja.entities.*;
+import ir.ac.ut.joboonja.exceptions.BadRequestException;
+import ir.ac.ut.joboonja.exceptions.ForbiddenException;
+import ir.ac.ut.joboonja.exceptions.NotFoundException;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 
@@ -20,7 +23,7 @@ public class Commands {
 
     public static List<User> getAllUsers(User user){
         List<User> users = userRepository.getAllUser();
-        List<User> newList = new ArrayList<User>(users);
+        List<User> newList = new ArrayList<>(users);
         for(User u:newList){
             if(u.getId().equals(user.getId())){
                 newList.remove(u);
@@ -48,15 +51,21 @@ public class Commands {
         return userRepository.getUserById(id);
     }
 
-    public static Project getProjectById(String id){
-        return projectRepository.getProjectById(id);
+    public static Project getProjectById(String id) {
+        User user = getDefaultUser();
+        Project project = projectRepository.getProjectById(id);
+        if (project == null)
+            throw new NotFoundException("Project not found!");
+        if (!hasEnoughSkills(user, project))
+            throw new ForbiddenException("Access to project is forbidden!");
+        return project;
     }
 
     public static List<Skill> getAllSkills() {
         return skillRepository.getAllSkills();
     }
 
-    public static boolean hasEnoughSkills(User user , Project project) {
+    private static boolean hasEnoughSkills(User user, Project project) {
 
         if (user == null || project == null)
             return false;
@@ -83,7 +92,10 @@ public class Commands {
 //        projectRepository.insertProject(project);
 //    }
 
-    public static BidInfo addBid(Project project , User user , Integer bidAmount){
+    public static BidInfo addBid(Project project, Integer bidAmount) {
+        User user = Commands.getDefaultUser();
+        if (Commands.userIsBidBefore(project, user))
+            throw new BadRequestException("User has already bidded!");
         Auction auction = auctionRepository.getAuction(project.getId());
         if(auction == null) {
             auction = new Auction(project.getId());
@@ -94,7 +106,7 @@ public class Commands {
         return bidInfo;
     }
 
-    public static boolean userIsBidBefore(Project project, User user){
+    private static boolean userIsBidBefore(Project project, User user){
         Auction auction = auctionRepository.getAuction(project.getId());
         if(auction == null) {
             return false;
@@ -176,7 +188,7 @@ public class Commands {
     public static List<EndorsableSkill> getUserEndorsableSkills(Integer endorserId, Integer endorsedId) {
         User endorsed = userRepository.getUserById(endorsedId);
         List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
-        List<EndorsableSkill> result = new LinkedList<EndorsableSkill>();
+        List<EndorsableSkill> result = new LinkedList<>();
         for (Skill skill: endorsed.getSkills()) {
             boolean endorsable = true;
             for (Endorse endorse : endorses)
