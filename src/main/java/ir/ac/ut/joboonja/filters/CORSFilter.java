@@ -1,4 +1,4 @@
-package ir.ac.ut.joboonja.controllers;
+package ir.ac.ut.joboonja.filters;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -14,19 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CORSFilter implements Filter {
 
-    public CORSFilter() {
-        // TODO Auto-generated constructor stub
-    }
-
-    public void destroy() {
-        // TODO Auto-generated method stub
-    }
-
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println("CORSFilter HTTP Request: " + request.getMethod());
 
         // Authorize (allow) all domains to consume the content
         ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "*");
@@ -43,9 +34,4 @@ public class CORSFilter implements Filter {
         // pass the request along the filter chain
         chain.doFilter(request, servletResponse);
     }
-
-    public void init(FilterConfig fConfig) throws ServletException {
-        // TODO Auto-generated method stub
-    }
-
 }
