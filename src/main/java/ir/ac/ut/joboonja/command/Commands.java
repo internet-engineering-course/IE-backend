@@ -21,7 +21,8 @@ public class Commands {
     private static SkillRepository skillRepository = new SkillRepositoryInMemoryImpl();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
-    public static List<User> getAllUsers(User user){
+    public static List<User> getAllUsers() {
+        User user = Commands.getDefaultUser();
         List<User> users = userRepository.getAllUser();
         List<User> newList = new ArrayList<>(users);
         for(User u:newList){
@@ -48,7 +49,10 @@ public class Commands {
     }
 
     public static User getUserById(Integer id){
-        return userRepository.getUserById(id);
+        User user = userRepository.getUserById(id);
+        if (user == null)
+            throw new NotFoundException("User not found");
+        return user;
     }
 
     public static Project getProjectById(String id) {
@@ -179,10 +183,8 @@ public class Commands {
         Endorse endorse = new Endorse(endorserId, endorsedId, skillName);
         List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
         for (Endorse e: endorses)
-            if (e.getEndorsedId().equals(endorsedId) && e.getSkillName().equals(skillName)) {
-                System.out.println("Already endorsed!");
-                return null;
-            }
+            if (e.getEndorsedId().equals(endorsedId) && e.getSkillName().equals(skillName))
+                throw new BadRequestException("Already Endorsed");
         endorseRepository.insertEndorse(endorse);
         userRepository.updateUserSkillPoint(endorsedId, skillName, 1);
         return endorse;

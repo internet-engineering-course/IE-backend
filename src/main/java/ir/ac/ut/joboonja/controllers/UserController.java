@@ -4,8 +4,6 @@ import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Endorse;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
-import ir.ac.ut.joboonja.exceptions.BadRequestException;
-import ir.ac.ut.joboonja.exceptions.NotFoundException;
 import ir.ac.ut.joboonja.models.EndorseRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,33 +15,20 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-        User user = Commands.getDefaultUser();
-        return Commands.getAllUsers(user);
+        return Commands.getAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable("userId") String userId) {
-        try {
-            User user = Commands.getUserById(Integer.valueOf(userId));
-            if (user == null)
-                throw new NotFoundException("User not found");
-            return user;
-        } catch (NumberFormatException e) {
-            throw new NotFoundException("User not found");
-        }
+    public User getUser(@PathVariable("userId") Integer userId) {
+        return Commands.getUserById(userId);
     }
 
     // TODO user cannot endorse himself, skill should exist in user skills
     @PostMapping("/{userId}/endorse")
-    public Endorse endorse(@PathVariable("userId") String userId, @RequestBody EndorseRequest endorseRequest) {
+    public Endorse endorse(@PathVariable("userId") Integer userId, @RequestBody EndorseRequest endorseRequest) {
         Integer endorserId = Commands.getDefaultUser().getId();
-        Integer endorsedId = Integer.valueOf(userId);
-        Endorse endorse = Commands.endorseSkill(endorserId, endorsedId, endorseRequest.getSkillName());
-        if (endorse == null)
-            throw new BadRequestException("Already Endorsed");
-        return endorse;
+        return Commands.endorseSkill(endorserId, userId, endorseRequest.getSkillName());
     }
-
 
     //todo: check that the skill is valid or not
     @PutMapping
