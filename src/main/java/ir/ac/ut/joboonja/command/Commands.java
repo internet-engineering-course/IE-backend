@@ -208,6 +208,9 @@ public class Commands {
     }
 
     public static List<EndorsableSkill> getUserEndorsableSkills(Integer endorserId, Integer endorsedId) {
+        if (endorsedId.equals(endorserId))
+            return new LinkedList<>();
+
         User endorsed = userRepository.getUserById(endorsedId);
         List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
         List<EndorsableSkill> result = new LinkedList<>();

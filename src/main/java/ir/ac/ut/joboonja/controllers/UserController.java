@@ -4,6 +4,7 @@ import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Endorse;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
+import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.models.EndorseRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public User getUser(@PathVariable("userId") Integer userId) {
         return Commands.getUserById(userId);
+    }
+
+    @GetMapping("/{userId}/endorse")
+    public List<EndorsableSkill> getEndorsableSkills(@PathVariable("userId") Integer userId) {
+        return Commands.getUserEndorsableSkills(Commands.getDefaultUser().getId(), userId);
     }
 
     @PostMapping("/{userId}/endorse")
