@@ -12,6 +12,7 @@ import ir.ac.ut.joboonja.models.EndorsableSkill;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Commands {
 
@@ -208,10 +209,13 @@ public class Commands {
     }
 
     public static List<EndorsableSkill> getUserEndorsableSkills(Integer endorserId, Integer endorsedId) {
-        if (endorsedId.equals(endorserId))
-            return new LinkedList<>();
-
         User endorsed = userRepository.getUserById(endorsedId);
+
+        if (endorsedId.equals(endorserId))
+            return endorsed.getSkills().stream()
+                .map(skill -> new EndorsableSkill(skill, false))
+                .collect(Collectors.toList());
+
         List<Endorse> endorses = endorseRepository.getEndorses(endorserId);
         List<EndorsableSkill> result = new LinkedList<>();
         for (Skill skill: endorsed.getSkills()) {
