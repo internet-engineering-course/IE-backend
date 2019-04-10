@@ -114,7 +114,7 @@ public class Commands {
         return bidInfo;
     }
 
-    private static boolean userIsBidBefore(Project project, User user){
+    public static boolean userIsBidBefore(Project project, User user){
         Auction auction = auctionRepository.getAuction(project.getId());
         if(auction == null) {
             return false;
