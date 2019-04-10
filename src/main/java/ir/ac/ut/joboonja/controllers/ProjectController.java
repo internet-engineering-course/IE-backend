@@ -2,6 +2,7 @@ package ir.ac.ut.joboonja.controllers;
 
 import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Project;
+import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,11 @@ public class ProjectController {
     public boolean isUserBid(@PathVariable("projectId") String projectId){
         Project project = Commands.getProjectById(projectId);
         return Commands.userIsBidBefore(project , Commands.getDefaultUser());
+    }
+
+    @GetMapping("/{projectId}/auction")
+    public User projectWinner(@PathVariable("projectId") String projectId){
+        Project project = Commands.getProjectById(projectId);
+        return Commands.auction(project);
     }
 }

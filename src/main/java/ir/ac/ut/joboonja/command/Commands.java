@@ -141,24 +141,27 @@ public class Commands {
 //        return hasEnoughSkills(user , project);
 //    }
 
-//
-//    static User auction(String json) throws DeserializeException {
-//        ProjectTitle projectTitle = Deserializer.deserialize(json , ProjectTitle.class);
-//        Auction auction = auctionRepository.getAuction(projectTitle.getProjectTitle());
-//        Project project = projectRepository.getProject(auction.getProjectTitle());
-//        User winnerUser = null;
-//        double maxPoint = 0;
-//        for(BidInfo bidInfo: auction.getOffers()){
-//            User user = userRepository.getUser(bidInfo.getUserId());
-//            double point =  calAuctionPoint(project , user);
-//            point += project.getBudget() - bidInfo.getBidAmount();
-//            if(maxPoint < point) {
-//                maxPoint = point;
-//                winnerUser = user;
-//            }
-//        }
-//        return winnerUser;
-//    }
+
+    public static User auction(Project project){
+        Auction auction = auctionRepository.getAuction(project.getId());
+        if (auction == null) {
+            throw new BadRequestException("This Project has no winner!");
+            return;
+        }
+        User winnerUser = null;
+        double maxPoint = 0;
+        for(BidInfo bidInfo: auction.getOffers()){
+            User user = userRepository.getUserById(bidInfo.getUserId());
+            double point =  calAuctionPoint(project , user);
+            point += project.getBudget() - bidInfo.getBidAmount();
+            if(maxPoint < point) {
+                maxPoint = point;
+                winnerUser = user;
+            }
+        }
+
+        return winnerUser;
+    }
 
     private static double calAuctionPoint(Project project , User user){
         double sum = 0;
