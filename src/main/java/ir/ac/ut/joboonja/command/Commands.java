@@ -146,7 +146,6 @@ public class Commands {
         Auction auction = auctionRepository.getAuction(project.getId());
         if (auction == null) {
             throw new BadRequestException("This Project has no winner!");
-            return;
         }
         User winnerUser = null;
         double maxPoint = 0;
