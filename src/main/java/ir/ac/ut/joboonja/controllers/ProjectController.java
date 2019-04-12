@@ -30,9 +30,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}/bid")
-    public boolean isUserBid(@PathVariable("projectId") String projectId){
+    public BidAmount isUserBid(@PathVariable("projectId") String projectId){
         Project project = Commands.getProjectById(projectId);
-        return Commands.userIsBidBefore(project , Commands.getDefaultUser());
+        return Commands.hasUserBid(project , Commands.getDefaultUser());
     }
 
     @GetMapping("/{projectId}/auction")

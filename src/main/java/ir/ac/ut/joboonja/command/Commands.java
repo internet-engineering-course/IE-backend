@@ -6,6 +6,7 @@ import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.exceptions.ForbiddenException;
 import ir.ac.ut.joboonja.exceptions.NotFoundException;
+import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 
@@ -103,6 +104,9 @@ public class Commands {
             throw new BadRequestException("User has already bidded!");
         if (bidAmount > project.getBudget())
             throw new BadRequestException("Bid amount is higher than project budget!");
+        if (bidAmount < 0){
+            throw new BadRequestException("Bid amount should be positive!");
+        }
 
         Auction auction = auctionRepository.getAuction(project.getId());
         if(auction == null) {
@@ -129,6 +133,25 @@ public class Commands {
         return false;
     }
 
+    public static BidAmount hasUserBid(Project project, User user){
+        Auction auction = auctionRepository.getAuction(project.getId());
+        BidAmount bidAmount = new BidAmount();
+        if(auction == null) {
+            bidAmount.setBidAmount(-1);
+            return bidAmount;
+        }
+        else {
+            for(BidInfo bid:auction.getOffers()) {
+                if(bid.getUserId().equals(user.getId())) {
+                    bidAmount.setBidAmount(bid.getBidAmount());
+                    return bidAmount;
+                }
+            }
+        }
+        bidAmount.setBidAmount(-1);
+        return bidAmount;
+    }
+
 //    private static boolean meetsRequirements(BidInfo bidInfo) {
 //        User user = userRepository.getUser(bidInfo.getUserId());
 //        Project project = projectRepository.getProject(bidInfo.getProjectTitle());
@@ -144,10 +167,10 @@ public class Commands {
 
     public static User auction(Project project){
         Auction auction = auctionRepository.getAuction(project.getId());
-        if (auction == null) {
-            throw new BadRequestException("This Project has no winner!");
-        }
         User winnerUser = null;
+        if (auction == null) {
+            return winnerUser;
+        }
         double maxPoint = 0;
         for(BidInfo bidInfo: auction.getOffers()){
             User user = userRepository.getUserById(bidInfo.getUserId());

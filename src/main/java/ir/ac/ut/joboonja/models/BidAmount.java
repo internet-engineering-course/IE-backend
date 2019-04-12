@@ -12,4 +12,5 @@ public class BidAmount {
     public void setBidAmount(Integer bidAmount) {
         this.bidAmount = bidAmount;
     }
+
 }
