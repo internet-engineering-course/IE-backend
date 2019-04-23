@@ -1,6 +1,6 @@
-package ir.ac.ut.joboonja.database.impl;
+package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.database.AuctionRepository;
+import ir.ac.ut.joboonja.repositories.AuctionRepository;
 import ir.ac.ut.joboonja.entities.Auction;
 
 public class AuctionRepositoryInMemoryImpl implements AuctionRepository {

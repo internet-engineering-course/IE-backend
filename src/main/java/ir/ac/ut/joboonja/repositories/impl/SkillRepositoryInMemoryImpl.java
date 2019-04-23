@@ -1,6 +1,6 @@
-package ir.ac.ut.joboonja.database.impl;
+package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.database.SkillRepository;
+import ir.ac.ut.joboonja.repositories.SkillRepository;
 import ir.ac.ut.joboonja.entities.Skill;
 
 import java.util.List;

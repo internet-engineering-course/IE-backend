@@ -1,4 +1,4 @@
-package ir.ac.ut.joboonja.database;
+package ir.ac.ut.joboonja.repositories;
 
 import ir.ac.ut.joboonja.entities.User;
 

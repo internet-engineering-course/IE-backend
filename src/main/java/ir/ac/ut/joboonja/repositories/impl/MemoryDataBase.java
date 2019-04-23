@@ -1,4 +1,4 @@
-package ir.ac.ut.joboonja.database.impl;
+package ir.ac.ut.joboonja.repositories.impl;
 
 import ir.ac.ut.joboonja.client.HttpClient;
 import ir.ac.ut.joboonja.entities.*;

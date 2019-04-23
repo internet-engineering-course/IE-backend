@@ -1,6 +1,6 @@
-package ir.ac.ut.joboonja.database.impl;
+package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.database.EndorseRepository;
+import ir.ac.ut.joboonja.repositories.EndorseRepository;
 import ir.ac.ut.joboonja.entities.Endorse;
 
 import java.util.List;

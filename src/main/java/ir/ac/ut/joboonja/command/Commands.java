@@ -1,7 +1,7 @@
 package ir.ac.ut.joboonja.command;
 
-import ir.ac.ut.joboonja.database.*;
-import ir.ac.ut.joboonja.database.impl.*;
+import ir.ac.ut.joboonja.repositories.*;
+import ir.ac.ut.joboonja.repositories.impl.*;
 import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.exceptions.ForbiddenException;
