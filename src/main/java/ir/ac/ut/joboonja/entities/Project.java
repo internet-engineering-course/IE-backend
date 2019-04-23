@@ -84,7 +84,7 @@ public class Project {
     public boolean equals(Object obj) {
         if (obj instanceof Project) {
             Project project = (Project)obj;
-            return title.equals(project.title);
+            return id.equals(project.id);
         }
         else {
             return false;
