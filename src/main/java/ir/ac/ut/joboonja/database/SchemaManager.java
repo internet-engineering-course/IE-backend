@@ -1,6 +1,6 @@
 package ir.ac.ut.joboonja.database;
 
-import ir.ac.ut.joboonja.entities.UserSkill;
+import ir.ac.ut.joboonja.entities.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +13,12 @@ public class SchemaManager {
 
     private static List<String> schemaSQLScripts = new ArrayList<>(
         Arrays.asList(
-            UserSkill.getCreateScript()
+                Skill.getCreateScript(),
+                User.getCreateScript(),
+                UserSkill.getCreateScript(),
+                Project.getCreateScript(),
+                Endorse.getCreateScript(),
+                ProjectSkill.getCreateScript()
         )
     );
 

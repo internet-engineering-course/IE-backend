@@ -89,4 +89,22 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public static String getCreateScript(){
+        return "create table if not exists User\n" +
+                "(\n" +
+                "\tid integer\n" +
+                "\t\tconstraint User_pk\n" +
+                "\t\t\tprimary key autoincrement,\n" +
+                "\tusername varchar(100),\n" +
+                "\tfirstname varchar(100),\n" +
+                "\tlastname varchar(100),\n" +
+                "\tjobTitle text,\n" +
+                "\tbio text\n" +
+                ");\n" +
+                "\n" +
+                "create unique index if not exists User_username_uindex\n" +
+                "\ton User (username);\n" +
+                "\n";
+    }
 }

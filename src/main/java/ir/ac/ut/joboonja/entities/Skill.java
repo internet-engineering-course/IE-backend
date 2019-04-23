@@ -37,4 +37,18 @@ public class Skill {
             return false;
         }
     }
+
+    public static String getCreateScript(){
+        return "create table if not exists Skill\n" +
+                "(\n" +
+                "\tname varchar(100),\n" +
+                "\tid integer\n" +
+                "\t\tconstraint Skill_pk\n" +
+                "\t\t\tprimary key autoincrement\n" +
+                ");\n" +
+                "\n" +
+                "create unique index if not exists Skill_name_uindex\n" +
+                "\ton Skill (name);\n" +
+                "\n";
+    }
 }
