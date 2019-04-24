@@ -10,6 +10,7 @@ import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,9 +21,12 @@ public class Commands {
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
-    private static SkillRepository skillRepository = new SkillRepositoryInMemoryImpl();
+    private static SkillRepository skillRepository = new SkillRepositoryImple();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
+    public static void insertSkill(Skill skill) throws SQLException, ClassNotFoundException {
+        skillRepository.insertSkill(skill);
+    }
     public static List<User> getAllUsers() {
         User user = Commands.getDefaultUser();
         List<User> users = userRepository.getAllUser();
@@ -67,7 +71,7 @@ public class Commands {
         return project;
     }
 
-    public static List<Skill> getAllSkills() {
+    public static List<Skill> getAllSkills() throws SQLException, ClassNotFoundException {
         return skillRepository.getAllSkills();
     }
 
@@ -197,7 +201,7 @@ public class Commands {
         return sum;
     }
 
-    public static void addUserSkill(String skillName) {
+    public static void addUserSkill(String skillName) throws SQLException, ClassNotFoundException {
         User user = Commands.getDefaultUser();
         Skill skill = new Skill(skillName, 0);
         if (!skillRepository.skillExists(skill))
@@ -207,7 +211,7 @@ public class Commands {
         userRepository.addUserSkill(user.getId(), skillName);
     }
 
-    public static void deleteUserSkill(String skillName) {
+    public static void deleteUserSkill(String skillName) throws SQLException, ClassNotFoundException {
         User user = Commands.getDefaultUser();
         Skill skill = new Skill(skillName, 0);
         if (!skillRepository.skillExists(skill))

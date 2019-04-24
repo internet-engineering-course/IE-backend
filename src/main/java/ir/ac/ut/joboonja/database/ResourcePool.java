@@ -11,8 +11,8 @@ public class ResourcePool {
     static {
         ds.setUrl("jdbc:sqlite:sample.db");
         ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxOpenPreparedStatements(100);
+        ds.setMaxIdle(100);
+        ds.setMaxOpenPreparedStatements(1000);
     }
 
     public static Connection getConnection() throws SQLException {

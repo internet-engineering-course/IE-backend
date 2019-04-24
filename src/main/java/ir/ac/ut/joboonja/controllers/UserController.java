@@ -8,6 +8,7 @@ import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.models.EndorseRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@RequestBody User user) throws SQLException, ClassNotFoundException {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
                 Commands.addUserSkill(skill.getName());
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public User deleteUserSkill(@RequestBody User user) {
+    public User deleteUserSkill(@RequestBody User user) throws SQLException, ClassNotFoundException {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
                 Commands.deleteUserSkill(skill.getName());

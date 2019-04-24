@@ -1,5 +1,7 @@
 package ir.ac.ut.joboonja.database;
 
+import ir.ac.ut.joboonja.client.HttpClient;
+import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.*;
 
 import java.sql.Connection;
@@ -23,13 +25,18 @@ public class SchemaManager {
     );
 
     public static void initialSchema() {
-
         try {
-            Class.forName("org.sqlite.JDBC");
-            Connection connection = ResourcePool.getConnection();
-            Statement statement = connection.createStatement();
             for(String schema: schemaSQLScripts) {
+                Class.forName("org.sqlite.JDBC");
+                Connection connection = ResourcePool.getConnection();
+                Statement statement = connection.createStatement();
                 statement.executeUpdate(schema);
+                statement.close();
+                connection.close();
+            }
+            List<Skill> skills = HttpClient.fetchAllSkills();
+            for(Skill skill:skills) {
+                Commands.insertSkill(skill);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
