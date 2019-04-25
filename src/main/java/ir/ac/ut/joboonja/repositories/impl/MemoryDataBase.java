@@ -179,16 +179,16 @@ public class MemoryDataBase {
         insertUser(user);
 
         System.out.println("initialized users ...");
-        List<Project> projects = HttpClient.fetchAllProjects();
-        for (Project project: projects) {
-            insertProject(project);
-        }
+//        List<Project> projects = HttpClient.fetchAllProjects();
+//        for (Project project: projects) {
+//            insertProject(project);
+//        }
         System.out.println("fetched all projects ...");
 
-        List<Skill> skills = HttpClient.fetchAllSkills();
-        for (Skill skill: skills) {
-            insertSkill(skill);
-        }
+//        List<Skill> skills = HttpClient.fetchAllSkills();
+//        for (Skill skill: skills) {
+//            insertSkill(skill);
+//        }
         System.out.println("fetched all skills ...");
         initialized = true;
     }

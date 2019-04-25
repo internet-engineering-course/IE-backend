@@ -11,18 +11,7 @@ public class Project {
     private Integer budget;
     private Long deadline;
     private List<Skill> skills;
-
-    public Project() {}
-
-    public Project(String id, String title, String description, String imageUrl, Integer budget, Long deadline, List<Skill> skills) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.budget = budget;
-        this.deadline = deadline;
-        this.skills = skills;
-    }
+    private Long creationDate;
 
     public String getId() {
         return id;
@@ -79,6 +68,30 @@ public class Project {
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
+
+    public Long getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Long creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Project(String id, String title, String description, String imageUrl, Integer budget, Long deadline, Long creationDate, List<Skill> skills) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.budget = budget;
+        this.deadline = deadline;
+        this.skills = skills;
+        this.creationDate = creationDate;
+    }
+
+    public Project() {}
+
+
+
 
     @Override
     public boolean equals(Object obj) {

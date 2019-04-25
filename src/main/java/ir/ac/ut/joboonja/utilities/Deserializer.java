@@ -10,8 +10,8 @@ import java.util.List;
 
 
 public class Deserializer {
-    private static ObjectMapper mapper = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+//    private static ObjectMapper mapper = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private static  ObjectMapper mapper = new ObjectMapper();
     public static <T> T deserialize(String json , Class<T> type) throws SerializeException {
         T t;
         try {

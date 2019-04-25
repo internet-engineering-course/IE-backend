@@ -38,6 +38,10 @@ public class SchemaManager {
             for(Skill skill:skills) {
                 Commands.insertSkill(skill);
             }
+            List<Project> projects = HttpClient.fetchAllProjects();
+            for(Project project:projects){
+                Commands.insertProject(project);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

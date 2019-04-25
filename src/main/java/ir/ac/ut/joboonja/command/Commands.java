@@ -20,7 +20,7 @@ public class Commands {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
-    private static ProjectRepository projectRepository = new ProjectRepositoryInMemoryImpl();
+    private static ProjectRepository projectRepository = new ProjectRepositoryImple();
     private static SkillRepository skillRepository = new SkillRepositoryImple();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
@@ -265,5 +265,9 @@ public class Commands {
             }
         }
         return 0;
+    }
+
+    public static void insertProject(Project project) throws SQLException, ClassNotFoundException {
+        projectRepository.insertProject(project);
     }
 }
