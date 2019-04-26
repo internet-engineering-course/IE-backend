@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class ProjectRepositoryImple implements ProjectRepository {
+public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public List<Project> getAllProjects() {
         return null;

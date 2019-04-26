@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SkillRepositoryImple implements SkillRepository {
+public class SkillRepositoryImpl implements SkillRepository {
     @Override
     public boolean skillExists(Skill skill) throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");

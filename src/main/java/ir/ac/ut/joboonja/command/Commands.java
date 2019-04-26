@@ -20,8 +20,8 @@ public class Commands {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
     private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
-    private static ProjectRepository projectRepository = new ProjectRepositoryImple();
-    private static SkillRepository skillRepository = new SkillRepositoryImple();
+    private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private static SkillRepository skillRepository = new SkillRepositoryImpl();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
     public static void insertSkill(Skill skill) throws SQLException, ClassNotFoundException {
