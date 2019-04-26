@@ -14,7 +14,8 @@ public class SkillRepositoryImpl implements SkillRepository {
         Class.forName("org.sqlite.JDBC");
         Connection connection = ResourcePool.getConnection();
         Statement statement = connection.createStatement();
-        boolean res = statement.execute(String.format("select * where exists (select *from Skill s where s.name ='%s')", skill.getName()));
+        String query = String.format("select exists (select * from Skill s where s.name = '%s') as result", skill.getName());
+        boolean res = statement.executeQuery(query).getBoolean("result");
         statement.close();
         connection.close();
         return res;
