@@ -3,6 +3,9 @@ package ir.ac.ut.joboonja.database;
 import ir.ac.ut.joboonja.client.HttpClient;
 import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.*;
+import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.UserSkillRepositoryImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,14 +14,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class SchemaManager {
 
     private static List<String> schemaSQLScripts = new ArrayList<>(
         Arrays.asList(
-                Skill.getCreateScript(),
+                SkillRepositoryImpl.getCreateScript(),
                 User.getCreateScript(),
-                UserSkill.getCreateScript(),
-                Project.getCreateScript(),
+                UserSkillRepositoryImpl.getCreateScript(),
+                ProjectRepositoryImpl.getCreateScript(),
                 Endorse.getCreateScript(),
                 ProjectSkill.getCreateScript()
         )

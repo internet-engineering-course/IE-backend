@@ -54,4 +54,20 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Project getProjectById(String id) {
         return null;
     }
+
+    public static String getCreateScript(){
+        return "create table if not exists Project\n" +
+                "(\n" +
+                "\tid char(36)\n" +
+                "\t\tconstraint Project_pk\n" +
+                "\t\t\tprimary key,\n" +
+                "\ttitle varchar(240),\n" +
+                "\tdescription text,\n" +
+                "\timageURL text,\n" +
+                "\tbudget integer,\n" +
+                "\tdeadline integer,\n" +
+                "\tcreationDate integer\n" +
+                ");\n" +
+                "\n";
+    }
 }
