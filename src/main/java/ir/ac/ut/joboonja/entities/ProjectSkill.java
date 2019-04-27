@@ -3,7 +3,7 @@ package ir.ac.ut.joboonja.entities;
 public class ProjectSkill {
     private String projectId;
     private String skillName;
-    private int point;
+    private Integer point;
 
     public String getProjectId() {
         return projectId;
@@ -21,7 +21,7 @@ public class ProjectSkill {
         this.skillName = skillName;
     }
 
-    public int getPoint() {
+    public Integer getPoint() {
         return point;
     }
 
