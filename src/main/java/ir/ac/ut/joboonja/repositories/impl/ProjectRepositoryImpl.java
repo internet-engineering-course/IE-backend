@@ -22,11 +22,6 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
-    public boolean projectExists(Project project) {
-        return false;
-    }
-
-    @Override
     public void insertProject(Project project) throws ClassNotFoundException, SQLException {
         String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ('%s','%s','%s','%s',%d,%d,%d )",
                 getTableName(), project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
@@ -37,11 +32,6 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
             sql = String.format("insert or ignore into ProjectSkill(projectId,skillName,point) values('%s','%s',%d)", project.getId(), skill.getName(), skill.getPoint());
             execUpdate(sql);
         }
-    }
-
-    @Override
-    public Project getProject(String projectTitle) {
-        return null;
     }
 
     @Override
