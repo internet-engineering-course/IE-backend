@@ -44,6 +44,14 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
+    public List<Project> searchProjects(String filter) {
+        String query = String.format("SELECT * FROM %s p " +
+            "JOIN ProjectSkill ps ON p.id = ps.projectId " +
+            "WHERE title LIKE \"%%%s%%\";", getTableName(), filter);
+        return findAll(query);
+    }
+
+    @Override
     String getTableName() {
         return "Project";
     }

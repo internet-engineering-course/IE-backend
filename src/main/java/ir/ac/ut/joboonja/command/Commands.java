@@ -42,15 +42,20 @@ public class Commands {
         }
         return newList;
     }
-    public static List<Project> getValidProjects(User user){
-        List<Project>  projects= projectRepository.getAllProjects();
+
+    private static List<Project> filterValidProjects(List<Project> allProjects, User user) {
         LinkedList<Project> result = new LinkedList<>();
-        for(Project project:projects){
+        for(Project project: allProjects){
             if(hasEnoughSkills(user , project)) {
                 result.add(project);
             }
         }
         return result;
+    }
+
+    public static List<Project> getValidProjects(User user) {
+        List<Project> projects = projectRepository.getAllProjects();
+        return filterValidProjects(projects, user);
     }
 
     public static User getDefaultUser(){
@@ -272,5 +277,14 @@ public class Commands {
 
     public static void insertProject(Project project) {
         projectRepository.insertProject(project);
+    }
+
+    public static List<User> searchUsers(String filter) {
+        return userRepository.searchUsers(filter);
+    }
+
+    public static List<Project> searchValidProjects(String filter) {
+        List<Project> searchResult = projectRepository.searchProjects(filter);
+        return filterValidProjects(searchResult, getDefaultUser());
     }
 }

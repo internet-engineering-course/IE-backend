@@ -22,4 +22,9 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
         return MemoryDataBase.getInstance().getProjectById(id);
     }
 
+    @Override
+    public List<Project> searchProjects(String filter) {
+        return null;
+    }
+
 }

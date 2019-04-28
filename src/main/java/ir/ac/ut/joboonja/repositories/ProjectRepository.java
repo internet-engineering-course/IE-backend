@@ -9,4 +9,5 @@ public interface ProjectRepository {
     List<Project> getAllProjects();
     void insertProject(Project project);
     Project getProjectById(String id);
+    List<Project> searchProjects(String filter);
 }

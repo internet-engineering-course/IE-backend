@@ -48,5 +48,10 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
         return MemoryDataBase.getInstance().getAllUser();
     }
 
+    @Override
+    public List<User> searchUsers(String filter) {
+        return null;
+    }
+
 
 }

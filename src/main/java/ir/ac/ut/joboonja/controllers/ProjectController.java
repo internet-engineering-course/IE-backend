@@ -7,6 +7,7 @@ import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -39,5 +40,13 @@ public class ProjectController {
     public User projectWinner(@PathVariable("projectId") String projectId){
         Project project = Commands.getProjectById(projectId);
         return Commands.auction(project);
+    }
+
+    @GetMapping("/search")
+    public List<Project> searchProjects(@RequestParam(name = "filter", required = false) String filter) {
+        if (filter == null || filter.isEmpty())
+            return Collections.emptyList();
+
+        return Commands.searchValidProjects(filter);
     }
 }

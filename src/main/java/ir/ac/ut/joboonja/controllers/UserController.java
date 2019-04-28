@@ -8,7 +8,7 @@ import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.models.EndorseRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -53,5 +53,13 @@ public class UserController {
             }
         }
         return Commands.getDefaultUser();
+    }
+
+    @GetMapping("/search")
+    public List<User> searchUsers(@RequestParam(name = "filter", required = false) String filter) {
+        if (filter == null || filter.isEmpty())
+            return Collections.emptyList();
+
+        return Commands.searchUsers(filter);
     }
 }
