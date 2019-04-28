@@ -8,13 +8,13 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SkillRepositoryImpl implements SkillRepository {
+public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillRepository {
     @Override
     public boolean skillExists(Skill skill) throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
         Connection connection = ResourcePool.getConnection();
         Statement statement = connection.createStatement();
-        String query = String.format("select exists (select * from Skill s where s.name = '%s') as result", skill.getName());
+        String query = String.format("select exists " +
+            "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
         boolean res = statement.executeQuery(query).getBoolean("result");
         statement.close();
         connection.close();
@@ -23,45 +23,21 @@ public class SkillRepositoryImpl implements SkillRepository {
 
     @Override
     public void insertSkill(Skill skill) throws ClassNotFoundException, SQLException {
-        String sql = String.format("INSERT INTO Skill(name) SELECT '%s' WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = '%s');", skill.getName(), skill.getName());
-        Class.forName("org.sqlite.JDBC");
-        Connection connection = ResourcePool.getConnection();
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+        String sql = String.format("INSERT INTO %s(name) " +
+            "SELECT '%s' WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = '%s');",
+            getTableName(), skill.getName(), skill.getName());
+        execUpdate(sql);
     }
 
     @Override
     public Skill getSkill(String skillName) throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        Connection connection = ResourcePool.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet res = statement.executeQuery(String.format("select * from Skill s where s.name = '%s'", skillName));
-        String name = res.getString("name");
-        Integer point = 0;
-        Skill skill = new Skill(name , point);
-        statement.close();
-        connection.close();
-        return skill;
+        String query = String.format("select * from %s s where s.name = '%s'", getTableName(), skillName);
+        return findOne(query);
     }
 
     @Override
     public List<Skill> getAllSkills() throws SQLException, ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-        Connection connection = ResourcePool.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet res = statement.executeQuery("select * from Skill s");
-        List<Skill> skills= new LinkedList<>();
-        while(res.next()){
-            String name = res.getString("name");
-            Integer point = 0;
-            Skill skill = new Skill(name , point);
-            skills.add(skill);
-        }
-        statement.close();
-        connection.close();
-        return skills;
+        return findAll("SELECT * FROM " + getTableName());
     }
 
     public static String getCreateScript(){
@@ -71,5 +47,18 @@ public class SkillRepositoryImpl implements SkillRepository {
                 "\t\tconstraint Skill_pk\n" +
                 "\t\t\tprimary key\n" +
                 ");";
+    }
+
+    @Override
+    String getTableName() {
+        return "Skill";
+    }
+
+    @Override
+    Skill toDomainModel(ResultSet resultSet) throws SQLException {
+        return new Skill(
+            resultSet.getString("name"),
+            null
+        );
     }
 }

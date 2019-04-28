@@ -1,19 +1,24 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.database.ResourcePool;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.repositories.ProjectRepository;
 
-import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-public class ProjectRepositoryImpl implements ProjectRepository {
+import static java.util.stream.Collectors.groupingBy;
+
+public class ProjectRepositoryImpl extends JDBCRepository<Project> implements ProjectRepository {
+
     @Override
     public List<Project> getAllProjects() {
-        return null;
+        String query = "SELECT * FROM " + getTableName() + " p JOIN ProjectSkill ps on p.id = ps.projectId;";
+        return findAll(query);
     }
 
     @Override
@@ -23,26 +28,15 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void insertProject(Project project) throws ClassNotFoundException, SQLException {
-        String sql = String.format("insert or ignore into Project(id,title,description,imageUrl,budget,deadline,creationDate) values ('%s','%s','%s','%s',%d,%d,%d )",
-                project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
-        Class.forName("org.sqlite.JDBC");
-        Connection connection = ResourcePool.getConnection();
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+        String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ('%s','%s','%s','%s',%d,%d,%d )",
+                getTableName(), project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
+        execUpdate(sql);
 
         List<Skill> skills = project.getSkills();
         for(Skill skill:skills){
             sql = String.format("insert or ignore into ProjectSkill(projectId,skillName,point) values('%s','%s',%d)", project.getId(), skill.getName(), skill.getPoint());
-            connection = ResourcePool.getConnection();
-            statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            statement.close();
-            connection.close();
+            execUpdate(sql);
         }
-
-
     }
 
     @Override
@@ -52,10 +46,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Project getProjectById(String id) {
-        return null;
+        String query = String.format("SELECT * FROM %s p " +
+            "JOIN ProjectSkill ps on p.id = ps.projectId " +
+            "WHERE p.id = '%s';",
+            getTableName(), id);
+        return findOne(query);
     }
 
-    public static String getCreateScript(){
+    public static String getCreateScript() {
         return "create table if not exists Project\n" +
                 "(\n" +
                 "\tid char(36)\n" +
@@ -69,5 +67,43 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 "\tcreationDate integer\n" +
                 ");\n" +
                 "\n";
+    }
+
+    @Override
+    String getTableName() {
+        return "Project";
+    }
+
+    @Override
+    Project toDomainModel(ResultSet resultSet) throws SQLException {
+        List<Skill> skills = Collections.singletonList(
+            new Skill(resultSet.getString("skillName"), resultSet.getInt("point"))
+        );
+        return new Project(
+            resultSet.getString("id"),
+            resultSet.getString("title"),
+            resultSet.getString("description"),
+            resultSet.getString("imageUrl"),
+            resultSet.getInt("budget"),
+            resultSet.getLong("deadline"),
+            resultSet.getLong("creationDate"),
+            skills
+        );
+    }
+
+    @Override
+    List<Project> merge(List<Project> rawResult) {
+        Map<String, List<Project>> projects = rawResult.stream().collect(groupingBy(Project::getId));
+        LinkedList<Project> result = new LinkedList<>();
+        for (String projectId: projects.keySet()) {
+            LinkedList<Skill> projectSkills = new LinkedList<>();
+            for (Project p: projects.get(projectId))
+                projectSkills.add(p.getSkills().get(0));
+
+            Project project = projects.get(projectId).get(0);
+            project.setSkills(projectSkills);
+            result.add(project);
+        }
+        return result;
     }
 }
