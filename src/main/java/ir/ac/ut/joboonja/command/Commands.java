@@ -9,6 +9,9 @@ import ir.ac.ut.joboonja.exceptions.NotFoundException;
 import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
+import ir.ac.ut.joboonja.repositories.impl.memory.AuctionRepositoryInMemoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.memory.EndorseRepositoryInMemoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.memory.UserRepositoryInMemoryImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

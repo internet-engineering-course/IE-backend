@@ -1,4 +1,4 @@
-package ir.ac.ut.joboonja.repositories.impl;
+package ir.ac.ut.joboonja.repositories.impl.memory;
 
 import ir.ac.ut.joboonja.repositories.UserRepository;
 import ir.ac.ut.joboonja.entities.Skill;
