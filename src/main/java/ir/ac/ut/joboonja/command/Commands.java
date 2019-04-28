@@ -1,7 +1,5 @@
 package ir.ac.ut.joboonja.command;
 
-import ir.ac.ut.joboonja.repositories.*;
-import ir.ac.ut.joboonja.repositories.impl.*;
 import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.exceptions.ForbiddenException;
@@ -9,11 +7,13 @@ import ir.ac.ut.joboonja.exceptions.NotFoundException;
 import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
+import ir.ac.ut.joboonja.repositories.*;
+import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.memory.AuctionRepositoryInMemoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.memory.EndorseRepositoryInMemoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.memory.UserRepositoryInMemoryImpl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class Commands {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
-    private static UserRepository userRepository = new UserRepositoryInMemoryImpl();
+    private static UserRepository userRepository = new UserRepositoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private static SkillRepository skillRepository = new SkillRepositoryImpl();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
