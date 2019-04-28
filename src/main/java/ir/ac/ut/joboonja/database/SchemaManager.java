@@ -46,9 +46,11 @@ public class SchemaManager {
         for(Skill skill:skills) {
             Commands.insertSkill(skill);
         }
+        System.out.println("synced all skills ...");
         List<Project> projects = HttpClient.fetchAllProjects();
         for(Project project:projects){
             Commands.insertProject(project);
         }
+        System.out.println("synced all projects ...");
     }
 }
