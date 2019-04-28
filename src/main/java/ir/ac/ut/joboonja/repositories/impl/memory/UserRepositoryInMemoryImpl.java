@@ -8,12 +8,6 @@ import java.util.List;
 
 public class UserRepositoryInMemoryImpl implements UserRepository {
 
-
-    @Override
-    public boolean userExists(User user) {
-        return MemoryDataBase.getInstance().userExists(user);
-    }
-
     @Override
     public void insertUser(User user) {
         MemoryDataBase.getInstance().insertUser(user);
@@ -50,7 +44,7 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         return MemoryDataBase.getInstance().getAllUser();
     }
 

@@ -5,7 +5,7 @@ import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.UserSkillRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,8 +20,7 @@ public class SchemaManager {
     private static List<String> schemaSQLScripts = new ArrayList<>(
         Arrays.asList(
                 SkillRepositoryImpl.getCreateScript(),
-                User.getCreateScript(),
-                UserSkillRepositoryImpl.getCreateScript(),
+                UserRepositoryImpl.getCreateScript(),
                 ProjectRepositoryImpl.getCreateScript(),
                 Endorse.getCreateScript()
         )

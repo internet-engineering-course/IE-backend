@@ -41,15 +41,6 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
         return findAll("SELECT * FROM " + getTableName());
     }
 
-    public static String getCreateScript(){
-        return "create table if not exists Skill\n" +
-                "(\n" +
-                "\tname text\n" +
-                "\t\tconstraint Skill_pk\n" +
-                "\t\t\tprimary key\n" +
-                ");";
-    }
-
     @Override
     String getTableName() {
         return "Skill";
@@ -61,5 +52,14 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
             resultSet.getString("name"),
             null
         );
+    }
+
+    public static String getCreateScript(){
+        return "create table if not exists Skill\n" +
+            "(\n" +
+            "\tname text\n" +
+            "\t\tconstraint Skill_pk\n" +
+            "\t\t\tprimary key\n" +
+            ");";
     }
 }

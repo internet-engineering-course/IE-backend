@@ -32,7 +32,7 @@ public class Commands {
     }
     public static List<User> getAllUsers() {
         User user = Commands.getDefaultUser();
-        List<User> users = userRepository.getAllUser();
+        List<User> users = userRepository.getAllUsers();
         List<User> newList = new ArrayList<>(users);
         for(User u:newList){
             if(u.getId().equals(user.getId())){
