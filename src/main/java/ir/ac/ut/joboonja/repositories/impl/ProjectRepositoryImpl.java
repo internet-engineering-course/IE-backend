@@ -52,6 +52,14 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
+    public List<Project> getProjectsPaginated(Integer pageNumber, Integer pageSize) {
+        String query = String.format("SELECT * FROM " +
+            "(SELECT * FROM %s LIMIT %d, %d) as p " +
+            "JOIN ProjectSkill ps ON p.id = ps.projectId;", getTableName(), pageNumber*pageSize, pageSize);
+        return findAll(query);
+    }
+
+    @Override
     String getTableName() {
         return "Project";
     }

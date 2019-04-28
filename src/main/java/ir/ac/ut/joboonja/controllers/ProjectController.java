@@ -15,7 +15,12 @@ import java.util.List;
 public class ProjectController {
 
     @GetMapping
-    public List<Project> getProjects() {
+    public List<Project> getProjects(
+        @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
+        @RequestParam(name = "pageSize", required = false) Integer pageSize
+    ) {
+        if (pageNumber != null && pageSize != null)
+            return Commands.getValidProjects(Commands.getDefaultUser(), pageNumber, pageSize);
         return Commands.getValidProjects(Commands.getDefaultUser());
     }
 

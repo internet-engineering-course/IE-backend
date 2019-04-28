@@ -287,4 +287,9 @@ public class Commands {
         List<Project> searchResult = projectRepository.searchProjects(filter);
         return filterValidProjects(searchResult, getDefaultUser());
     }
+
+    public static List<Project> getValidProjects(User user, Integer pageNumber, Integer pageSize) {
+        List<Project> result = projectRepository.getProjectsPaginated(pageNumber, pageSize);
+        return filterValidProjects(result, user);
+    }
 }

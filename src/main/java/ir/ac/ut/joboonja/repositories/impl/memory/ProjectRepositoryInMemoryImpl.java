@@ -27,4 +27,9 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
         return null;
     }
 
+    @Override
+    public List<Project> getProjectsPaginated(Integer pageNumber, Integer pageSize) {
+        return null;
+    }
+
 }
