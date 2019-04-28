@@ -1,0 +1,3 @@
+INSERT INTO User (id, username, firstname, lastname, jobTitle, bio) VALUES (1, 'ali', 'علی', 'شریف زاده', 'برنامه نویس وب', 'روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت');
+INSERT INTO User (id, username, firstname, lastname, jobTitle, bio) VALUES (2, 'ahmadreza', 'احمدرضا', 'صبور', 'برنامه نویس وب', 'روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت');
+INSERT INTO User (id, username, firstname, lastname, jobTitle, bio) VALUES (3, 'navid', 'نوید', 'اکبری', 'دانشجو', 'no bio');
