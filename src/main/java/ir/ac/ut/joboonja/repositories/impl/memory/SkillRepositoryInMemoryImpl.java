@@ -18,11 +18,6 @@ public class SkillRepositoryInMemoryImpl implements SkillRepository {
     }
 
     @Override
-    public Skill getSkill(String skillName) {
-        return MemoryDataBase.getInstance().getSkill(skillName);
-    }
-
-    @Override
     public List<Skill> getAllSkills() {
         return MemoryDataBase.getInstance().getAllSkills();
     }

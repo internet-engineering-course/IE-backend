@@ -37,12 +37,6 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
     }
 
     @Override
-    public Skill getSkill(String skillName) {
-        String query = String.format("select * from %s s where s.name = '%s'", getTableName(), skillName);
-        return findOne(query);
-    }
-
-    @Override
     public List<Skill> getAllSkills() {
         return findAll("SELECT * FROM " + getTableName());
     }
