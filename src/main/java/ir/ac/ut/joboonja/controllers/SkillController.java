@@ -14,7 +14,7 @@ import java.util.List;
 public class SkillController {
 
     @GetMapping
-    public List<Skill> getSkills() throws SQLException, ClassNotFoundException {
+    public List<Skill> getSkills() {
         return Commands.getAllSkills();
     }
 }

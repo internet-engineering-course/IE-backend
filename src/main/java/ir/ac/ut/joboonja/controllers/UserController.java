@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) throws SQLException, ClassNotFoundException {
+    public User updateUser(@RequestBody User user) {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
                 Commands.addUserSkill(skill.getName());
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public User deleteUserSkill(@RequestBody User user) throws SQLException, ClassNotFoundException {
+    public User deleteUserSkill(@RequestBody User user) {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
                 Commands.deleteUserSkill(skill.getName());

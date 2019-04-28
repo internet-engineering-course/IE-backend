@@ -2,6 +2,7 @@ package ir.ac.ut.joboonja.repositories.impl;
 
 import ir.ac.ut.joboonja.database.ResourcePool;
 import ir.ac.ut.joboonja.entities.Skill;
+import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.repositories.SkillRepository;
 
 import java.sql.*;
@@ -10,19 +11,25 @@ import java.util.List;
 
 public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillRepository {
     @Override
-    public boolean skillExists(Skill skill) throws ClassNotFoundException, SQLException {
-        Connection connection = ResourcePool.getConnection();
-        Statement statement = connection.createStatement();
-        String query = String.format("select exists " +
-            "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
-        boolean res = statement.executeQuery(query).getBoolean("result");
-        statement.close();
-        connection.close();
+    public boolean skillExists(Skill skill) {
+        boolean res;
+        try {
+            Connection connection = ResourcePool.getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("select exists " +
+                "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
+            res = statement.executeQuery(query).getBoolean("result");
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BadRequestException("Something is wrong in db: " + e.getMessage());
+        }
         return res;
     }
 
     @Override
-    public void insertSkill(Skill skill) throws ClassNotFoundException, SQLException {
+    public void insertSkill(Skill skill) {
         String sql = String.format("INSERT INTO %s(name) " +
             "SELECT '%s' WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = '%s');",
             getTableName(), skill.getName(), skill.getName());
@@ -30,13 +37,13 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
     }
 
     @Override
-    public Skill getSkill(String skillName) throws ClassNotFoundException, SQLException {
+    public Skill getSkill(String skillName) {
         String query = String.format("select * from %s s where s.name = '%s'", getTableName(), skillName);
         return findOne(query);
     }
 
     @Override
-    public List<Skill> getAllSkills() throws SQLException, ClassNotFoundException {
+    public List<Skill> getAllSkills() {
         return findAll("SELECT * FROM " + getTableName());
     }
 

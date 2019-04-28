@@ -27,7 +27,7 @@ public class Commands {
     private static SkillRepository skillRepository = new SkillRepositoryImpl();
     private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
 
-    public static void insertSkill(Skill skill) throws SQLException, ClassNotFoundException {
+    public static void insertSkill(Skill skill) {
         skillRepository.insertSkill(skill);
     }
     public static List<User> getAllUsers() {
@@ -74,7 +74,7 @@ public class Commands {
         return project;
     }
 
-    public static List<Skill> getAllSkills() throws SQLException, ClassNotFoundException {
+    public static List<Skill> getAllSkills() {
         return skillRepository.getAllSkills();
     }
 
@@ -204,7 +204,7 @@ public class Commands {
         return sum;
     }
 
-    public static void addUserSkill(String skillName) throws SQLException, ClassNotFoundException {
+    public static void addUserSkill(String skillName) {
         User user = Commands.getDefaultUser();
         Skill skill = new Skill(skillName, 0);
         if (!skillRepository.skillExists(skill))
@@ -214,7 +214,7 @@ public class Commands {
         userRepository.addUserSkill(user.getId(), skillName);
     }
 
-    public static void deleteUserSkill(String skillName) throws SQLException, ClassNotFoundException {
+    public static void deleteUserSkill(String skillName) {
         User user = Commands.getDefaultUser();
         Skill skill = new Skill(skillName, 0);
         if (!skillRepository.skillExists(skill))
@@ -270,7 +270,7 @@ public class Commands {
         return 0;
     }
 
-    public static void insertProject(Project project) throws SQLException, ClassNotFoundException {
+    public static void insertProject(Project project) {
         projectRepository.insertProject(project);
     }
 }

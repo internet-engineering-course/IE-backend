@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface SkillRepository {
-    boolean skillExists(Skill skill) throws ClassNotFoundException, SQLException;
-    void insertSkill(Skill skill) throws ClassNotFoundException, SQLException;
-    Skill getSkill(String skillName) throws ClassNotFoundException, SQLException;
-    List<Skill> getAllSkills() throws SQLException, ClassNotFoundException;
+    boolean skillExists(Skill skill);
+    void insertSkill(Skill skill);
+    Skill getSkill(String skillName);
+    List<Skill> getAllSkills();
 }

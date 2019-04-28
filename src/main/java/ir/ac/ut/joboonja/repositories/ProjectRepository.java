@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ProjectRepository {
     List<Project> getAllProjects();
-    void insertProject(Project project) throws ClassNotFoundException, SQLException;
+    void insertProject(Project project);
     Project getProjectById(String id);
 }

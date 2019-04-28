@@ -22,7 +22,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
-    public void insertProject(Project project) throws ClassNotFoundException, SQLException {
+    public void insertProject(Project project) {
         String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ('%s','%s','%s','%s',%d,%d,%d )",
                 getTableName(), project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
         execUpdate(sql);
