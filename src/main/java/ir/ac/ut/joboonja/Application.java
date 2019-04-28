@@ -11,6 +11,5 @@ public class Application {
     @PostConstruct
     public void init() {
         SchemaManager.initialSchema();
-        SchemaManager.syncData();
     }
 }
