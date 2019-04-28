@@ -23,8 +23,7 @@ public class SchemaManager {
                 User.getCreateScript(),
                 UserSkillRepositoryImpl.getCreateScript(),
                 ProjectRepositoryImpl.getCreateScript(),
-                Endorse.getCreateScript(),
-                ProjectSkill.getCreateScript()
+                Endorse.getCreateScript()
         )
     );
 

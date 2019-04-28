@@ -54,19 +54,33 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     public static String getCreateScript() {
-        return "create table if not exists Project\n" +
-                "(\n" +
-                "\tid char(36)\n" +
-                "\t\tconstraint Project_pk\n" +
-                "\t\t\tprimary key,\n" +
-                "\ttitle varchar(240),\n" +
-                "\tdescription text,\n" +
-                "\timageURL text,\n" +
-                "\tbudget integer,\n" +
-                "\tdeadline integer,\n" +
-                "\tcreationDate integer\n" +
-                ");\n" +
-                "\n";
+        return
+            "create table if not exists Project\n" +
+            "(\n" +
+            "\tid char(36)\n" +
+            "\t\tconstraint Project_pk\n" +
+            "\t\t\tprimary key,\n" +
+            "\ttitle varchar(240),\n" +
+            "\tdescription text,\n" +
+            "\timageURL text,\n" +
+            "\tbudget integer,\n" +
+            "\tdeadline integer,\n" +
+            "\tcreationDate integer\n" +
+            ");\n" +
+            "\n" +
+            "create table if not exists ProjectSkill\n" +
+            "(\n" +
+            "\tprojectId varchar(36)\n" +
+            "\t\tconstraint ProjectSkill_Project_id_fk\n" +
+            "\t\t\treferences Project\n" +
+            "\t\t\t\ton update cascade on delete cascade,\n" +
+            "\tskillName varchar(100)\n" +
+            "\t\tconstraint ProjectSkill_Skill_name_fk\n" +
+            "\t\t\treferences Skill (name)\n" +
+            "\t\t\t\ton update cascade on delete cascade,\n" +
+            "\tpoint int,\n" +
+            "primary key(projectId,skillName)"+
+            ");";
     }
 
     @Override
