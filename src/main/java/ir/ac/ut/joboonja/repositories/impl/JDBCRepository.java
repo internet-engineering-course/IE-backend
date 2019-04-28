@@ -61,4 +61,19 @@ abstract class JDBCRepository<E> {
             return null;
         return merge(result).get(0);
     }
+
+    boolean exists(String query) {
+        boolean res;
+        try {
+            Connection connection = ResourcePool.getConnection();
+            Statement statement = connection.createStatement();
+            res = statement.executeQuery(query).getBoolean("result");
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BadRequestException("Something is wrong in db: " + e.getMessage());
+        }
+        return res;
+    }
 }

@@ -1,31 +1,18 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.database.ResourcePool;
 import ir.ac.ut.joboonja.entities.Skill;
-import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.repositories.SkillRepository;
 
-import java.sql.*;
-import java.util.LinkedList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillRepository {
     @Override
     public boolean skillExists(Skill skill) {
-        boolean res;
-        try {
-            Connection connection = ResourcePool.getConnection();
-            Statement statement = connection.createStatement();
-            String query = String.format("select exists " +
-                "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
-            res = statement.executeQuery(query).getBoolean("result");
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new BadRequestException("Something is wrong in db: " + e.getMessage());
-        }
-        return res;
+        String query = String.format("select exists " +
+            "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
+        return exists(query);
     }
 
     @Override
