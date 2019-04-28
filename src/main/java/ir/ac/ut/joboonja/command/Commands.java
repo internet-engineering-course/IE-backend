@@ -8,11 +8,11 @@ import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.models.BidInfo;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.repositories.*;
+import ir.ac.ut.joboonja.repositories.impl.EndorseRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
 import ir.ac.ut.joboonja.repositories.impl.memory.AuctionRepositoryInMemoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.memory.EndorseRepositoryInMemoryImpl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ public class Commands {
     private static UserRepository userRepository = new UserRepositoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private static SkillRepository skillRepository = new SkillRepositoryImpl();
-    private static EndorseRepository endorseRepository = new EndorseRepositoryInMemoryImpl();
+    private static EndorseRepository endorseRepository = new EndorseRepositoryImpl();
 
     public static void insertSkill(Skill skill) {
         skillRepository.insertSkill(skill);

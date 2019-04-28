@@ -36,16 +36,19 @@ public class SchemaManager {
                 statement.close();
                 connection.close();
             }
-            List<Skill> skills = HttpClient.fetchAllSkills();
-            for(Skill skill:skills) {
-                Commands.insertSkill(skill);
-            }
-            List<Project> projects = HttpClient.fetchAllProjects();
-            for(Project project:projects){
-                Commands.insertProject(project);
-            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void syncData() {
+        List<Skill> skills = HttpClient.fetchAllSkills();
+        for(Skill skill:skills) {
+            Commands.insertSkill(skill);
+        }
+        List<Project> projects = HttpClient.fetchAllProjects();
+        for(Project project:projects){
+            Commands.insertProject(project);
         }
     }
 }

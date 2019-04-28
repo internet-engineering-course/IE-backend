@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 public class Application {
     @PostConstruct
     public void init() {
-        MemoryDataBase.getInstance().initialize();
         SchemaManager.initialSchema();
+        SchemaManager.syncData();
     }
 }
