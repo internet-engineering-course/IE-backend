@@ -6,10 +6,8 @@ import ir.ac.ut.joboonja.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -83,7 +81,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     List<Project> merge(List<Project> rawResult) {
-        Map<String, List<Project>> projects = rawResult.stream().collect(groupingBy(Project::getId));
+        Map<String, List<Project>> projects = rawResult.stream().collect(groupingBy(Project::getId, LinkedHashMap::new, Collectors.toList()));
         LinkedList<Project> result = new LinkedList<>();
         for (String projectId: projects.keySet()) {
             LinkedList<Skill> projectSkills = new LinkedList<>();
