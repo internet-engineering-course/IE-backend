@@ -51,8 +51,7 @@ public class Commands {
     }
 
     public static List<Project> getValidProjects(User user) {
-        List<Project> projects = projectRepository.getAllProjects();
-        return filterValidProjects(projects, user);
+        return projectRepository.getAllProjects();
     }
 
     public static User getDefaultUser(){
@@ -277,12 +276,10 @@ public class Commands {
     }
 
     public static List<Project> searchValidProjects(String filter) {
-        List<Project> searchResult = projectRepository.searchProjects(filter);
-        return filterValidProjects(searchResult, getDefaultUser());
+        return projectRepository.searchProjects(filter);
     }
 
     public static List<Project> getValidProjects(User user, Integer pageNumber, Integer pageSize) {
-        List<Project> result = projectRepository.getProjectsPaginated(pageNumber, pageSize);
-        return filterValidProjects(result, user);
+        return projectRepository.getProjectsPaginated(pageNumber, pageSize);
     }
 }
