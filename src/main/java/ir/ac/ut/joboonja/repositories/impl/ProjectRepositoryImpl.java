@@ -17,7 +17,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     public List<Project> getAllProjects() {
-        String query = "SELECT * FROM " + getTableName() + " p JOIN ProjectSkill ps on p.id = ps.projectId;";
+        String query = "SELECT * FROM " + getTableName() + " p JOIN ProjectSkill ps on p.id = ps.projectId ORDER BY creationDate DESC;";
         return findAll(query);
     }
 
@@ -47,14 +47,14 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     public List<Project> searchProjects(String filter) {
         String query = String.format("SELECT * FROM %s p " +
             "JOIN ProjectSkill ps ON p.id = ps.projectId " +
-            "WHERE title LIKE \"%%%s%%\";", getTableName(), filter);
+            "WHERE title LIKE \"%%%s%%\" ORDER BY creationDate DESC;", getTableName(), filter);
         return findAll(query);
     }
 
     @Override
     public List<Project> getProjectsPaginated(Integer pageNumber, Integer pageSize) {
         String query = String.format("SELECT * FROM " +
-            "(SELECT * FROM %s LIMIT %d, %d) as p " +
+            "(SELECT * FROM %s ORDER BY creationDate DESC LIMIT %d, %d) as p " +
             "JOIN ProjectSkill ps ON p.id = ps.projectId;", getTableName(), pageNumber*pageSize, pageSize);
         return findAll(query);
     }
