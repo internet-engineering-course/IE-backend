@@ -1,9 +1,9 @@
 package ir.ac.ut.joboonja.repositories;
 
 import ir.ac.ut.joboonja.entities.Auction;
+import ir.ac.ut.joboonja.entities.Bid;
 
 public interface AuctionRepository {
-    boolean auctionExists(Auction auction);
-    void insertAuction(Auction auction);
+    void insertBid(Bid bid);
     Auction getAuction(String id);
 }

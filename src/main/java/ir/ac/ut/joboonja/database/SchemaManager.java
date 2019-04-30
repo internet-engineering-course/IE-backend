@@ -3,9 +3,7 @@ package ir.ac.ut.joboonja.database;
 import ir.ac.ut.joboonja.client.HttpClient;
 import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.*;
-import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,10 +21,11 @@ public class SchemaManager {
 
     private static List<String> schemaSQLScripts = new ArrayList<>(
         Arrays.asList(
-                SkillRepositoryImpl.getCreateScript(),
-                UserRepositoryImpl.getCreateScript(),
-                ProjectRepositoryImpl.getCreateScript(),
-                Endorse.getCreateScript()
+            SkillRepositoryImpl.getCreateScript(),
+            UserRepositoryImpl.getCreateScript(),
+            ProjectRepositoryImpl.getCreateScript(),
+            EndorseRepositoryImpl.getCreateScript(),
+            AuctionRepositoryImpl.getCreateScript()
         )
     );
 

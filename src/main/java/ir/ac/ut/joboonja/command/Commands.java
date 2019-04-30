@@ -5,23 +5,20 @@ import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.exceptions.ForbiddenException;
 import ir.ac.ut.joboonja.exceptions.NotFoundException;
 import ir.ac.ut.joboonja.models.BidAmount;
-import ir.ac.ut.joboonja.models.BidInfo;
+import ir.ac.ut.joboonja.entities.Bid;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.repositories.*;
-import ir.ac.ut.joboonja.repositories.impl.EndorseRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.SkillRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
-import ir.ac.ut.joboonja.repositories.impl.memory.AuctionRepositoryInMemoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Commands {
 
-    private static AuctionRepository auctionRepository = new AuctionRepositoryInMemoryImpl();
+    private static AuctionRepository auctionRepository = new AuctionRepositoryImpl();
     private static UserRepository userRepository = new UserRepositoryImpl();
     private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private static SkillRepository skillRepository = new SkillRepositoryImpl();
@@ -110,24 +107,20 @@ public class Commands {
 //        projectRepository.insertProject(project);
 //    }
 
-    public static BidInfo addBid(Project project, Integer bidAmount) {
+    public static Bid addBid(Project project, Integer bidAmount) {
         User user = Commands.getDefaultUser();
         if (Commands.userIsBidBefore(project, user))
             throw new BadRequestException("User has already bidded!");
         if (bidAmount > project.getBudget())
             throw new BadRequestException("Bid amount is higher than project budget!");
-        if (bidAmount < 0){
+        if (bidAmount < 0)
             throw new BadRequestException("Bid amount should be positive!");
-        }
+        if (project.getDeadline() < (new Date()).getTime())
+            throw new BadRequestException("Project deadline has been passed!");
 
-        Auction auction = auctionRepository.getAuction(project.getId());
-        if(auction == null) {
-            auction = new Auction(project.getId());
-            auctionRepository.insertAuction(auction);
-        }
-        BidInfo bidInfo = new BidInfo(user.getId(), project.getId(), bidAmount);
-        auction.addOffer(bidInfo);
-        return bidInfo;
+        Bid bid = new Bid(user.getId(), project.getId(), bidAmount);
+        auctionRepository.insertBid(bid);
+        return bid;
     }
 
     public static boolean userIsBidBefore(Project project, User user){
@@ -136,7 +129,7 @@ public class Commands {
             return false;
         }
         else {
-            for(BidInfo bid:auction.getOffers()) {
+            for(Bid bid:auction.getOffers()) {
                 if(bid.getUserId().equals(user.getId())) {
                     return true;
                 }
@@ -153,7 +146,7 @@ public class Commands {
             return bidAmount;
         }
         else {
-            for(BidInfo bid:auction.getOffers()) {
+            for(Bid bid:auction.getOffers()) {
                 if(bid.getUserId().equals(user.getId())) {
                     bidAmount.setBidAmount(bid.getBidAmount());
                     return bidAmount;
@@ -184,7 +177,7 @@ public class Commands {
             return winnerUser;
         }
         double maxPoint = 0;
-        for(BidInfo bidInfo: auction.getOffers()){
+        for(Bid bidInfo: auction.getOffers()){
             User user = userRepository.getUserById(bidInfo.getUserId());
             double point =  calAuctionPoint(project , user);
             point += project.getBudget() - bidInfo.getBidAmount();
@@ -267,7 +260,7 @@ public class Commands {
 
     public static Integer getUserBidAmount(Project project, User user) {
         Auction auction = auctionRepository.getAuction(project.getId());
-        for(BidInfo bid:auction.getOffers()) {
+        for(Bid bid:auction.getOffers()) {
             if(bid.getUserId().equals(user.getId())) {
                 return bid.getBidAmount();
             }

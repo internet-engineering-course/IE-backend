@@ -1,12 +1,12 @@
-package ir.ac.ut.joboonja.models;
+package ir.ac.ut.joboonja.entities;
 
-public class BidInfo {
+public class Bid {
     private Integer userId;
     private String projectId;
     private Integer bidAmount;
 
 
-    public BidInfo(Integer userId, String projectId, Integer bidAmount) {
+    public Bid(Integer userId, String projectId, Integer bidAmount) {
         this.userId = userId;
         this.projectId = projectId;
         this.bidAmount = bidAmount;

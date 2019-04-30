@@ -47,24 +47,4 @@ public class Endorse {
             return false;
         }
     }
-
-    public  static  String getCreateScript(){
-        return "create table if not exists Endorse\n" +
-                "(\n" +
-                "\tendorserId integer\n" +
-                "\t\tconstraint Endorse_User_id_fk\n" +
-                "\t\t\treferences User\n" +
-                "\t\t\t\ton update cascade on delete cascade,\n" +
-                "\tendorsedId integer\n" +
-                "\t\tconstraint Endorse_User_id_fk_2\n" +
-                "\t\t\treferences User\n" +
-                "\t\t\t\ton update cascade on delete cascade,\n" +
-                "\tskillName varchar(100)\n" +
-                "\t\tconstraint Endorse_pk\n" +
-                "\t\t\tprimary key\n" +
-                "\t\tconstraint Endorse_Skill_name_fk\n" +
-                "\t\t\treferences Skill (name)\n" +
-                "\t\t\t\ton update cascade on delete cascade\n" +
-                ");\n";
-    }
 }

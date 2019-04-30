@@ -4,7 +4,7 @@ import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.models.BidAmount;
-import ir.ac.ut.joboonja.models.BidInfo;
+import ir.ac.ut.joboonja.entities.Bid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class ProjectController {
     }
 
     @PostMapping("/{projectId}/bid")
-    public BidInfo bidProject(@PathVariable("projectId") String projectId, @RequestBody BidAmount bidAmount) {
+    public Bid bidProject(@PathVariable("projectId") String projectId, @RequestBody BidAmount bidAmount) {
         Project project = Commands.getProjectById(projectId);
         return Commands.addBid(project, bidAmount.getBidAmount());
     }
