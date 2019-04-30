@@ -92,7 +92,7 @@ public class MemoryDataBase {
 
     Auction getAuction(String id) {
         for (Auction auction : auctions) {
-            if (auction.getId().equals(id)) {
+            if (auction.getProjectId().equals(id)) {
                 return auction;
             }
         }

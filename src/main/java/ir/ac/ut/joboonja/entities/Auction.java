@@ -6,26 +6,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Auction {
-    private String projectTitle;
+    private String projectId;
     private List<BidInfo> offers;
-    private String id;
 
-    public Auction(String id, List<BidInfo> offers) {
+    public Auction(String projectId, List<BidInfo> offers) {
         this.offers = offers;
-        this.id = id;
+        this.projectId = projectId;
     }
 
-    public Auction(String id) {
-        this.id = id;
+    public Auction(String projectId) {
+        this.projectId = projectId;
         this.offers = new LinkedList<BidInfo>();
-    }
-
-    public String getProjectTitle() {
-        return projectTitle;
-    }
-
-    public void setProjectTitle(String projectTitle) {
-        this.projectTitle = projectTitle;
     }
 
     public List<BidInfo> getOffers() {
@@ -40,7 +31,7 @@ public class Auction {
     public boolean equals(Object obj) {
         if (obj instanceof Auction) {
             Auction project = (Auction)obj;
-            return id.equals(project.id);
+            return projectId.equals(project.projectId);
         }
         else {
             return false;
@@ -51,11 +42,11 @@ public class Auction {
         offers.add(bidInfo);
     }
 
-    public String getId() {
-        return id;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }
