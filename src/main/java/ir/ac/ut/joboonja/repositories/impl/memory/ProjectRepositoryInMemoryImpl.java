@@ -29,6 +29,11 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
     }
 
     @Override
+    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
+        return null;
+    }
+
+    @Override
     public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
         return null;
     }

@@ -10,5 +10,7 @@ public interface ProjectRepository {
     void insertProject(Project project);
     Project getProjectById(String id);
     List<Project> searchProjects(String filter);
+
+    List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize);
     List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize);
 }

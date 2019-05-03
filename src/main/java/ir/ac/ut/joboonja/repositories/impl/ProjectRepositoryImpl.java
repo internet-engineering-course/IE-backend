@@ -15,17 +15,32 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class ProjectRepositoryImpl extends JDBCRepository<Project> implements ProjectRepository {
 
+    private String generateQuery(
+        Integer userId, String filter, Integer pageNumber, Integer pageSize, String projectId
+    ) {
+        String like = "";
+        if (filter != null)
+            like = String.format("AND p.title LIKE \"%%%s%%\" or p.description LIKE \"%%%s%%\"", filter, filter);
+
+        String limit = "";
+        if (pageNumber != null && pageSize != null)
+            limit = String.format("LIMIT %d, %d", pageNumber*pageSize, pageSize);
+
+        String where = "";
+        if (projectId != null)
+            where = String.format("WHERE project.id = '%s'", projectId);
+
+        return String.format("SELECT * FROM (SELECT * FROM %s p where not exists " +
+                "(select * from ProjectSkill ps where ps.projectId = p.id and not exists " +
+                "(select * from User u, UserSkill us " +
+                "where u.id = %d and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point) " +
+                ") %s ORDER BY creationDate DESC %s) as project JOIN ProjectSkill pss on project.id == pss.projectId %s;",
+            getTableName(), userId, like, limit, where);
+    }
+
     @Override
     public List<Project> getAllProjects(User user) {
-        String query = String.format("SELECT * " +
-                "FROM %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
-                "where not exists " +
-                    "(select * " +
-                    "from ProjectSkill pss " +
-                    "where pss.projectId = p.id and not exists " +
-                        "(select * " +
-                        "from User u ,UserSkill us " +
-                        "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC;", getTableName(), user.getId());
+        String query = generateQuery(user.getId(), null, null, null, null);
         return findAll(query);
     }
 
@@ -44,41 +59,28 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     public Project getProjectById(String id) {
-        String query = String.format("SELECT * FROM %s p " +
-            "JOIN ProjectSkill ps on p.id = ps.projectId " +
-            "WHERE p.id = '%s';",
-            getTableName(), id);
+        User user = Commands.getDefaultUser();
+        String query = generateQuery(user.getId(), null, null, null, id);
         return findOne(query);
     }
 
     @Override
     public List<Project> searchProjects(String filter) {
         User user = Commands.getDefaultUser();
-        String query = String.format("SELECT * " +
-                "FROM(select * " +
-                "from %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
-                "where not exists " +
-                "(select * " +
-                "from ProjectSkill pss " +
-                "where pss.projectId = p.id and not exists " +
-                "(select * " +
-                "from User u ,UserSkill us " +
-                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate) as temp " +
-                "where temp.title LIKE \"%%%s%%\" or temp.description LIKE \"%%%s%%\";", getTableName(), user.getId(), filter, filter);
+        String query = generateQuery(user.getId(), filter, null, null, null);
+        return findAll(query);
+    }
+
+    @Override
+    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
+        User user = Commands.getDefaultUser();
+        String query = generateQuery(user.getId(), filter, pageNumber, pageSize, null);
         return findAll(query);
     }
 
     @Override
     public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
-        String query = String.format("SELECT * " +
-                "FROM %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
-                "where not exists " +
-                "(select * " +
-                "from ProjectSkill pss " +
-                "where pss.projectId = p.id and not exists " +
-                "(select * " +
-                "from User u ,UserSkill us " +
-                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC LIMIT %d OFFSET %d;", getTableName(), user.getId(), pageSize, pageNumber*pageSize);
+        String query = generateQuery(user.getId(), null, pageNumber, pageSize, null);
         return findAll(query);
     }
 
