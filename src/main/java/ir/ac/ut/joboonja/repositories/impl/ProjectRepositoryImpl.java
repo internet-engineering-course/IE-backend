@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
@@ -52,9 +53,18 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     public List<Project> searchProjects(String filter) {
-        String query = String.format("SELECT * FROM %s p " +
-            "JOIN ProjectSkill ps ON p.id = ps.projectId " +
-            "WHERE title LIKE \"%%%s%%\" or description LIKE \"%%%s%%\" ORDER BY creationDate DESC;", getTableName(), filter ,filter);
+        User user = Commands.getDefaultUser();
+        String query = String.format("SELECT * " +
+                "FROM(select * " +
+                "from %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
+                "where not exists " +
+                "(select * " +
+                "from ProjectSkill pss " +
+                "where pss.projectId = p.id and not exists " +
+                "(select * " +
+                "from User u ,UserSkill us " +
+                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate) as temp " +
+                "where temp.title LIKE \"%%%s%%\" or temp.description LIKE \"%%%s%%\";", getTableName(), user.getId(), filter, filter);
         return findAll(query);
     }
 
