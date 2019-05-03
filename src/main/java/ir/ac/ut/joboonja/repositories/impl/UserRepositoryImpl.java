@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.UserRepository;
@@ -69,9 +70,10 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
 
     @Override
     public List<User> searchUsers(String filter) {
+        User user = Commands.getDefaultUser();
         String query = String.format("SELECT * FROM %s u " +
                 "JOIN UserSkill us ON u.id = us.userId " +
-                "WHERE printf('%%s%%s%%s', username, firstname, lastname) LIKE \"%%%s%%\";",
+                "WHERE printf('%%s%%s%%s', username, firstname, lastname) LIKE \"%%%s%%\" and u.id <>" + user.getId() +";",
             getTableName(), filter);
         return findAll(query);
     }
