@@ -54,21 +54,21 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     public List<Project> searchProjects(String filter) {
         String query = String.format("SELECT * FROM %s p " +
             "JOIN ProjectSkill ps ON p.id = ps.projectId " +
-            "WHERE title LIKE \"%%%s%%\" ORDER BY creationDate DESC;", getTableName(), filter);
+            "WHERE title LIKE \"%%%s%%\" or description LIKE \"%%%s%%\" ORDER BY creationDate DESC;", getTableName(), filter ,filter);
         return findAll(query);
     }
 
     @Override
     public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
         String query = String.format("SELECT * " +
-                "FROM %s p and projectSkill ps " +
+                "FROM %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
                 "where not exists " +
                 "(select * " +
                 "from ProjectSkill pss " +
                 "where pss.projectId = p.id and not exists " +
                 "(select * " +
                 "from User u ,UserSkill us " +
-                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC LIMIT %d, %d", getTableName(), user.getId(), pageNumber*pageSize, pageSize);
+                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC LIMIT %d OFFSET %d;", getTableName(), user.getId(), pageSize, pageNumber*pageSize);
         return findAll(query);
     }
 
