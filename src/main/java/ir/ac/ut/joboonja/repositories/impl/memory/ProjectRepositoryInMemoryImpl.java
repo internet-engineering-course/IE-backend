@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl.memory;
 
+import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.ProjectRepository;
 import ir.ac.ut.joboonja.entities.Project;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
     @Override
-    public List<Project> getAllProjects() {
+    public List<Project> getAllProjects(User user) {
         return MemoryDataBase.getInstance().getAllProjects();
     }
 
@@ -28,7 +29,7 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Project> getProjectsPaginated(Integer pageNumber, Integer pageSize) {
+    public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
         return null;
     }
 

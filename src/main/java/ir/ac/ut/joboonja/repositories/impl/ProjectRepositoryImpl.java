@@ -2,6 +2,7 @@ package ir.ac.ut.joboonja.repositories.impl;
 
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
+import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
@@ -14,8 +15,16 @@ import static java.util.stream.Collectors.groupingBy;
 public class ProjectRepositoryImpl extends JDBCRepository<Project> implements ProjectRepository {
 
     @Override
-    public List<Project> getAllProjects() {
-        String query = "SELECT * FROM " + getTableName() + " p JOIN ProjectSkill ps on p.id = ps.projectId ORDER BY creationDate DESC;";
+    public List<Project> getAllProjects(User user) {
+        String query = String.format("SELECT * " +
+                "FROM %s p JOIN ProjectSkill ps on p.id = ps.projectId " +
+                "where not exists " +
+                    "(select * " +
+                    "from ProjectSkill pss " +
+                    "where pss.projectId = p.id and not exists " +
+                        "(select * " +
+                        "from User u ,UserSkill us " +
+                        "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC;", getTableName(), user.getId());
         return findAll(query);
     }
 
@@ -50,10 +59,16 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
-    public List<Project> getProjectsPaginated(Integer pageNumber, Integer pageSize) {
-        String query = String.format("SELECT * FROM " +
-            "(SELECT * FROM %s ORDER BY creationDate DESC LIMIT %d, %d) as p " +
-            "JOIN ProjectSkill ps ON p.id = ps.projectId;", getTableName(), pageNumber*pageSize, pageSize);
+    public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
+        String query = String.format("SELECT * " +
+                "FROM %s p and projectSkill ps " +
+                "where not exists " +
+                "(select * " +
+                "from ProjectSkill pss " +
+                "where pss.projectId = p.id and not exists " +
+                "(select * " +
+                "from User u ,UserSkill us " +
+                "where u.id = %d and us.userId = u.id and us.skillName = pss.skillName and us.points >= pss.point)) ORDER BY creationDate DESC LIMIT %d, %d", getTableName(), user.getId(), pageNumber*pageSize, pageSize);
         return findAll(query);
     }
 

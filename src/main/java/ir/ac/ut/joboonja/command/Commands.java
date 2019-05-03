@@ -51,7 +51,7 @@ public class Commands {
     }
 
     public static List<Project> getValidProjects(User user) {
-        return projectRepository.getAllProjects();
+        return projectRepository.getAllProjects(user);
     }
 
     public static User getDefaultUser(){
@@ -280,6 +280,6 @@ public class Commands {
     }
 
     public static List<Project> getValidProjects(User user, Integer pageNumber, Integer pageSize) {
-        return projectRepository.getProjectsPaginated(pageNumber, pageSize);
+        return projectRepository.getProjectsPaginated(user, pageNumber, pageSize);
     }
 }
