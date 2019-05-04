@@ -20,7 +20,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     ) {
         String like = "";
         if (filter != null)
-            like = String.format("AND p.title LIKE \"%%%s%%\" or p.description LIKE \"%%%s%%\"", filter, filter);
+            like = String.format("where project.title LIKE \"%%%s%%\" or project.description LIKE \"%%%s%%\"", filter, filter);
 
         String limit = "";
         if (pageNumber != null && pageSize != null)
@@ -34,8 +34,8 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
                 "(select * from ProjectSkill ps where ps.projectId = p.id and not exists " +
                 "(select * from User u, UserSkill us " +
                 "where u.id = %d and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point) " +
-                ") %s ORDER BY creationDate DESC %s) as project JOIN ProjectSkill pss on project.id == pss.projectId %s;",
-            getTableName(), userId, like, limit, where);
+                ") ORDER BY creationDate DESC %s) as project JOIN ProjectSkill pss on project.id == pss.projectId %s %s;",
+            getTableName(), userId, limit, like, where);
     }
 
     @Override
