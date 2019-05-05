@@ -20,7 +20,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     ) {
         String like = "";
         if (filter != null)
-            like = "where project.title LIKE '%"+filter+"%' or project.description LIKE '%"+filter+"%'";
+            like = "where proj.title LIKE '%"+filter+"%' or proj.description LIKE '%"+filter+"%'";
 
         String limit = "";
         if (pageNumber != null && pageSize != null)
@@ -28,14 +28,15 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
         String where = "";
         if (projectId != null)
-            where = String.format("WHERE project.id = '%s'", projectId);
+            where = String.format("WHERE proj.id = '%s'", projectId);
 
-        return String.format("SELECT * FROM (SELECT * FROM %s p where not exists " +
-                "(select * from ProjectSkill ps where ps.projectId = p.id and not exists " +
-                "(select * from User u, UserSkill us " +
-                "where u.id = %d and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point) " +
-                ") ORDER BY creationDate DESC %s) as project JOIN ProjectSkill pss on project.id == pss.projectId %s %s;",
-            getTableName(), userId, limit, like, where);
+        return "select * \n" +
+                "FROM (SELECT * FROM (SELECT * FROM Project p where not exists\n" +
+                "(select * from ProjectSkill ps where ps.projectId = p.id and not exists\n" +
+                "(select * from User u, UserSkill us\n" +
+                "where u.id = "+ userId +" and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point)\n" +
+                ")) as proj " + like + where + " ORDER BY proj.creationDate DESC " + limit + ") as result join ProjectSkill on result.id = projectId;\n";
+
     }
 
     @Override
