@@ -20,7 +20,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     ) {
         String like = "";
         if (filter != null)
-            like = String.format("where project.title LIKE \"%%%s%%\" or project.description LIKE \"%%%s%%\"", filter, filter);
+            like = "where project.title LIKE '%"+filter+"%' or project.description LIKE '%"+filter+"%'";
 
         String limit = "";
         if (pageNumber != null && pageSize != null)

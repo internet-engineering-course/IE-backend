@@ -71,10 +71,10 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     @Override
     public List<User> searchUsers(String filter) {
         User user = Commands.getDefaultUser();
-        String query = String.format("SELECT * FROM %s u " +
+        String query ="SELECT * FROM User u " +
                 "JOIN UserSkill us ON u.id = us.userId " +
-                "WHERE printf('%%s%%s%%s', username, firstname, lastname) LIKE \"%%%s%%\" and u.id <>" + user.getId() +";",
-            getTableName(), filter);
+                "WHERE ( u.firstname LIKE '%" + filter + "%' or u.lastname LIKE '%" + filter + "%' ) and u.id <>" + user.getId() +";";
+
         return findAll(query);
     }
 

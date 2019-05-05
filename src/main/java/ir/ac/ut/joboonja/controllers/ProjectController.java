@@ -48,10 +48,13 @@ public class ProjectController {
     }
 
     @GetMapping("/search")
-    public List<Project> searchProjects(@RequestParam(name = "filter", required = false) String filter) {
+    public List<Project> searchProjects(
+            @RequestParam(name = "filter", required = false) String filter,
+            @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (filter == null || filter.isEmpty())
             return Collections.emptyList();
 
-        return Commands.searchValidProjects(filter);
+        return Commands.searchProjectsPaginated(filter, pageNumber, pageSize);
     }
 }

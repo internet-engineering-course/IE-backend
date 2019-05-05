@@ -282,4 +282,8 @@ public class Commands {
     public static List<Project> getValidProjects(User user, Integer pageNumber, Integer pageSize) {
         return projectRepository.getProjectsPaginated(user, pageNumber, pageSize);
     }
+
+    public static List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
+        return projectRepository.searchProjectsPaginated(filter, pageNumber, pageSize);
+    }
 }
