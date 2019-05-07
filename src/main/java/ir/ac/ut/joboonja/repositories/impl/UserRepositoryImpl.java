@@ -16,8 +16,8 @@ import static java.util.stream.Collectors.groupingBy;
 public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepository {
     @Override
     public void insertUser(User user) {
-        String sql = String.format("insert into %s (username,firstname,lastname,jobTitle,bio) values ( '%s','%s','%s','%s','%s' )",
-            getTableName(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getJobTitle(), user.getBio());
+        String sql = String.format("insert into %s (username,firstname,lastname,password,jobTitle,bio,imageUrl) values ( '%s','%s','%s','%s','%s','%s','%s' )",
+            getTableName(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getPassword(), user.getJobTitle(), user.getBio(), user.getImageUrl());
         execUpdate(sql);
     }
 
@@ -116,32 +116,34 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
 
     public static String getCreateScript(){
         return "create table if not exists User\n" +
-            "(\n" +
-            "\tid integer\n" +
-            "\t\tconstraint User_pk\n" +
-            "\t\t\tprimary key autoincrement,\n" +
-            "\tusername varchar(100),\n" +
-            "\tfirstname varchar(100),\n" +
-            "\tlastname varchar(100),\n" +
-            "\tjobTitle text,\n" +
-            "\tbio text\n" +
-            ");\n" +
-            "\n" +
-            "create unique index if not exists User_username_uindex\n" +
-            "\ton User (username);\n" +
-            "\n" +
-            "create table if not exists UserSkill\n" +
-            "(\n" +
-            "\tuserId integer\n" +
-            "\t\tconstraint UserSkill_User_id_fk\n" +
-            "\t\t\treferences User\n" +
-            "\t\t\t\ton update cascade on delete cascade,\n" +
-            "\tskillName varchar(100)\n" +
-            "\t\tconstraint UserSkill_Skill_id_fk\n" +
-            "\t\t\treferences Skill\n" +
-            "\t\t\t\ton update cascade on delete cascade,\n" +
-            "\tpoints integer,\n" +
-            "\tprimary key (userId, skillName)\n" +
-            ");";
+                "(\n" +
+                "\tid integer\n" +
+                "\t\tconstraint user_pk\n" +
+                "\t\t\tprimary key autoincrement,\n" +
+                "\tusername varchar(100) not null,\n" +
+                "\tfirstname varchar(100),\n" +
+                "\tlastname varchar(100),\n" +
+                "\tpassword varchar(100) not null,\n" +
+                "\tjobTitle text,\n" +
+                "\tbio text,\n" +
+                "\timageUrl text\n" +
+                ");\n" +
+                "\n" +
+                "create unique index user_username_uindex\n" +
+                "\ton user (username);\n" +
+                "\n"+
+                "create table if not exists UserSkill\n" +
+                "(\n" +
+                "\tuserId integer\n" +
+                "\t\tconstraint UserSkill_User_id_fk\n" +
+                "\t\t\treferences User\n" +
+                "\t\t\t\ton update cascade on delete cascade,\n" +
+                "\tskillName varchar(100)\n" +
+                "\t\tconstraint UserSkill_Skill_id_fk\n" +
+                "\t\t\treferences Skill\n" +
+                "\t\t\t\ton update cascade on delete cascade,\n" +
+                "\tpoints integer,\n" +
+                "\tprimary key (userId, skillName)\n" +
+                ");";
     }
 }

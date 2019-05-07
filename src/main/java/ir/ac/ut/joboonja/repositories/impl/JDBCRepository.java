@@ -25,6 +25,7 @@ abstract class JDBCRepository<E> {
             Connection connection = ResourcePool.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
+
             while(resultSet.next()) {
                 result.add(toDomainModel(resultSet));
             }

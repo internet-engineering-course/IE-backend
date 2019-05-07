@@ -288,7 +288,8 @@ public class Commands {
     }
 
     public static User insertUser(String username, String firstname, String lastname, String jobTitle, String password, String imageUrl, String bio) {
-        User newUser = new User();
+        User newUser = new User(username , firstname , lastname , jobTitle , bio , password , imageUrl);
+        userRepository.insertUser(newUser);
         return newUser;
     }
 }

@@ -8,7 +8,36 @@ public class User {
     private String firstname;
     private String lastname;
     private String jobTitle;
+    private String imageUrl;
     private String bio;
+    private String password;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(String username, String firstname, String lastname, String jobTitle, String bio, String password, String imageUrl) {
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.jobTitle = jobTitle;
+        this.bio = bio;
+        this.password = password;
+        this.imageUrl = imageUrl;
+    }
+
     private LinkedList<Skill> skills;
 
     public User() {}

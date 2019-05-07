@@ -36,16 +36,8 @@ public class UserController {
     }
 
     @PostMapping
-    public User insertUser(
-            @RequestParam(name = "username") String username,
-            @RequestParam(name = "lastname") String lastname,
-            @RequestParam(name = "firstname") String firstname,
-            @RequestParam(name = "bio") String bio,
-            @RequestParam(name = "jobTitle") String jobTitle,
-            @RequestParam(name = "password") String password,
-            @RequestParam(name = "imageUrl") String imageUrl
-            ){
-          return Commands.insertUser(username, firstname, lastname, jobTitle, password, imageUrl, bio);
+    public User insertUser(@RequestBody User user){
+          return Commands.insertUser(user.getUsername(), user.getFirstname(), user.getLastname(), user.getJobTitle(), user.getPassword(), user.getImageUrl(), user.getBio());
     }
 
     @PutMapping
