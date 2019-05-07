@@ -286,4 +286,9 @@ public class Commands {
     public static List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
         return projectRepository.searchProjectsPaginated(filter, pageNumber, pageSize);
     }
+
+    public static User insertUser(String username, String firstname, String lastname, String jobTitle, String password, String imageUrl, String bio) {
+        User newUser = new User();
+        return newUser;
+    }
 }

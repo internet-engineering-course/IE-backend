@@ -35,6 +35,19 @@ public class UserController {
         return Commands.endorseSkill(userId, endorseRequest.getSkillName());
     }
 
+    @PostMapping
+    public User insertUser(
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "lastname") String lastname,
+            @RequestParam(name = "firstname") String firstname,
+            @RequestParam(name = "bio") String bio,
+            @RequestParam(name = "jobTitle") String jobTitle,
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "imageUrl") String imageUrl
+            ){
+          return Commands.insertUser(username, firstname, lastname, jobTitle, password, imageUrl, bio);
+    }
+
     @PutMapping
     public User updateUser(@RequestBody User user) {
         if (user.getSkills().size() != 0) {
