@@ -9,6 +9,8 @@ import ir.ac.ut.joboonja.entities.Bid;
 import ir.ac.ut.joboonja.models.EndorsableSkill;
 import ir.ac.ut.joboonja.repositories.*;
 import ir.ac.ut.joboonja.repositories.impl.*;
+import org.apache.commons.codec.cli.Digest;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -287,8 +289,8 @@ public class Commands {
         return projectRepository.searchProjectsPaginated(filter, pageNumber, pageSize);
     }
 
-    public static User insertUser(String username, String firstname, String lastname, String jobTitle, String password, String imageUrl, String bio) {
-        User newUser = new User(username , firstname , lastname , jobTitle , bio , password , imageUrl);
+    public static User insertUser(User newUser) {
+        newUser.setPassword(DigestUtils.sha256Hex(newUser.getPassword().getBytes()));
         userRepository.insertUser(newUser);
         return newUser;
     }

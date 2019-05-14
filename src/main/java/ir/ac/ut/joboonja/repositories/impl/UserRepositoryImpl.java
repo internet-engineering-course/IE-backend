@@ -129,7 +129,7 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
                 "\timageUrl text\n" +
                 ");\n" +
                 "\n" +
-                "create unique index user_username_uindex\n" +
+                "create unique index if not exists user_username_uindex\n" +
                 "\ton user (username);\n" +
                 "\n"+
                 "create table if not exists UserSkill\n" +

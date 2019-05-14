@@ -12,6 +12,8 @@ import java.util.List;
 
 abstract class JDBCRepository<E> {
 
+    private final static int SQLITE_CONSTRAINT_UNIQUE = 19;
+
     abstract String getTableName();
     abstract E toDomainModel(ResultSet resultSet) throws SQLException;
 
@@ -33,8 +35,7 @@ abstract class JDBCRepository<E> {
             statement.close();
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new BadRequestException("Something is wrong in db: " + e.getMessage());
+            handleSQLException(e);
         }
         return result;
     }
@@ -47,8 +48,7 @@ abstract class JDBCRepository<E> {
             statement.close();
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new BadRequestException("Something is wrong in db: " + e.getMessage());
+            handleSQLException(e);
         }
     }
 
@@ -76,5 +76,12 @@ abstract class JDBCRepository<E> {
             throw new BadRequestException("Something is wrong in db: " + e.getMessage());
         }
         return res;
+    }
+
+    private void handleSQLException(SQLException e) {
+        if (e.getErrorCode() == SQLITE_CONSTRAINT_UNIQUE)
+            throw new BadRequestException("Already exists!");
+        e.printStackTrace();
+        throw new BadRequestException("Something is wrong in db: " + e.getMessage());
     }
 }

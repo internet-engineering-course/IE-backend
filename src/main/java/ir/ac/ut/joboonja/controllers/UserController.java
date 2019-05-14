@@ -37,7 +37,7 @@ public class UserController {
 
     @PostMapping
     public User insertUser(@RequestBody User user){
-          return Commands.insertUser(user.getUsername(), user.getFirstname(), user.getLastname(), user.getJobTitle(), user.getPassword(), user.getImageUrl(), user.getBio());
+          return Commands.insertUser(user);
     }
 
     @PutMapping
