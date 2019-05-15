@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class JWTUtils {
 
-    private final static String SECRET_KEY = "joboonja";
+    private final static String SECRET_KEY = "joboonja-joboonja-joboonja-joboonja-joboonja-joboonja-joboonja";
     private final static long JWT_TTL = 15*60*1000L;
 
     public static String createJWT(String issuer) {

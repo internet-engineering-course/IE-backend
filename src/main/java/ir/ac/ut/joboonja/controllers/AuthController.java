@@ -2,6 +2,7 @@ package ir.ac.ut.joboonja.controllers;
 
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.models.Token;
+import ir.ac.ut.joboonja.services.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public Token login(@RequestBody User user) {
-        return new Token("dummy token");
+        return AuthService.authenticateUser(user);
     }
 }

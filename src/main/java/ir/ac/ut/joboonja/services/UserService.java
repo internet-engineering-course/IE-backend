@@ -25,6 +25,13 @@ public class UserService {
         return user;
     }
 
+    public static User getUserByUserName(String username){
+        User user = userRepository.getUser(username);
+        if (user == null)
+            throw new NotFoundException("User not found");
+        return user;
+    }
+
     public static List<User> getAllUsers() {
         User user = getDefaultUser();
         List<User> users = userRepository.getAllUsers();
