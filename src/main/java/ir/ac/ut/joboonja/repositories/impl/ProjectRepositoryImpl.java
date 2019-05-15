@@ -1,10 +1,10 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.ProjectRepository;
+import ir.ac.ut.joboonja.services.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,21 +60,21 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     public Project getProjectById(String id) {
-        User user = Commands.getDefaultUser();
+        User user = UserService.getDefaultUser();
         String query = generateQuery(user.getId(), null, null, null, id);
         return findOne(query);
     }
 
     @Override
     public List<Project> searchProjects(String filter) {
-        User user = Commands.getDefaultUser();
+        User user = UserService.getDefaultUser();
         String query = generateQuery(user.getId(), filter, null, null, null);
         return findAll(query);
     }
 
     @Override
     public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
-        User user = Commands.getDefaultUser();
+        User user = UserService.getDefaultUser();
         String query = generateQuery(user.getId(), filter, pageNumber, pageSize, null);
         return findAll(query);
     }

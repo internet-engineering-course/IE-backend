@@ -1,9 +1,10 @@
 package ir.ac.ut.joboonja.database;
 
 import ir.ac.ut.joboonja.client.HttpClient;
-import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.repositories.impl.*;
+import ir.ac.ut.joboonja.services.ProjectService;
+import ir.ac.ut.joboonja.services.SkillService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -49,12 +50,12 @@ public class SchemaManager {
         System.out.println("syncing database ...");
         List<Skill> skills = HttpClient.fetchAllSkills();
         for(Skill skill:skills) {
-            Commands.insertSkill(skill);
+            SkillService.insertSkill(skill);
         }
         System.out.println("synced all skills ...");
         List<Project> projects = HttpClient.fetchAllProjects();
         for(Project project:projects){
-            Commands.insertProject(project);
+            ProjectService.insertProject(project);
         }
         System.out.println("synced all projects ...");
     }

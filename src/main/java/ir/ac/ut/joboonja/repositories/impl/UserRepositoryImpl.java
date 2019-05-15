@@ -1,9 +1,9 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
-import ir.ac.ut.joboonja.command.Commands;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.UserRepository;
+import ir.ac.ut.joboonja.services.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,7 +38,7 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     @Override
     public User getUser(String username) {
         String query = String.format("SELECT * FROM %s u " +
-                "JOIN UserSkill us on u.id = us.userId " +
+                "LEFT JOIN UserSkill us on u.id = us.userId " +
                 "WHERE u.username = '%s';",
             getTableName(), username);
         return findOne(query);
@@ -47,8 +47,8 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     @Override
     public User getUserById(Integer id) {
         String query = String.format("SELECT * FROM %s u " +
-                "JOIN UserSkill us on u.id = us.userId " +
-                "WHERE userId = %d;",
+                "LEFT JOIN UserSkill us on u.id = us.userId " +
+                "WHERE u.id = %d;",
             getTableName(), id);
         return findOne(query);
     }
@@ -63,14 +63,14 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     @Override
     public List<User> getAllUsers() {
         String query = String.format("SELECT * FROM %s u " +
-                "JOIN UserSkill us on u.id = us.userId;",
+                "LEFT JOIN UserSkill us on u.id = us.userId;",
             getTableName());
         return findAll(query);
     }
 
     @Override
     public List<User> searchUsers(String filter) {
-        User user = Commands.getDefaultUser();
+        User user = UserService.getDefaultUser();
         String query ="SELECT * FROM User u " +
                 "JOIN UserSkill us ON u.id = us.userId " +
                 "WHERE ( u.firstname LIKE '%" + filter + "%' or u.lastname LIKE '%" + filter + "%' ) and u.id <>" + user.getId() +";";
@@ -94,6 +94,8 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
             resultSet.getString("lastname"),
             resultSet.getString("jobTitle"),
             resultSet.getString("bio"),
+            resultSet.getString("password"),
+            resultSet.getString("imageUrl"),
             skills
         );
     }
@@ -104,8 +106,11 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
         LinkedList<User> result = new LinkedList<>();
         for (Integer userId: users.keySet()) {
             LinkedList<Skill> userSkills = new LinkedList<>();
-            for (User u: users.get(userId))
-                userSkills.add(u.getSkills().get(0));
+            for (User u: users.get(userId)) {
+                Skill skill = u.getSkills().get(0);
+                if (skill.getName() != null)
+                    userSkills.add(skill);
+            }
 
             User user = users.get(userId).get(0);
             user.setSkills(userSkills);

@@ -11,6 +11,7 @@ public class User {
     private String imageUrl;
     private String bio;
     private String password;
+    private LinkedList<Skill> skills;
 
     public String getImageUrl() {
         return imageUrl;
@@ -28,7 +29,8 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String firstname, String lastname, String jobTitle, String bio, String password, String imageUrl) {
+    public User(Integer id, String username, String firstname, String lastname, String jobTitle, String bio, String password, String imageUrl, LinkedList<Skill> skills) {
+        this.id = id;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -36,9 +38,8 @@ public class User {
         this.bio = bio;
         this.password = password;
         this.imageUrl = imageUrl;
+        this.skills = skills;
     }
-
-    private LinkedList<Skill> skills;
 
     public User() {}
 
