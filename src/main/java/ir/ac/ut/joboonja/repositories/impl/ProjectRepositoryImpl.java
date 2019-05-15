@@ -59,22 +59,19 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     }
 
     @Override
-    public Project getProjectById(String id) {
-        User user = UserService.getDefaultUser();
+    public Project getProjectById(String id, User user) {
         String query = generateQuery(user.getId(), null, null, null, id);
         return findOne(query);
     }
 
     @Override
-    public List<Project> searchProjects(String filter) {
-        User user = UserService.getDefaultUser();
+    public List<Project> searchProjects(String filter, User user) {
         String query = generateQuery(user.getId(), filter, null, null, null);
         return findAll(query);
     }
 
     @Override
-    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
-        User user = UserService.getDefaultUser();
+    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize, User user) {
         String query = generateQuery(user.getId(), filter, pageNumber, pageSize, null);
         return findAll(query);
     }

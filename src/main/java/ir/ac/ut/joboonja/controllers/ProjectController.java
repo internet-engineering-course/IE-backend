@@ -19,33 +19,34 @@ public class ProjectController {
     @GetMapping
     public List<Project> getProjects(
         @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
-        @RequestParam(name = "pageSize", required = false) Integer pageSize
+        @RequestParam(name = "pageSize", required = false) Integer pageSize,
+        @RequestAttribute("user") User user
     ) {
         if (pageNumber != null && pageSize != null)
-            return ProjectService.getValidProjects(UserService.getDefaultUser(), pageNumber, pageSize);
-        return ProjectService.getValidProjects(UserService.getDefaultUser());
+            return ProjectService.getValidProjects(user, pageNumber, pageSize);
+        return ProjectService.getValidProjects(user);
     }
 
     @GetMapping("/{projectId}")
-    public Project getProject(@PathVariable("projectId") String projectId) {
-        return ProjectService.getProjectById(projectId);
+    public Project getProject(@PathVariable("projectId") String projectId, @RequestAttribute("user") User user) {
+        return ProjectService.getProjectById(projectId, user);
     }
 
     @PostMapping("/{projectId}/bid")
-    public Bid bidProject(@PathVariable("projectId") String projectId, @RequestBody BidAmount bidAmount) {
-        Project project = ProjectService.getProjectById(projectId);
-        return AuctionService.bidProject(project, bidAmount.getBidAmount());
+    public Bid bidProject(@PathVariable("projectId") String projectId, @RequestBody BidAmount bidAmount, @RequestAttribute("user") User user) {
+        Project project = ProjectService.getProjectById(projectId, user);
+        return AuctionService.bidProject(project, bidAmount.getBidAmount(), user);
     }
 
     @GetMapping("/{projectId}/bid")
-    public BidAmount isUserBid(@PathVariable("projectId") String projectId){
-        Project project = ProjectService.getProjectById(projectId);
-        return AuctionService.hasUserBid(project , UserService.getDefaultUser());
+    public BidAmount isUserBid(@PathVariable("projectId") String projectId, @RequestAttribute("user") User user) {
+        Project project = ProjectService.getProjectById(projectId, user);
+        return AuctionService.hasUserBid(project, user);
     }
 
     @GetMapping("/{projectId}/auction")
-    public User projectWinner(@PathVariable("projectId") String projectId){
-        Project project = ProjectService.getProjectById(projectId);
+    public User projectWinner(@PathVariable("projectId") String projectId, @RequestAttribute("user") User user){
+        Project project = ProjectService.getProjectById(projectId, user);
         return AuctionService.holdAuction(project);
     }
 
@@ -53,10 +54,11 @@ public class ProjectController {
     public List<Project> searchProjects(
             @RequestParam(name = "filter", required = false) String filter,
             @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestAttribute("user") User user) {
         if (filter == null || filter.isEmpty())
             return Collections.emptyList();
 
-        return ProjectService.searchProjectsPaginated(filter, pageNumber, pageSize);
+        return ProjectService.searchProjectsPaginated(filter, pageNumber, pageSize, user);
     }
 }

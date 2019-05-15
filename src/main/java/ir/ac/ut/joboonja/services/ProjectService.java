@@ -9,8 +9,6 @@ import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
 import java.util.LinkedList;
 import java.util.List;
 
-import static ir.ac.ut.joboonja.services.UserService.getDefaultUser;
-
 public class ProjectService {
     private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
 
@@ -49,21 +47,20 @@ public class ProjectService {
         projectRepository.insertProject(project);
     }
 
-    public static List<Project> searchValidProjects(String filter) {
-        return projectRepository.searchProjects(filter);
+    public static List<Project> searchValidProjects(String filter, User user) {
+        return projectRepository.searchProjects(filter, user);
     }
 
     public static List<Project> getValidProjects(User user, Integer pageNumber, Integer pageSize) {
         return projectRepository.getProjectsPaginated(user, pageNumber, pageSize);
     }
 
-    public static List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
-        return projectRepository.searchProjectsPaginated(filter, pageNumber, pageSize);
+    public static List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize, User user) {
+        return projectRepository.searchProjectsPaginated(filter, pageNumber, pageSize, user);
     }
 
-    public static Project getProjectById(String id) {
-        User user = getDefaultUser();
-        Project project = projectRepository.getProjectById(id);
+    public static Project getProjectById(String id, User user) {
+        Project project = projectRepository.getProjectById(id, user);
         if (project == null)
             throw new NotFoundException("Project not found!");
         if (!hasEnoughSkills(user, project))

@@ -49,7 +49,7 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> searchUsers(String filter) {
+    public List<User> searchUsers(String filter, User user) {
         return null;
     }
 

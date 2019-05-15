@@ -8,9 +8,9 @@ import java.util.List;
 public interface ProjectRepository {
     List<Project> getAllProjects(User user);
     void insertProject(Project project);
-    Project getProjectById(String id);
-    List<Project> searchProjects(String filter);
+    Project getProjectById(String id, User user);
+    List<Project> searchProjects(String filter, User user);
 
-    List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize);
+    List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize, User user);
     List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize);
 }

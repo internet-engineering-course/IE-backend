@@ -8,8 +8,6 @@ import ir.ac.ut.joboonja.repositories.impl.AuctionRepositoryImpl;
 
 import java.util.Date;
 
-import static ir.ac.ut.joboonja.services.UserService.getDefaultUser;
-
 public class AuctionService {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryImpl();
@@ -46,8 +44,7 @@ public class AuctionService {
         return sum;
     }
 
-    public static Bid bidProject(Project project, Integer bidAmount) {
-        User user = getDefaultUser();
+    public static Bid bidProject(Project project, Integer bidAmount, User user) {
         if (hasUserBid(project, user).getBidAmount() != -1)
             throw new BadRequestException("User has already bidded!");
         if (bidAmount > project.getBudget())

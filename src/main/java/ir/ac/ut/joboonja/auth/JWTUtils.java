@@ -11,7 +11,7 @@ import java.util.Date;
 public class JWTUtils {
 
     private final static String SECRET_KEY = "joboonja-joboonja-joboonja-joboonja-joboonja-joboonja-joboonja";
-    private final static long JWT_TTL = 15*60*1000L;
+    private final static long JWT_TTL = 45*60*1000L;
 
     public static String createJWT(String issuer) {
 
@@ -30,12 +30,14 @@ public class JWTUtils {
         return builder.compact();
     }
 
-    public static boolean verifyJWT(String jwt) {
+    public static String verifyJWT(String jwt) {
 
         try {
-            Jwts.parser()
+            Claims claims =
+                Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(jwt).getBody();
+            return claims.getIssuer();
         } catch (
             ExpiredJwtException |
             UnsupportedJwtException |
@@ -43,8 +45,7 @@ public class JWTUtils {
             MalformedJwtException |
             IllegalArgumentException e
             ) {
-            return false;
+            return null;
         }
-        return true;
     }
 }

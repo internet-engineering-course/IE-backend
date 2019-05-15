@@ -14,5 +14,5 @@ public interface UserRepository {
 
     void updateUserSkillPoint(Integer userId, String skillName, Integer points);
     List<User> getAllUsers();
-    List<User> searchUsers(String filter);
+    List<User> searchUsers(String filter, User user);
 }

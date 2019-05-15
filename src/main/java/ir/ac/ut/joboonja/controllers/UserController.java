@@ -17,8 +17,8 @@ import java.util.List;
 public class UserController {
 
     @GetMapping
-    public List<User> getUsers() {
-        return UserService.getAllUsers();
+    public List<User> getUsers(@RequestAttribute("user") User user) {
+        return UserService.getAllUsers(user);
     }
 
     @GetMapping("/{userId}")
@@ -27,45 +27,40 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/endorse")
-    public List<EndorsableSkill> getEndorsableSkills(@PathVariable("userId") Integer userId) {
-        return EndorseService.getUserEndorsableSkills(UserService.getDefaultUser().getId(), userId);
+    public List<EndorsableSkill> getEndorsableSkills(@PathVariable("userId") Integer userId, @RequestAttribute("user") User user) {
+        return EndorseService.getUserEndorsableSkills(user.getId(), userId);
     }
 
     @PostMapping("/{userId}/endorse")
-    public Endorse endorse(@PathVariable("userId") Integer userId, @RequestBody EndorseRequest endorseRequest) {
-        return EndorseService.endorseSkill(userId, endorseRequest.getSkillName());
-    }
-
-    @PostMapping
-    public User insertUser(@RequestBody User user){
-          return UserService.insertUser(user);
+    public Endorse endorse(@PathVariable("userId") Integer userId, @RequestBody EndorseRequest endorseRequest, @RequestAttribute("user") User user) {
+        return EndorseService.endorseSkill(userId, endorseRequest.getSkillName(), user);
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@RequestBody User user, @RequestAttribute("user") User loggedInUser) {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
-                UserService.addUserSkill(skill.getName());
+                UserService.addUserSkill(skill.getName(), loggedInUser);
             }
         }
-        return UserService.getDefaultUser();
+        return UserService.getUserById(user.getId());
     }
 
     @DeleteMapping
-    public User deleteUserSkill(@RequestBody User user) {
+    public User deleteUserSkill(@RequestBody User user, @RequestAttribute("user") User loggedInUser) {
         if (user.getSkills().size() != 0) {
             for (Skill skill: user.getSkills()) {
-                UserService.deleteUserSkill(skill.getName());
+                UserService.deleteUserSkill(skill.getName(), loggedInUser);
             }
         }
-        return UserService.getDefaultUser();
+        return UserService.getUserById(user.getId());
     }
 
     @GetMapping("/search")
-    public List<User> searchUsers(@RequestParam(name = "filter", required = false) String filter) {
+    public List<User> searchUsers(@RequestParam(name = "filter", required = false) String filter, @RequestAttribute("user") User user) {
         if (filter == null || filter.isEmpty())
             return Collections.emptyList();
 
-        return UserService.searchUsers(filter);
+        return UserService.searchUsers(filter, user);
     }
 }

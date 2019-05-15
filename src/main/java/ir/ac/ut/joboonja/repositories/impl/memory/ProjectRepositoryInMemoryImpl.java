@@ -19,17 +19,17 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Project getProjectById(String id) {
+    public Project getProjectById(String id, User user) {
         return MemoryDataBase.getInstance().getProjectById(id);
     }
 
     @Override
-    public List<Project> searchProjects(String filter) {
+    public List<Project> searchProjects(String filter, User user) {
         return null;
     }
 
     @Override
-    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize) {
+    public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize, User user) {
         return null;
     }
 

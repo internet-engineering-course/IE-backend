@@ -69,8 +69,7 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     }
 
     @Override
-    public List<User> searchUsers(String filter) {
-        User user = UserService.getDefaultUser();
+    public List<User> searchUsers(String filter, User user) {
         String query ="SELECT * FROM User u " +
                 "JOIN UserSkill us ON u.id = us.userId " +
                 "WHERE ( u.firstname LIKE '%" + filter + "%' or u.lastname LIKE '%" + filter + "%' ) and u.id <>" + user.getId() +";";

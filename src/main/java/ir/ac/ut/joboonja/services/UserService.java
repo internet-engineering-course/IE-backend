@@ -14,10 +14,6 @@ import java.util.List;
 public class UserService {
     private static UserRepository userRepository = new UserRepositoryImpl();
 
-    public static User getDefaultUser(){
-        return userRepository.getUser("ali");
-    }
-
     public static User getUserById(Integer id){
         User user = userRepository.getUserById(id);
         if (user == null)
@@ -32,8 +28,7 @@ public class UserService {
         return user;
     }
 
-    public static List<User> getAllUsers() {
-        User user = getDefaultUser();
+    public static List<User> getAllUsers(User user) {
         List<User> users = userRepository.getAllUsers();
         List<User> newList = new ArrayList<>(users);
         for(User u:newList){
@@ -45,8 +40,7 @@ public class UserService {
         return newList;
     }
 
-    public static void addUserSkill(String skillName) {
-        User user = getDefaultUser();
+    public static void addUserSkill(String skillName, User user) {
         Skill skill = new Skill(skillName, 0);
         if (!SkillService.skillExists(skill))
             throw new BadRequestException("Skill " + skillName + " doesn't exist!");
@@ -55,8 +49,7 @@ public class UserService {
         userRepository.addUserSkill(user.getId(), skillName);
     }
 
-    public static void deleteUserSkill(String skillName) {
-        User user = getDefaultUser();
+    public static void deleteUserSkill(String skillName, User user) {
         Skill skill = new Skill(skillName, 0);
         if (!SkillService.skillExists(skill))
             throw new BadRequestException("Skill " + skillName + " doesn't exist!");
@@ -65,8 +58,8 @@ public class UserService {
         userRepository.deleteUserSkill(user.getId(), skillName);
     }
 
-    public static List<User> searchUsers(String filter) {
-        return userRepository.searchUsers(filter);
+    public static List<User> searchUsers(String filter, User user) {
+        return userRepository.searchUsers(filter, user);
     }
 
     public static User insertUser(User newUser) {

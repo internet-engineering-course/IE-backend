@@ -13,13 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ir.ac.ut.joboonja.services.UserService.getDefaultUser;
-
 public class EndorseService {
     private static EndorseRepository endorseRepository = new EndorseRepositoryImpl();
 
-    public static Endorse endorseSkill(Integer endorsedId, String skillName) {
-        Integer endorserId = getDefaultUser().getId();
+    public static Endorse endorseSkill(Integer endorsedId, String skillName, User loggedInUser) {
+        Integer endorserId = loggedInUser.getId();
         Endorse endorse = new Endorse(endorserId, endorsedId, skillName);
         User user = UserService.getUserById(endorsedId);
         if (endorserId.equals(endorsedId))
