@@ -58,5 +58,6 @@ public class SchemaManager {
             ProjectService.insertProject(project);
         }
         System.out.println("synced all projects ...");
+        System.out.println("finished syncing database ...");
     }
 }

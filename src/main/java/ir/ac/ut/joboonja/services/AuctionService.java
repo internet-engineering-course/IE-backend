@@ -26,7 +26,7 @@ public class AuctionService {
 
     @Scheduled(fixedDelay = 1000*60)
     public static void holdAuction(){
-        System.out.println("Auction...");
+        System.out.println("holding auctions ...");
         List<Project> projects = projectRepository.getAllProjects();
 
         for(Project project:projects){
@@ -47,9 +47,11 @@ public class AuctionService {
                         winnerUser = user;
                     }
                 }
+                System.out.println("project " + project.getId() + " winner " + winnerUser.getId());
                 auctionRepository.insertAuction(new Auction(project.getId() , winnerUser.getId()));
             }
         }
+        System.out.println("finished holding auctions ...");
     }
 
     private static double calAuctionPoint(Project project , User user){
