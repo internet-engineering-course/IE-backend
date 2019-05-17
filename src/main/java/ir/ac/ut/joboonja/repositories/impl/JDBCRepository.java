@@ -80,7 +80,7 @@ abstract class JDBCRepository<E> {
 
     private void handleSQLException(SQLException e) {
         if (e.getErrorCode() == SQLITE_CONSTRAINT_UNIQUE)
-            throw new BadRequestException("Already exists!");
+            throw new BadRequestException("Username already exists!");
         e.printStackTrace();
         throw new BadRequestException("Something is wrong in db: " + e.getMessage());
     }
