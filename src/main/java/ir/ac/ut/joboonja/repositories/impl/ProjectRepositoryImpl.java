@@ -4,7 +4,6 @@ import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.ProjectRepository;
-import ir.ac.ut.joboonja.services.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,6 +41,12 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     @Override
     public List<Project> getAllProjects(User user) {
         String query = generateQuery(user.getId(), null, null, null, null);
+        return findAll(query);
+    }
+
+    @Override
+    public List<Project> getAllProjects() {
+        String query = "select * from Project p, ProjectSkill ps where ps.projectId = p.id";
         return findAll(query);
     }
 

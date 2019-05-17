@@ -6,6 +6,20 @@ import java.util.List;
 public class Auction {
     private String projectId;
     private List<Bid> offers;
+    private Integer winnerId;
+
+    public Integer getWinnerId() {
+        return winnerId;
+    }
+
+    public void setWinnerId(Integer winnerId) {
+        this.winnerId = winnerId;
+    }
+
+    public Auction(String projectId, Integer winnerId) {
+        this.projectId = projectId;
+        this.winnerId = winnerId;
+    }
 
     public Auction(String projectId, List<Bid> offers) {
         this.offers = offers;

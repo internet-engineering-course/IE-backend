@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ProjectRepository {
     List<Project> getAllProjects(User user);
+    List<Project> getAllProjects();
     void insertProject(Project project);
     Project getProjectById(String id, User user);
     List<Project> searchProjects(String filter, User user);

@@ -2,9 +2,11 @@ package ir.ac.ut.joboonja.repositories.impl;
 
 import ir.ac.ut.joboonja.entities.Auction;
 import ir.ac.ut.joboonja.entities.Bid;
+import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.repositories.AuctionRepository;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -28,18 +30,41 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
     }
 
     @Override
+    public void insertAuction(Auction auction) {
+        String query = String.format("INSERT or IGNORE INTO Auction (userId, projectId) VALUES ('%s' , %d);",auction.getProjectId(), auction.getWinnerId());
+        execUpdate(query);
+    }
+
+    @Override
+    public Auction getAuctionWinner(Project project) {
+        String query = "select * from Auction a where a.projectId = " + project.getId() + ";";
+        return findOne(query);
+    }
+
+    @Override
     String getTableName() {
         return "Bid";
     }
 
     @Override
     Auction toDomainModel(ResultSet resultSet) throws SQLException {
-        Bid bid =  new Bid(
-            resultSet.getInt("userId"),
-            resultSet.getString("projectId"),
-            resultSet.getInt("amount")
-        );
-        return new Auction(bid.getProjectId(), Collections.singletonList(bid));
+        ResultSetMetaData rs = resultSet.getMetaData();
+
+        if(rs.getColumnCount() == 3){
+            Bid bid =  new Bid(
+                    resultSet.getInt("userId"),
+                    resultSet.getString("projectId"),
+                    resultSet.getInt("amount")
+            );
+            return new Auction(bid.getProjectId(), Collections.singletonList(bid));
+        }else{
+            Auction auction = new Auction(
+                    resultSet.getString("projectId"),
+                    resultSet.getInt("userId")
+            );
+            return auction;
+        }
+
     }
 
     @Override
@@ -67,6 +92,18 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
             "    CONSTRAINT Bid_projectId_userId_pk PRIMARY KEY (projectId, userId),\n"+
             "    CONSTRAINT Bid_User_id_fk FOREIGN KEY (userId) REFERENCES User (id) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
             "    CONSTRAINT Bid_Project_id_fk FOREIGN KEY (projectId) REFERENCES Project (id) ON DELETE CASCADE ON UPDATE CASCADE\n"+
+            ");" +
+            "create table if not exists Auction\n" +
+            "(\n" +
+            "\tprojectId varchar(36)\n" +
+            "\t\tconstraint Auction_Project_id_fk\n" +
+            "\t\t\treferences Project\n" +
+            "\t\t\t\ton update cascade on delete cascade,\n" +
+            "\tuserId int\n" +
+            "\t\tconstraint Auction_User_id_fk\n" +
+            "\t\t\treferences User,\n" +
+            "\tconstraint Auction_pk\n" +
+            "\t\tprimary key (projectId, userId)\n" +
             ");";
     }
 }

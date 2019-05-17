@@ -14,6 +14,11 @@ public class ProjectRepositoryInMemoryImpl implements ProjectRepository {
     }
 
     @Override
+    public List<Project> getAllProjects() {
+        return null;
+    }
+
+    @Override
     public void insertProject(Project project){
         MemoryDataBase.getInstance().insertProject(project);
     }

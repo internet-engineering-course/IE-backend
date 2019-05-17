@@ -4,32 +4,52 @@ import ir.ac.ut.joboonja.entities.*;
 import ir.ac.ut.joboonja.exceptions.BadRequestException;
 import ir.ac.ut.joboonja.models.BidAmount;
 import ir.ac.ut.joboonja.repositories.AuctionRepository;
+import ir.ac.ut.joboonja.repositories.ProjectRepository;
+import ir.ac.ut.joboonja.repositories.UserRepository;
 import ir.ac.ut.joboonja.repositories.impl.AuctionRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.ProjectRepositoryImpl;
+import ir.ac.ut.joboonja.repositories.impl.UserRepositoryImpl;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Date;
+import java.util.List;
 
+@Configuration
+@EnableScheduling
 public class AuctionService {
 
     private static AuctionRepository auctionRepository = new AuctionRepositoryImpl();
+    private static ProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private static UserRepository userRepository = new UserRepositoryImpl();
 
-    public static User holdAuction(Project project){
-        Auction auction = auctionRepository.getAuction(project.getId());
-        User winnerUser = null;
-        if (auction == null) {
-            return winnerUser;
-        }
-        double maxPoint = 0;
-        for(Bid bidInfo: auction.getOffers()){
-            User user = UserService.getUserById(bidInfo.getUserId());
-            double point =  calAuctionPoint(project , user);
-            point += project.getBudget() - bidInfo.getBidAmount();
-            if(maxPoint < point) {
-                maxPoint = point;
-                winnerUser = user;
+    @Scheduled(fixedDelay = 1000*60)
+    public static void holdAuction(){
+        System.out.println("Auction...");
+        List<Project> projects = projectRepository.getAllProjects();
+
+        for(Project project:projects){
+            if(project.getDeadline() < new Date().getTime()){
+                Auction auction = auctionRepository.getAuction(project.getId());
+                User winnerUser = null;
+                if (auction == null) {
+                    auctionRepository.insertAuction(new Auction(project.getId() , 0));
+                    continue;
+                }
+                double maxPoint = 0;
+                for(Bid bidInfo: auction.getOffers()){
+                    User user = UserService.getUserById(bidInfo.getUserId());
+                    double point =  calAuctionPoint(project , user);
+                    point += project.getBudget() - bidInfo.getBidAmount();
+                    if(maxPoint < point) {
+                        maxPoint = point;
+                        winnerUser = user;
+                    }
+                }
+                auctionRepository.insertAuction(new Auction(project.getId() , winnerUser.getId()));
             }
         }
-
-        return winnerUser;
     }
 
     private static double calAuctionPoint(Project project , User user){
@@ -76,5 +96,13 @@ public class AuctionService {
         }
         bidAmount.setBidAmount(-1);
         return bidAmount;
+    }
+
+    public static User getAuctionWinner(Project project){
+        Auction auction = auctionRepository.getAuctionWinner(project);
+        if(auction.getWinnerId() == 0){
+            return new User();
+        }
+        return userRepository.getUserById(auction.getWinnerId());
     }
 }

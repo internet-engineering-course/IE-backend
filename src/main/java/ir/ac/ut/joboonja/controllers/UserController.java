@@ -45,7 +45,7 @@ public class UserController {
                 UserService.addUserSkill(skill.getName(), loggedInUser);
             }
         }
-        return UserService.getUserById(user.getId());
+        return UserService.getUserByUserName(user.getUsername());
     }
 
     @DeleteMapping

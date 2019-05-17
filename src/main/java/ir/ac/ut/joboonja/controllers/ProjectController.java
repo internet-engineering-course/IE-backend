@@ -1,12 +1,11 @@
 package ir.ac.ut.joboonja.controllers;
 
+import ir.ac.ut.joboonja.entities.Bid;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.models.BidAmount;
-import ir.ac.ut.joboonja.entities.Bid;
 import ir.ac.ut.joboonja.services.AuctionService;
 import ir.ac.ut.joboonja.services.ProjectService;
-import ir.ac.ut.joboonja.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -47,7 +46,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/auction")
     public User projectWinner(@PathVariable("projectId") String projectId, @RequestAttribute("user") User user){
         Project project = ProjectService.getProjectById(projectId, user);
-        return AuctionService.holdAuction(project);
+        return AuctionService.getAuctionWinner(project);
     }
 
     @GetMapping("/search")
