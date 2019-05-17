@@ -21,19 +21,21 @@ public class UserController {
         return UserService.getAllUsers(user);
     }
 
-    @GetMapping("/{userId}")
-    public User getUser(@PathVariable("userId") Integer userId) {
-        return UserService.getUserById(userId);
+    @GetMapping("/{username}")
+    public User getUser(@PathVariable("username") String username) {
+        return UserService.getUserByUserName(username);
     }
 
-    @GetMapping("/{userId}/endorse")
-    public List<EndorsableSkill> getEndorsableSkills(@PathVariable("userId") Integer userId, @RequestAttribute("user") User user) {
-        return EndorseService.getUserEndorsableSkills(user.getId(), userId);
+    @GetMapping("/{username}/endorse")
+    public List<EndorsableSkill> getEndorsableSkills(@PathVariable("username") String username, @RequestAttribute("user") User user) {
+        User tempUser = UserService.getUserByUserName(username);
+        return EndorseService.getUserEndorsableSkills(user.getId(), tempUser.getId());
     }
 
-    @PostMapping("/{userId}/endorse")
-    public Endorse endorse(@PathVariable("userId") Integer userId, @RequestBody EndorseRequest endorseRequest, @RequestAttribute("user") User user) {
-        return EndorseService.endorseSkill(userId, endorseRequest.getSkillName(), user);
+    @PostMapping("/{username}/endorse")
+    public Endorse endorse(@PathVariable("username") String username, @RequestBody EndorseRequest endorseRequest, @RequestAttribute("user") User user) {
+        User tempUser = UserService.getUserByUserName(username);
+        return EndorseService.endorseSkill(tempUser.getId(), endorseRequest.getSkillName(), user);
     }
 
     @PutMapping
