@@ -50,22 +50,14 @@ public class EndorseRepositoryImpl extends JDBCRepository<Endorse> implements En
     }
 
     public  static  String getCreateScript(){
-        return "create table if not exists Endorse\n" +
+        return "CREATE TABLE IF NOT EXISTS Endorse\n" +
             "(\n" +
-            "\tendorserId integer\n" +
-            "\t\tconstraint Endorse_User_id_fk\n" +
-            "\t\t\treferences User\n" +
-            "\t\t\t\ton update cascade on delete cascade,\n" +
-            "\tendorsedId integer\n" +
-            "\t\tconstraint Endorse_User_id_fk_2\n" +
-            "\t\t\treferences User\n" +
-            "\t\t\t\ton update cascade on delete cascade,\n" +
-            "\tskillName varchar(100)\n" +
-            "\t\tconstraint Endorse_pk\n" +
-            "\t\t\tprimary key\n" +
-            "\t\tconstraint Endorse_Skill_name_fk\n" +
-            "\t\t\treferences Skill (name)\n" +
-            "\t\t\t\ton update cascade on delete cascade\n" +
-            ");\n";
+            "  endorserId INTEGER,\n" +
+            "  endorsedId INTEGER,\n" +
+            "  skillName  TEXT,\n" +
+            "  FOREIGN KEY(endorserId) REFERENCES User(id),\n" +
+            "  FOREIGN KEY(endorsedId) REFERENCES User(id),\n" +
+            "  FOREIGN KEY(skillName) REFERENCES Skill(skillName)\n" +
+            ");";
     }
 }
