@@ -10,8 +10,8 @@ public class ResourcePool {
 
     static {
         ds.setUrl("jdbc:sqlite:sample.db");
-        ds.setMinIdle(5);
-        ds.setMaxIdle(100);
+        ds.setMinIdle(100);
+        ds.setMaxIdle(1000);
         ds.setMaxOpenPreparedStatements(1000);
     }
 
