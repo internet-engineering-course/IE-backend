@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.UserRepository;
@@ -7,57 +8,57 @@ import ir.ac.ut.joboonja.services.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
 
 public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepository {
     @Override
     public void insertUser(User user) {
-        String sql = String.format("insert into %s (username,firstname,lastname,password,jobTitle,bio,imageUrl) values ( '%s','%s','%s','%s','%s','%s','%s' )",
-            getTableName(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getPassword(), user.getJobTitle(), user.getBio(), user.getImageUrl());
-        execUpdate(sql);
+        String sql = String.format("insert into %s (username,firstname,lastname,password,jobTitle,bio,imageUrl) values ( ?,?,?,?,?,?,? )", getTableName());
+        List<Object> params = Arrays.asList(user.getUsername(), user.getFirstname(), user.getLastname(), user.getPassword(), user.getJobTitle(), user.getBio(), user.getImageUrl());
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
     public void addUserSkill(Integer userId, String skillName) {
-        String sql = String.format("INSERT INTO UserSkill (userId, skillName, points) VALUES (%d, '%s', 0);",
-            userId, skillName);
-        execUpdate(sql);
+        String sql = "INSERT INTO UserSkill (userId, skillName, points) VALUES (?, ?, 0);";
+        List<Object> params = Arrays.asList(userId, skillName);
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
     public void deleteUserSkill(Integer userId, String skillName) {
-        String sql = String.format("DELETE FROM UserSkill WHERE userId = %d AND skillName = '%s';",
-            userId, skillName);
-        execUpdate(sql);
+        String sql = "DELETE FROM UserSkill WHERE userId = ? AND skillName = ?;";
+        List<Object> params = Arrays.asList(userId, skillName);
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
     public User getUser(String username) {
         String query = String.format("SELECT * FROM %s u " +
                 "LEFT JOIN UserSkill us on u.id = us.userId " +
-                "WHERE u.username = '%s';",
-            getTableName(), username);
-        return findOne(query);
+                "WHERE u.username = ?;",
+            getTableName());
+        List<Object> params = Collections.singletonList(username);
+        return findOne(new PreparedQuery(query, params));
     }
 
     @Override
     public User getUserById(Integer id) {
         String query = String.format("SELECT * FROM %s u " +
                 "LEFT JOIN UserSkill us on u.id = us.userId " +
-                "WHERE u.id = %d;",
-            getTableName(), id);
-        return findOne(query);
+                "WHERE u.id = ?;",
+            getTableName());
+        List<Object> params = Collections.singletonList(id);
+        return findOne(new PreparedQuery(query, params));
     }
 
     @Override
     public void updateUserSkillPoint(Integer userId, String skillName, Integer points) {
-        String sql = String.format("UPDATE UserSkill SET points = points + %d WHERE userId = %d AND  skillName = '%s';",
-            points, userId, skillName);
-        execUpdate(sql);
+        String sql = "UPDATE UserSkill SET points = points + ? WHERE userId = ? AND  skillName = ?;";
+        List<Object> params = Arrays.asList(points, userId, skillName);
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
@@ -65,16 +66,16 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
         String query = String.format("SELECT * FROM %s u " +
                 "LEFT JOIN UserSkill us on u.id = us.userId;",
             getTableName());
-        return findAll(query);
+        return findAll(new PreparedQuery(query, Collections.emptyList()));
     }
 
     @Override
     public List<User> searchUsers(String filter, User user) {
-        String query ="SELECT * FROM User u " +
-                "JOIN UserSkill us ON u.id = us.userId " +
-                "WHERE ( u.firstname LIKE '%" + filter + "%' or u.lastname LIKE '%" + filter + "%' ) and u.id <>" + user.getId() +";";
-
-        return findAll(query);
+        String query = "SELECT * FROM User u " +
+                "LEFT JOIN UserSkill us ON u.id = us.userId " +
+                "WHERE ( u.firstname LIKE ? or u.lastname LIKE ? ) and u.id <> ?;";
+        List<Object> params = Arrays.asList("%"+filter+"%", "%"+filter+"%", user.getId());
+        return findAll(new PreparedQuery(query, params));
     }
 
     @Override

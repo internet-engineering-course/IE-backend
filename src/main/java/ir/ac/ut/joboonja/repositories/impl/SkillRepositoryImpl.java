@@ -1,31 +1,36 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.repositories.SkillRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillRepository {
     @Override
     public boolean skillExists(Skill skill) {
         String query = String.format("select exists " +
-            "(select * from %s s where s.name = '%s') as result", getTableName(), skill.getName());
-        return exists(query);
+            "(select * from %s s where s.name = ?) as result", getTableName());
+        List<Object> params = Collections.singletonList(skill.getName());
+        return exists(new PreparedQuery(query, params));
     }
 
     @Override
     public void insertSkill(Skill skill) {
         String sql = String.format("INSERT INTO %s(name) " +
-            "SELECT '%s' WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = '%s');",
-            getTableName(), skill.getName(), skill.getName());
-        execUpdate(sql);
+            "SELECT ? WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = ?);",
+            getTableName());
+        List<Object> params = Arrays.asList(skill.getName(), skill.getName());
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
     public List<Skill> getAllSkills() {
-        return findAll("SELECT * FROM " + getTableName());
+        return findAll(new PreparedQuery("SELECT * FROM " + getTableName(), Collections.emptyList()));
     }
 
     @Override

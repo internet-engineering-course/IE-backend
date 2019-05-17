@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.entities.Auction;
 import ir.ac.ut.joboonja.entities.Bid;
 import ir.ac.ut.joboonja.entities.Project;
@@ -8,32 +9,36 @@ import ir.ac.ut.joboonja.repositories.AuctionRepository;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements AuctionRepository {
     @Override
     public void insertBid(Bid bid) {
-        String sql = String.format("INSERT INTO %s (projectId, userId, amount) VALUES ('%s', %d, %d);",
-            getTableName(), bid.getProjectId(), bid.getUserId(), bid.getBidAmount());
-        execUpdate(sql);
+        String sql = String.format("INSERT INTO %s (projectId, userId, amount) VALUES (?, ?, ?);",
+            getTableName());
+        List<Object> params = Arrays.asList(bid.getProjectId(), bid.getUserId(), bid.getBidAmount());
+        execUpdate(new PreparedQuery(sql, params));
     }
 
     @Override
     public Auction getAuction(String id) {
-        String query = String.format("SELECT * FROM %s WHERE projectId = '%s';", getTableName(), id);
-        return findOne(query);
+        String query = String.format("SELECT * FROM %s WHERE projectId = ?;", getTableName());
+        return findOne(new PreparedQuery(query, Collections.singletonList(id)));
     }
 
     @Override
     public void insertAuction(Auction auction) {
-        String query = String.format("INSERT or IGNORE INTO Auction (projectId, userId) VALUES ('%s' , %d);",auction.getProjectId(), auction.getWinnerId());
-        execUpdate(query);
+        String query = "INSERT or IGNORE INTO Auction (projectId, userId) VALUES (?, ?);";
+        List<Object> params = Arrays.asList(auction.getProjectId(), auction.getWinnerId());
+        execUpdate(new PreparedQuery(query, params));
     }
 
     @Override
     public Auction getAuctionWinner(Project project) {
-        String query = "select * from Auction where projectId = '" + project.getId() + "';";
-        return findOne(query);
+        String query = "select * from Auction where projectId = ?;";
+        return findOne(new PreparedQuery(query, Collections.singletonList(project.getId())));
     }
 
     @Override

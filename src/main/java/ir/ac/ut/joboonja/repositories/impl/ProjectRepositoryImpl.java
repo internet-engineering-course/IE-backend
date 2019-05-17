@@ -1,5 +1,6 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.entities.Project;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
@@ -14,77 +15,83 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class ProjectRepositoryImpl extends JDBCRepository<Project> implements ProjectRepository {
 
-    private String generateQuery(
+    private PreparedQuery generateQuery(
         Integer userId, String filter, Integer pageNumber, Integer pageSize, String projectId
     ) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(userId);
         String like = "";
-        if (filter != null)
-            like = "where proj.title LIKE '%"+filter+"%' or proj.description LIKE '%"+filter+"%'";
-
-        String limit = "";
-        if (pageNumber != null && pageSize != null)
-            limit = String.format("LIMIT %d, %d", pageNumber*pageSize, pageSize);
+        if (filter != null) {
+            like = "where proj.title LIKE ? or proj.description LIKE ?";
+            params.add("%"+filter+"%");
+            params.add("%"+filter+"%");
+        }
 
         String where = "";
-        if (projectId != null)
-            where = String.format("WHERE proj.id = '%s'", projectId);
+        if (projectId != null) {
+            where = "WHERE proj.id = ?";
+            params.add(projectId);
+        }
 
-        return "select * \n" +
-                "FROM (SELECT * FROM (SELECT * FROM Project p where not exists\n" +
-                "(select * from ProjectSkill ps where ps.projectId = p.id and not exists\n" +
-                "(select * from User u, UserSkill us\n" +
-                "where u.id = "+ userId +" and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point)\n" +
-                ")) as proj " + like + where + " ORDER BY proj.creationDate DESC " + limit + ") as result join ProjectSkill on result.id = projectId;\n";
+        String limit = "";
+        if (pageNumber != null && pageSize != null) {
+            limit = "LIMIT ?, ?";
+            params.add(pageNumber*pageSize);
+            params.add(pageSize);
+        }
 
+        String query =
+            "select * FROM (SELECT * FROM (SELECT * FROM Project p where not exists\n" +
+            "(select * from ProjectSkill ps where ps.projectId = p.id and not exists\n" +
+            "(select * from User u, UserSkill us\n" +
+            "where u.id = ? and us.userId = u.id and us.skillName = ps.skillName and us.points >= ps.point)\n" +
+            ")) as proj " + like + where + " ORDER BY proj.creationDate DESC " + limit + ") as result join ProjectSkill on result.id = projectId;\n";
+        return new PreparedQuery(query, params);
     }
 
     @Override
     public List<Project> getAllProjects(User user) {
-        String query = generateQuery(user.getId(), null, null, null, null);
-        return findAll(query);
+        return findAll(generateQuery(user.getId(), null, null, null, null));
     }
 
     @Override
     public List<Project> getAllProjects() {
         String query = "select * from Project p, ProjectSkill ps where ps.projectId = p.id";
-        return findAll(query);
+        return findAll(new PreparedQuery(query, Collections.emptyList()));
     }
 
     @Override
     public void insertProject(Project project) {
-        String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ('%s','%s','%s','%s',%d,%d,%d )",
-                getTableName(), project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
-        execUpdate(sql);
+        String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ( ?,?,?,?,?,?,? )", getTableName());
+        List<Object> params = Arrays.asList(project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
+        execUpdate(new PreparedQuery(sql, params));
 
         List<Skill> skills = project.getSkills();
-        for(Skill skill:skills){
-            sql = String.format("insert or ignore into ProjectSkill(projectId,skillName,point) values('%s','%s',%d)", project.getId(), skill.getName(), skill.getPoint());
-            execUpdate(sql);
+        for(Skill skill: skills){
+            sql = "insert or ignore into ProjectSkill(projectId,skillName,point) values(?,?,?)";
+            params = Arrays.asList(project.getId(), skill.getName(), skill.getPoint());
+            execUpdate(new PreparedQuery(sql, params));
         }
     }
 
     @Override
     public Project getProjectById(String id, User user) {
-        String query = generateQuery(user.getId(), null, null, null, id);
-        return findOne(query);
+        return findOne(generateQuery(user.getId(), null, null, null, id));
     }
 
     @Override
     public List<Project> searchProjects(String filter, User user) {
-        String query = generateQuery(user.getId(), filter, null, null, null);
-        return findAll(query);
+        return findAll(generateQuery(user.getId(), filter, null, null, null));
     }
 
     @Override
     public List<Project> searchProjectsPaginated(String filter, Integer pageNumber, Integer pageSize, User user) {
-        String query = generateQuery(user.getId(), filter, pageNumber, pageSize, null);
-        return findAll(query);
+        return findAll(generateQuery(user.getId(), filter, pageNumber, pageSize, null));
     }
 
     @Override
     public List<Project> getProjectsPaginated(User user, Integer pageNumber, Integer pageSize) {
-        String query = generateQuery(user.getId(), null, pageNumber, pageSize, null);
-        return findAll(query);
+        return findAll(generateQuery(user.getId(), null, pageNumber, pageSize, null));
     }
 
     @Override

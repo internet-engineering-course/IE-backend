@@ -1,12 +1,10 @@
 package ir.ac.ut.joboonja.repositories.impl;
 
+import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.database.ResourcePool;
 import ir.ac.ut.joboonja.exceptions.BadRequestException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,18 +19,24 @@ abstract class JDBCRepository<E> {
         return rawResult;
     }
 
-    private List<E> execQuery(String query) {
+    private void fillPreparedStatement(PreparedStatement preparedStatement, List<Object> params) throws SQLException {
+        for (int i = 0; i < params.size(); i++)
+            preparedStatement.setObject(i+1, params.get(i));
+    }
+
+    private List<E> execQuery(PreparedQuery query) {
         LinkedList<E> result = new LinkedList<>();
         try {
             Connection connection = ResourcePool.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query.getPreparedSql());
+            fillPreparedStatement(preparedStatement, query.getParameters());
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {
                 result.add(toDomainModel(resultSet));
             }
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
             handleSQLException(e);
@@ -40,36 +44,38 @@ abstract class JDBCRepository<E> {
         return result;
     }
 
-    void execUpdate(String sql) {
+    void execUpdate(PreparedQuery query) {
         try {
             Connection connection = ResourcePool.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            statement.close();
+            PreparedStatement preparedStatement = connection.prepareStatement(query.getPreparedSql());
+            fillPreparedStatement(preparedStatement, query.getParameters());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
             handleSQLException(e);
         }
     }
 
-    List<E> findAll(String query) {
+    List<E> findAll(PreparedQuery query) {
         return merge(execQuery(query));
     }
 
-    E findOne(String query) {
+    E findOne(PreparedQuery query) {
         List<E> result = execQuery(query);
         if (result.isEmpty())
             return null;
         return merge(result).get(0);
     }
 
-    boolean exists(String query) {
+    boolean exists(PreparedQuery query) {
         boolean res;
         try {
             Connection connection = ResourcePool.getConnection();
-            Statement statement = connection.createStatement();
-            res = statement.executeQuery(query).getBoolean("result");
-            statement.close();
+            PreparedStatement preparedStatement = connection.prepareStatement(query.getPreparedSql());
+            fillPreparedStatement(preparedStatement, query.getParameters());
+            res = preparedStatement.executeQuery().getBoolean("result");
+            preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
