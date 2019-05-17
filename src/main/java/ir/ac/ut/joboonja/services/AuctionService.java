@@ -100,7 +100,7 @@ public class AuctionService {
 
     public static User getAuctionWinner(Project project){
         Auction auction = auctionRepository.getAuctionWinner(project);
-        if(auction.getWinnerId() == 0){
+        if(auction == null || auction.getWinnerId() == 0){
             return new User();
         }
         return userRepository.getUserById(auction.getWinnerId());

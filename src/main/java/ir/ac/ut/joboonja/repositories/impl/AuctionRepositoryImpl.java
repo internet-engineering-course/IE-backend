@@ -9,11 +9,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.groupingBy;
 
 public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements AuctionRepository {
     @Override
@@ -31,13 +26,13 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
 
     @Override
     public void insertAuction(Auction auction) {
-        String query = String.format("INSERT or IGNORE INTO Auction (userId, projectId) VALUES ('%s' , %d);",auction.getProjectId(), auction.getWinnerId());
+        String query = String.format("INSERT or IGNORE INTO Auction (projectId, userId) VALUES ('%s' , %d);",auction.getProjectId(), auction.getWinnerId());
         execUpdate(query);
     }
 
     @Override
     public Auction getAuctionWinner(Project project) {
-        String query = "select * from Auction a where a.projectId = " + project.getId() + ";";
+        String query = "select * from Auction where projectId = '" + project.getId() + "';";
         return findOne(query);
     }
 
@@ -49,7 +44,6 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
     @Override
     Auction toDomainModel(ResultSet resultSet) throws SQLException {
         ResultSetMetaData rs = resultSet.getMetaData();
-
         if(rs.getColumnCount() == 3){
             Bid bid =  new Bid(
                     resultSet.getInt("userId"),
@@ -58,30 +52,28 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
             );
             return new Auction(bid.getProjectId(), Collections.singletonList(bid));
         }else{
-            Auction auction = new Auction(
+            return new Auction(
                     resultSet.getString("projectId"),
                     resultSet.getInt("userId")
             );
-            return auction;
         }
-
     }
 
-    @Override
-    List<Auction> merge(List<Auction> rawResult) {
-        Map<String, List<Auction>> auctions = rawResult.stream().collect(groupingBy(Auction::getProjectId));
-        LinkedList<Auction> result = new LinkedList<>();
-        for (String projectId: auctions.keySet()) {
-            LinkedList<Bid> offers = new LinkedList<>();
-            for (Auction a: auctions.get(projectId))
-                offers.add(a.getOffers().get(0));
-
-            Auction auction = auctions.get(projectId).get(0);
-            auction.setOffers(offers);
-            result.add(auction);
-        }
-        return result;
-    }
+//    @Override
+//    List<Auction> merge(List<Auction> rawResult) {
+//        Map<String, List<Auction>> auctions = rawResult.stream().collect(groupingBy(Auction::getProjectId));
+//        LinkedList<Auction> result = new LinkedList<>();
+//        for (String projectId: auctions.keySet()) {
+//            LinkedList<Bid> offers = new LinkedList<>();
+//            for (Auction a: auctions.get(projectId))
+//                offers.add(a.getOffers().get(0));
+//
+//            Auction auction = auctions.get(projectId).get(0);
+//            auction.setOffers(offers);
+//            result.add(auction);
+//        }
+//        return result;
+//    }
 
     public static String getCreateScript() {
         return "CREATE TABLE IF NOT EXISTS Bid\n"+
