@@ -1,0 +1,6 @@
+.db
+.idea/
+*.iml
+*.iws
+.DS_Store
+log/
