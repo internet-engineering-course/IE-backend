@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  backend:
+    image: joboonja-backend
+    build: ./IE-project
+    expose: 
+      - 8080
+    ports: 
+      - 8080:8080
+  frontend:
+    image: joboonja-frontend
+    build: ./IE-frontend
+    ports:
+      - 5000:5000
+    links:
+      - backend
