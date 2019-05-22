@@ -1,7 +1,8 @@
 package ir.ac.ut.joboonja.database;
 
 import ir.ac.ut.joboonja.client.HttpClient;
-import ir.ac.ut.joboonja.entities.*;
+import ir.ac.ut.joboonja.entities.Project;
+import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.repositories.impl.*;
 import ir.ac.ut.joboonja.services.ProjectService;
 import ir.ac.ut.joboonja.services.SkillService;
@@ -24,16 +25,19 @@ public class SchemaManager {
         Arrays.asList(
             SkillRepositoryImpl.getCreateScript(),
             UserRepositoryImpl.getCreateScript(),
+            UserRepositoryImpl.getCreateUserSkillScript(),
             ProjectRepositoryImpl.getCreateScript(),
+            ProjectRepositoryImpl.getCreateProjectSkillScript(),
             EndorseRepositoryImpl.getCreateScript(),
-            AuctionRepositoryImpl.getCreateScript()
+            AuctionRepositoryImpl.getCreateScript(),
+            AuctionRepositoryImpl.getCreateAuctionScript()
         )
     );
 
     public static void initialSchema() {
         try {
             for(String schema: schemaSQLScripts) {
-                Class.forName("org.sqlite.JDBC");
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection connection = ResourcePool.getConnection();
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(schema);

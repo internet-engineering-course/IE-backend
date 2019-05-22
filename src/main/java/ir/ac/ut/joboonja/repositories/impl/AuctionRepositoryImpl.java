@@ -79,28 +79,38 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
 //        }
 //        return result;
 //    }
+    public static String getCreateAuctionScript(){
+        return "create table if not exists Auction\n" +
+                "(\n" +
+                "\tprojectId varchar(36) null,\n" +
+                "\tuserId integer null,\n" +
+                "\tconstraint Auction_pk\n" +
+                "\t\tprimary key (projectId),\n" +
+                "\tconstraint Auction_Project_id_fk\n" +
+                "\t\tforeign key (projectId) references Project (id)\n" +
+                "\t\t\ton update cascade on delete cascade,\n" +
+                "\tconstraint Auction_User_id_fk\n" +
+                "\t\tforeign key (userId) references User (id)\n" +
+                "\t\t\ton update cascade on delete cascade\n" +
+                ");\n" +
+                "\n";
+    }
 
     public static String getCreateScript() {
-        return "CREATE TABLE IF NOT EXISTS Bid\n"+
-            "(\n"+
-            "    projectId INTEGER,\n"+
-            "    userId INTEGER,\n"+
-            "    amount INTEGER,\n"+
-            "    CONSTRAINT Bid_projectId_userId_pk PRIMARY KEY (projectId, userId),\n"+
-            "    CONSTRAINT Bid_User_id_fk FOREIGN KEY (userId) REFERENCES User (id) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
-            "    CONSTRAINT Bid_Project_id_fk FOREIGN KEY (projectId) REFERENCES Project (id) ON DELETE CASCADE ON UPDATE CASCADE\n"+
-            ");" +
-            "create table if not exists Auction\n" +
-            "(\n" +
-            "\tprojectId varchar(36)\n" +
-            "\t\tconstraint Auction_Project_id_fk\n" +
-            "\t\t\treferences Project\n" +
-            "\t\t\t\ton update cascade on delete cascade,\n" +
-            "\tuserId int\n" +
-            "\t\tconstraint Auction_User_id_fk\n" +
-            "\t\t\treferences User,\n" +
-            "\tconstraint Auction_pk\n" +
-            "\t\tprimary key (projectId, userId)\n" +
-            ");";
+        return "create table if not exists Bid\n" +
+                "(\n" +
+                "\tprojectId varchar(36) null,\n" +
+                "\tuserId integer null,\n" +
+                "\tamount integer null,\n" +
+                "\tconstraint Bid_pk\n" +
+                "\t\tprimary key (projectId, userId),\n" +
+                "\tconstraint Bid_Project_id_fk\n" +
+                "\t\tforeign key (projectId) references Project (id)\n" +
+                "\t\t\ton update cascade on delete cascade,\n" +
+                "\tconstraint Bid_User_id_fk\n" +
+                "\t\tforeign key (userId) references User (id)\n" +
+                "\t\t\ton update cascade on delete cascade\n" +
+                ");\n" +
+                "\n";
     }
 }

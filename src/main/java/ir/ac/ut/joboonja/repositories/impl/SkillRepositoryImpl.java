@@ -48,10 +48,10 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
 
     public static String getCreateScript(){
         return "create table if not exists Skill\n" +
-            "(\n" +
-            "\tname text\n" +
-            "\t\tconstraint Skill_pk\n" +
-            "\t\t\tprimary key\n" +
-            ");";
+                "(\n" +
+                "\tname varchar(100) null,\n" +
+                "\tconstraint Skill_pk\n" +
+                "\t\tprimary key (name)\n" +
+                ");";
     }
 }

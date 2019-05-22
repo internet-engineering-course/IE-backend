@@ -4,7 +4,6 @@ import ir.ac.ut.joboonja.database.PreparedQuery;
 import ir.ac.ut.joboonja.entities.Skill;
 import ir.ac.ut.joboonja.entities.User;
 import ir.ac.ut.joboonja.repositories.UserRepository;
-import ir.ac.ut.joboonja.services.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -119,36 +118,31 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
         return result;
     }
 
+    public static String getCreateUserSkillScript(){
+        return "create table if not exists UserSkill\n " +
+                "(\n" +
+                "\tuserId integer null ,\n" +
+                "\tskillName varchar(100) null,\n" +
+                "\tpoints integer null,\n" +
+                "\t\tprimary key (userId, skillName),\n" +
+                "FOREIGN KEY (userId) REFERENCES User(id)"+
+                ");\n";
+    }
+
     public static String getCreateScript(){
         return "create table if not exists User\n" +
                 "(\n" +
-                "\tid integer\n" +
-                "\t\tconstraint user_pk\n" +
-                "\t\t\tprimary key autoincrement,\n" +
+                "\tid integer auto_increment,\n" +
+                "\tcolumn_2 int null,\n" +
                 "\tusername varchar(100) not null,\n" +
-                "\tfirstname varchar(100),\n" +
-                "\tlastname varchar(100),\n" +
+                "\tfirstname varchar(100) null,\n" +
+                "\tlastname varchar(100) null,\n" +
                 "\tpassword varchar(100) not null,\n" +
-                "\tjobTitle text,\n" +
-                "\tbio text,\n" +
-                "\timageUrl text\n" +
-                ");\n" +
-                "\n" +
-                "create unique index if not exists user_username_uindex\n" +
-                "\ton user (username);\n" +
-                "\n"+
-                "create table if not exists UserSkill\n" +
-                "(\n" +
-                "\tuserId integer\n" +
-                "\t\tconstraint UserSkill_User_id_fk\n" +
-                "\t\t\treferences User\n" +
-                "\t\t\t\ton update cascade on delete cascade,\n" +
-                "\tskillName varchar(100)\n" +
-                "\t\tconstraint UserSkill_Skill_id_fk\n" +
-                "\t\t\treferences Skill\n" +
-                "\t\t\t\ton update cascade on delete cascade,\n" +
-                "\tpoints integer,\n" +
-                "\tprimary key (userId, skillName)\n" +
-                ");";
+                "\tjobTitle text null,\n" +
+                "\tbio text null,\n" +
+                "\timageUrl text null,\n" +
+                "\tconstraint User_pk\n" +
+                "\t\tprimary key (id)\n" +
+                ");\n";
     }
 }
