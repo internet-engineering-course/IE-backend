@@ -9,9 +9,9 @@ public class ResourcePool {
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl("jdbc:mysql://localhost:8889/IE");
-        ds.setUsername("navid");
-        ds.setPassword("0021390568");
+        ds.setUrl("jdbc:mysql://database:3306/IE?useUnicode=yes&characterEncoding=UTF-8");
+        ds.setUsername("root");
+        ds.setPassword("mypassword");
         ds.setMinIdle(100);
         ds.setMaxIdle(1000);
         ds.setMaxOpenPreparedStatements(1000);

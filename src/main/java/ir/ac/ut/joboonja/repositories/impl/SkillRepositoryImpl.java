@@ -21,10 +21,8 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
 
     @Override
     public void insertSkill(Skill skill) {
-        String sql = String.format("INSERT INTO %s(name) " +
-            "SELECT ? WHERE NOT EXISTS(SELECT * FROM Skill WHERE name = ?);",
-            getTableName());
-        List<Object> params = Arrays.asList(skill.getName(), skill.getName());
+        String sql = "INSERT IGNORE INTO Skill values(?)";
+        List<Object> params = Arrays.asList(skill.getName());
         execUpdate(new PreparedQuery(sql, params));
     }
 

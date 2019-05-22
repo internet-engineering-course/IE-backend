@@ -37,7 +37,7 @@ public class SchemaManager {
     public static void initialSchema() {
         try {
             for(String schema: schemaSQLScripts) {
-                Class.forName("com.mysql.cj.jdbc.Driver");
+                Class.forName("com.mysql.jdbc.Driver");
                 Connection connection = ResourcePool.getConnection();
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(schema);
