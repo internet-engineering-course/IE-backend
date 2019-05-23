@@ -30,7 +30,7 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
 
     @Override
     public void insertAuction(Auction auction) {
-        String query = "INSERT or IGNORE INTO Auction (projectId, userId) VALUES (?, ?);";
+        String query = "INSERT IGNORE INTO Auction (projectId, userId) VALUES (?, ?);";
         List<Object> params = Arrays.asList(auction.getProjectId(), auction.getWinnerId());
         execUpdate(new PreparedQuery(query, params));
     }

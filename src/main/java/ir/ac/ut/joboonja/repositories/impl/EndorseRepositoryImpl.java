@@ -54,7 +54,7 @@ public class EndorseRepositoryImpl extends JDBCRepository<Endorse> implements En
                 "(\n" +
                 "\tendorserId integer null,\n" +
                 "\tendorsedId integer null,\n" +
-                "\tskillname varchar(100) null,\n" +
+                "\tskillname varchar(512) null,\n" +
                 "\tconstraint Endorse_Skill_name_fk\n" +
                 "\t\tforeign key (skillname) references Skill (name)\n" +
                 "\t\t\ton update cascade on delete cascade,\n" +

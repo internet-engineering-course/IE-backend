@@ -122,7 +122,7 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
         return "create table if not exists UserSkill\n " +
                 "(\n" +
                 "\tuserId integer not null ,\n" +
-                "\tskillName varchar(100) not null,\n" +
+                "\tskillName varchar(512) not null,\n" +
                 "\tpoints integer null,\n" +
                 "\t\tprimary key (userId, skillName),\n" +
                 "FOREIGN KEY (userId) REFERENCES User(id)"+
@@ -133,14 +133,13 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
         return "create table if not exists User\n" +
                 "(\n" +
                 "\tid integer auto_increment not null,\n" +
-                "\tcolumn_2 int null,\n" +
-                "\tusername varchar(100) not null,\n" +
-                "\tfirstname varchar(100) null,\n" +
-                "\tlastname varchar(100) null,\n" +
-                "\tpassword varchar(100) not null,\n" +
-                "\tjobTitle text null,\n" +
-                "\tbio text null,\n" +
-                "\timageUrl text null,\n" +
+                "\tusername varchar(512) not null,\n" +
+                "\tfirstname varchar(512) null,\n" +
+                "\tlastname varchar(512) null,\n" +
+                "\tpassword varchar(512) not null,\n" +
+                "\tjobTitle varchar(512) null,\n" +
+                "\tbio varchar(512) null,\n" +
+                "\timageUrl varchar(512) null,\n" +
                 "\tconstraint User_pk\n" +
                 "\t\tprimary key (id)\n" +
                 ");\n";

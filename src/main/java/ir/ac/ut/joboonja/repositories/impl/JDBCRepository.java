@@ -74,7 +74,9 @@ abstract class JDBCRepository<E> {
             Connection connection = ResourcePool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query.getPreparedSql());
             fillPreparedStatement(preparedStatement, query.getParameters());
-            res = preparedStatement.executeQuery().getBoolean("result");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            res = resultSet.getBoolean("result");
             preparedStatement.close();
             connection.close();
         } catch (SQLException e) {

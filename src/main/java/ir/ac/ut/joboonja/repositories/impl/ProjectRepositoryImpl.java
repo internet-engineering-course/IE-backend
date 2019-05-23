@@ -62,13 +62,13 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
 
     @Override
     public void insertProject(Project project) {
-        String sql = String.format("insert or ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ( ?,?,?,?,?,?,? )", getTableName());
+        String sql = String.format("insert ignore into %s (id,title,description,imageUrl,budget,deadline,creationDate) values ( ?,?,?,?,?,?,? )", getTableName());
         List<Object> params = Arrays.asList(project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget(), project.getDeadline(), project.getCreationDate());
         execUpdate(new PreparedQuery(sql, params));
 
         List<Skill> skills = project.getSkills();
         for(Skill skill: skills){
-            sql = "insert or ignore into ProjectSkill(projectId,skillName,point) values(?,?,?)";
+            sql = "insert ignore into ProjectSkill(projectId,skillName,point) values(?,?,?)";
             params = Arrays.asList(project.getId(), skill.getName(), skill.getPoint());
             execUpdate(new PreparedQuery(sql, params));
         }
@@ -136,7 +136,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
         return  "create table if not exists ProjectSkill\n" +
                 "(\n" +
                 "\tprojectId varchar(36) not null,\n" +
-                "\tskillName varchar(100) not null,\n" +
+                "\tskillName varchar(512) not null,\n" +
                 "\tpoint integer null,\n" +
                 "\tconstraint ProjectSkill_pk\n" +
                 "\t\tprimary key (projectId, skillName),\n" +
@@ -154,12 +154,12 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
         return "create table if not exists Project\n" +
                 "(\n" +
                 "\tid varchar(36) not null,\n" +
-                "\ttitle varchar(100) null,\n" +
-                "\tdescription text null,\n" +
-                "\timageUrl text null,\n" +
-                "\tbudget integer null,\n" +
-                "\tdeadline integer null,\n" +
-                "\tcreationDate integer null,\n" +
+                "\ttitle varchar(512) null,\n" +
+                "\tdescription varchar(512) null,\n" +
+                "\timageUrl varchar(512) null,\n" +
+                "\tbudget BIGINT null,\n" +
+                "\tdeadline BIGINT null,\n" +
+                "\tcreationDate BIGINT null,\n" +
                 "\tconstraint Project_pk\n" +
                 "\t\tprimary key (id)\n" +
                 ");\n" +

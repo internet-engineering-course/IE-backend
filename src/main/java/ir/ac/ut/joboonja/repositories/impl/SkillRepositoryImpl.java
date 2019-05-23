@@ -22,7 +22,7 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
     @Override
     public void insertSkill(Skill skill) {
         String sql = "INSERT IGNORE INTO Skill values(?)";
-        List<Object> params = Arrays.asList(skill.getName());
+        List<Object> params = Collections.singletonList(skill.getName());
         execUpdate(new PreparedQuery(sql, params));
     }
 
@@ -47,7 +47,7 @@ public class SkillRepositoryImpl extends JDBCRepository<Skill> implements SkillR
     public static String getCreateScript(){
         return "create table if not exists Skill\n" +
                 "(\n" +
-                "\tname varchar(100) not null,\n" +
+                "\tname varchar(512) not null,\n" +
                 "\tconstraint Skill_pk\n" +
                 "\t\tprimary key (name)\n" +
                 ");";
