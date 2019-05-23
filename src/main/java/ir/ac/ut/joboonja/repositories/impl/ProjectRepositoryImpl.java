@@ -135,8 +135,8 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     public static String getCreateProjectSkillScript(){
         return  "create table if not exists ProjectSkill\n" +
                 "(\n" +
-                "\tprojectId varchar(36) null,\n" +
-                "\tskillName varchar(100) null,\n" +
+                "\tprojectId varchar(36) not null,\n" +
+                "\tskillName varchar(100) not null,\n" +
                 "\tpoint integer null,\n" +
                 "\tconstraint ProjectSkill_pk\n" +
                 "\t\tprimary key (projectId, skillName),\n" +
@@ -153,7 +153,7 @@ public class ProjectRepositoryImpl extends JDBCRepository<Project> implements Pr
     public static String getCreateScript() {
         return "create table if not exists Project\n" +
                 "(\n" +
-                "\tid varchar(36) null,\n" +
+                "\tid varchar(36) not null,\n" +
                 "\ttitle varchar(100) null,\n" +
                 "\tdescription text null,\n" +
                 "\timageUrl text null,\n" +

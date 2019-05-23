@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 public class Application {
     @PostConstruct
     public void init() {
+        System.out.println("\n\n\n &&&&&&&&&&&&&&&&& \n\n\n");
         SchemaManager.initialSchema();
     }
 }

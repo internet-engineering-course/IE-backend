@@ -121,8 +121,8 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     public static String getCreateUserSkillScript(){
         return "create table if not exists UserSkill\n " +
                 "(\n" +
-                "\tuserId integer null ,\n" +
-                "\tskillName varchar(100) null,\n" +
+                "\tuserId integer not null ,\n" +
+                "\tskillName varchar(100) not null,\n" +
                 "\tpoints integer null,\n" +
                 "\t\tprimary key (userId, skillName),\n" +
                 "FOREIGN KEY (userId) REFERENCES User(id)"+
@@ -132,7 +132,7 @@ public class UserRepositoryImpl extends JDBCRepository<User> implements UserRepo
     public static String getCreateScript(){
         return "create table if not exists User\n" +
                 "(\n" +
-                "\tid integer auto_increment,\n" +
+                "\tid integer auto_increment not null,\n" +
                 "\tcolumn_2 int null,\n" +
                 "\tusername varchar(100) not null,\n" +
                 "\tfirstname varchar(100) null,\n" +

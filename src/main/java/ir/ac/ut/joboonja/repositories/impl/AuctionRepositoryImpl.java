@@ -82,7 +82,7 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
     public static String getCreateAuctionScript(){
         return "create table if not exists Auction\n" +
                 "(\n" +
-                "\tprojectId varchar(36) null,\n" +
+                "\tprojectId varchar(36) not null,\n" +
                 "\tuserId integer null,\n" +
                 "\tconstraint Auction_pk\n" +
                 "\t\tprimary key (projectId),\n" +
@@ -99,8 +99,8 @@ public class AuctionRepositoryImpl extends JDBCRepository<Auction> implements Au
     public static String getCreateScript() {
         return "create table if not exists Bid\n" +
                 "(\n" +
-                "\tprojectId varchar(36) null,\n" +
-                "\tuserId integer null,\n" +
+                "\tprojectId varchar(36) not null,\n" +
+                "\tuserId integer not null,\n" +
                 "\tamount integer null,\n" +
                 "\tconstraint Bid_pk\n" +
                 "\t\tprimary key (projectId, userId),\n" +
