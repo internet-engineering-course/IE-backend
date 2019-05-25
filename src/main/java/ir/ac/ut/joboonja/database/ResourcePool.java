@@ -17,26 +17,8 @@ public class ResourcePool {
         ds.setMaxOpenPreparedStatements(1000);
     }
 
-    private static void coolDown(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    public static Connection getConnection() {
-        Connection connection;
-        while (true) {
-            try {
-                connection = ds.getConnection();
-                break;
-            } catch (SQLException e) {
-                System.out.println("Unable to get db connection retrying in 5 seconds ...");
-                coolDown(5000);
-            }
-        }
-        return connection;
+    public static Connection getConnection() throws SQLException {
+        return ds.getConnection();
     }
 
     private ResourcePool(){ }
