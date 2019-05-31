@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"database"},"name":"database","namespace":"ahmadreza-navid-ns"},"spec":{"selector":{"matchLabels":{"app":"database"}},"template":{"metadata":{"labels":{"app":"database"}},"spec":{"containers":[{"args":["--character-set-server=utf8","--collation-server=utf8_general_ci"],"env":[{"name":"MYSQL_DATABASE","value":"IE"},{"name":"MYSQL_ROOT_PASSWORD","value":"mypassword"}],"image":"mysql:5.7.16","imagePullPolicy":"IfNotPresent","name":"database","ports":[{"containerPort":3306,"protocol":"TCP"}],"resources":{"limits":{"cpu":"400m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"volumeMounts":[{"mountPath":"/var/lib/mysql","name":"ahmadreza-volume-claim","subPath":"ahmadreza-mysql"}]}],"restartPolicy":"Always","volumes":[{"name":"ahmadreza-volume-claim","persistentVolumeClaim":{"claimName":"ahmadreza-volume-claim"}}]}}},"status":{}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: database
+  name: database
+  namespace: ahmadreza-navid-ns
+  selfLink: /apis/extensions/v1beta1/namespaces/ahmadreza-navid-ns/deployments/database
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 2147483647
+  selector:
+    matchLabels:
+      app: database
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: database
+    spec:
+      containers:
+      - args:
+        - --character-set-server=utf8
+        - --collation-server=utf8_general_ci
+        env:
+        - name: MYSQL_DATABASE
+          value: IE
+        - name: MYSQL_ROOT_PASSWORD
+          value: mypassword
+        image: mysql:5.7.16
+        imagePullPolicy: IfNotPresent
+        name: database
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: ahmadreza-volume-claim
+          subPath: ahmadreza-mysql
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ahmadreza-volume-claim
+        persistentVolumeClaim:
+          claimName: ahmadreza-volume-claim
+status: {}
